@@ -36,12 +36,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
 
         cardViewHolder.likesText.setText("Likes: "+String.valueOf(tweet.getFavourite_count()));
         cardViewHolder.retweetCountText.setText("Retweet: "+String.valueOf(tweet.getRetweet_count()));
-///
-//        ContactInfo ci = contactList.get(i);
-//        contactViewHolder.vName.setText(ci.name);
-//        contactViewHolder.vSurname.setText(ci.surname);
-//        contactViewHolder.vEmail.setText(ci.email);
-//        contactViewHolder.vTitle.setText(ci.name + " " + ci.surname);
     }
 
     @Override
@@ -52,7 +46,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
 
         return new CardViewHolder(itemView);
     }
-
 
     public static class CardViewHolder extends RecyclerView.ViewHolder{
 

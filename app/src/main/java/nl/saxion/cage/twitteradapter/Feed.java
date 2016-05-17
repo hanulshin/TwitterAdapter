@@ -29,7 +29,6 @@ public class Feed extends AppCompatActivity {
         //create list for tweets
         List<Tweets> tweets = new ArrayList<>();
 
-
         CardAdapter adapter = new CardAdapter(this, R.layout.card_item, tweets);
 
         RecyclerView recList = (RecyclerView) findViewById(R.id.cardList);
