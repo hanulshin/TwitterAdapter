@@ -28,6 +28,7 @@ public class Feed extends AppCompatActivity {
         //create list for tweets
         List<Tweets> tweets = new ArrayList<>();
 
+        //
 //        LinearLayoutManager llm = new LinearLayoutManager(this);
 //        llm.setOrientation(LinearLayoutManager.VERTICAL);
 //        list.setLayoutManager(llm);
