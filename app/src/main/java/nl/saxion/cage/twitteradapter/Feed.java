@@ -57,6 +57,28 @@ public class Feed extends AppCompatActivity {
         }
         conn.setReadTimeout(10000);
         conn.setConnectTimeout(15000);
+        conn.setDoInput(true);
+        int response= 0;
+        try {
+            response = conn.getResponseCode();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if(response==200){
+
+        }else {
+
+        }
+
+        try {
+            InputStream is=conn.getInputStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
+
         try {
             conn.setRequestMethod("GET");
         } catch (ProtocolException e) {
