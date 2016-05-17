@@ -35,7 +35,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         cardViewHolder.dateText.setText(tweet.getCreated_at());
         cardViewHolder.likesText.setText("Likes: "+String.valueOf(tweet.getFavourite_count()));
         cardViewHolder.retweetCountText.setText("Retweet: "+String.valueOf(tweet.getRetweet_count()));
-
+///
 //        ContactInfo ci = contactList.get(i);
 //        contactViewHolder.vName.setText(ci.name);
 //        contactViewHolder.vSurname.setText(ci.surname);
