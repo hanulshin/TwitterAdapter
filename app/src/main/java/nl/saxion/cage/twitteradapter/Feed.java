@@ -44,6 +44,7 @@ public class Feed extends AppCompatActivity {
         URL url = null;
         try {
 
+
             url = new URL("http://<url>");
         } catch (MalformedURLException e) {
             e.printStackTrace();
