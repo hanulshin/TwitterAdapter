@@ -38,55 +38,6 @@ public class Feed extends AppCompatActivity {
         recList.setLayoutManager(llm);
         recList.setAdapter(adapter);
 
-        URL url = null;
-        try {
-            url = new URL("http://<url>");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        HttpURLConnection conn = null;
-
-        try {
-            conn = (HttpURLConnection) url.openConnection();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        conn.setReadTimeout(10000);
-        conn.setConnectTimeout(15000);
-        conn.setDoInput(true);
-        int response = 0;
-
-        try {
-            response = conn.getResponseCode();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (response == 200) {
-            //everything is okay :D
-        } else {
-            //we fucked up
-        }
-
-
-        try {
-            conn.setRequestMethod("GET");
-        } catch (ProtocolException e) {
-            e.printStackTrace();
-        }
-
-        //tells client we want to get input from it
-        conn.setDoInput(true);
-
-        try {
-            InputStream is = conn.getInputStream();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-
 
 
         String file = null;
