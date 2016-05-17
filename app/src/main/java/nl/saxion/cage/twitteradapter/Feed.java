@@ -28,8 +28,8 @@ public class Feed extends AppCompatActivity {
         //create list for tweets
         List<Tweets> tweets = new ArrayList<>();
 
-        CardAdapter adapter= new CardAdapter( this,R.layout.card_item,tweets);
-
+        //create CardView adapter
+        CardAdapter adapter = new CardAdapter( this,R.layout.card_item,tweets);
         RecyclerView recList = (RecyclerView) findViewById(R.id.cardList);
         recList.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
@@ -37,12 +37,14 @@ public class Feed extends AppCompatActivity {
         recList.setLayoutManager(llm);
         recList.setAdapter( adapter );
 
+
         String file = null;
         try {
             file = readAssetIntoString("tweets.json");
             JSONObject stateObj	=	new JSONObject(file);
             JSONArray tweetArray = stateObj.getJSONArray("statuses");
             for (int i = 0; i < tweetArray.length(); i++) {
+
                 JSONObject tweetObj = tweetArray.getJSONObject(i);
 
                 String text = tweetObj.getString("text");
@@ -51,23 +53,18 @@ public class Feed extends AppCompatActivity {
                 int favourites = tweetObj.getInt("favorite_count");
 
                 JSONObject userObj = tweetObj.getJSONObject("user");
-
                 String name = userObj.getString("name");
                 String screen_name = userObj.getString("screen_name");
-
                 Users user = new Users(screen_name,name);
 
                 tweets.add( new Tweets( user, text, retweets, createdAt,favourites));
 
             }
-
-
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
 
     }
     /**
