@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,10 +30,22 @@ public class Feed extends AppCompatActivity {
         //create CardView adapter
         CardAdapter adapter = new CardAdapter( this,R.layout.card_item,tweets);
         RecyclerView recList = (RecyclerView) findViewById(R.id.cardList);
-        recList.setHasFixedSize(true);
+
+        //set fixed size
+        try {
+            //make sure recList isn't null
+            assert recList != null;
+            recList.setHasFixedSize(true);
+        } catch (NullPointerException npe){
+            npe.printStackTrace();
+        }
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
-        recList.setLayoutManager(llm);
+        try{
+            recList.setLayoutManager(llm);
+        } catch (NullPointerException npe){
+            npe.printStackTrace();
+        }
         recList.setAdapter( adapter );
 
 
