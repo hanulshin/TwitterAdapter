@@ -5,8 +5,9 @@
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    card_view:cardCornerRadius="4dp"
-    android:layout_margin="5dp">
+    card_view:cardCornerRadius="8dp"
+    card_view:cardBackgroundColor="@color/cardview_dark_background"
+    android:layout_margin="8dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -20,7 +21,7 @@
             android:layout_marginStart="30dp"
             android:textSize="18dp"
             android:textStyle="bold"
-            android:textColor="#000000"
+            android:textColor="#ffffff"
             android:layout_marginLeft="10dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
@@ -41,7 +42,7 @@
             android:layout_height="wrap_content"
             android:text="text"
             android:id="@+id/TextView"
-            android:textColor="#000000"
+            android:textColor="#ffffff"
             android:layout_below="@+id/DateView"
             android:layout_alignStart="@+id/NameView" />
 

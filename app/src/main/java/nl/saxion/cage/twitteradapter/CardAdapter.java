@@ -14,7 +14,6 @@ import java.util.List;
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder> {
     Tweets tweet;
 
-    //private List<ContactInfo> contactList;
     private List<Tweets> tweetsList;
 
     public CardAdapter(Feed feed, int item_tweet, List<Tweets> tweetsList) {
@@ -34,8 +33,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         cardViewHolder.screenNameText.setText(tweet.getUser().getScreen_name());
         cardViewHolder.dateText.setText(tweet.getCreated_at());
 
-        cardViewHolder.likesText.setText("Likes: "+String.valueOf(tweet.getFavourite_count()));
-        cardViewHolder.retweetCountText.setText("Retweet: "+String.valueOf(tweet.getRetweet_count()));
+        cardViewHolder.likesText.setText("Likes: " + String.valueOf(tweet.getFavourite_count()));
+        cardViewHolder.retweetsCountText.setText("Retweet: " + String.valueOf(tweet.getRetweet_count()));
     }
 
     @Override
@@ -43,16 +42,15 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
                 inflate(R.layout.card_item, viewGroup, false);
-
         return new CardViewHolder(itemView);
     }
 
-    public static class CardViewHolder extends RecyclerView.ViewHolder{
+    public static class CardViewHolder extends RecyclerView.ViewHolder {
 
         protected TextView textText;
         protected TextView nameText;
         protected TextView screenNameText;
-        protected TextView retweetCountText;
+        protected TextView retweetsCountText;
         protected TextView likesText;
         protected TextView dateText;
 
@@ -60,11 +58,11 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
             super(convertView);
 
             textText = (TextView) convertView.findViewById(R.id.TextView);
-            nameText = (TextView)convertView.findViewById(R.id.NameView);
-            screenNameText = (TextView)convertView.findViewById(R.id.ScreenNameView);
-            retweetCountText = (TextView)convertView.findViewById(R.id.RetweetView);
+            nameText = (TextView) convertView.findViewById(R.id.NameView);
+            screenNameText = (TextView) convertView.findViewById(R.id.ScreenNameView);
+            retweetsCountText = (TextView) convertView.findViewById(R.id.RetweetView);
             likesText = (TextView) convertView.findViewById(R.id.LikeView);
-            dateText = (TextView)convertView.findViewById(R.id.DateView);
+            dateText = (TextView) convertView.findViewById(R.id.DateView);
         }
 
         public void setTextText(TextView textText) {
@@ -79,8 +77,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
             this.screenNameText = screenNameText;
         }
 
-        public void setRetweetCountText(TextView retweetCountText) {
-            this.retweetCountText = retweetCountText;
+        public void setRetweetsCountText(TextView retweetsCountText) {
+            this.retweetsCountText = retweetsCountText;
         }
 
         public void setLikesText(TextView likesText) {
@@ -91,5 +89,4 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
             this.dateText = dateText;
         }
     }
-
 }
