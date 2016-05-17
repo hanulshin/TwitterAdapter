@@ -28,12 +28,6 @@ public class Feed extends AppCompatActivity {
         //create list for tweets
         List<Tweets> tweets = new ArrayList<>();
 
-        //
-//        LinearLayoutManager llm = new LinearLayoutManager(this);
-//        llm.setOrientation(LinearLayoutManager.VERTICAL);
-//        list.setLayoutManager(llm);
-//        list.setAdapter( adapter );
-
         CardAdapter adapter= new CardAdapter( this,R.layout.card_item,tweets);
 
         RecyclerView recList = (RecyclerView) findViewById(R.id.cardList);
@@ -42,12 +36,6 @@ public class Feed extends AppCompatActivity {
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
         recList.setAdapter( adapter );
-
-//        TextView textText = (TextView) findViewById(R.id.TextView);
-//        TextView userText=(TextView)findViewById(R.id.NameView);
-//        TextView screenNameText=(TextView)findViewById(R.id.ScreenNameView);
-//        TextView favouriteText=(TextView)findViewById(R.id.LikeView);
-//        TextView retweetText=(TextView)findViewById(R.id.RetweetView);
 
         String file = null;
         try {
