@@ -15,6 +15,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +32,7 @@ public class Feed extends AppCompatActivity {
         //create list for tweets
         List<Tweets> tweets = new ArrayList<>();
 
+
         CardAdapter adapter= new CardAdapter( this,R.layout.card_item,tweets);
 
         RecyclerView recList = (RecyclerView) findViewById(R.id.cardList);
@@ -36,6 +41,26 @@ public class Feed extends AppCompatActivity {
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
         recList.setAdapter( adapter );
+        URL url = null;
+        try {
+            url = new URL("http://<url>");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        HttpURLConnection conn = null;
+        try {
+            conn = (HttpURLConnection)url.openConnection();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        conn.setReadTimeout(10000);
+        conn.setConnectTimeout(15000);
+        try {
+            conn.setRequestMethod("GET");
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+        }
+        conn.setDoInput(true);
 
         String file = null;
         try {
