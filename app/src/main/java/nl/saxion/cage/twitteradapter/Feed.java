@@ -15,6 +15,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import nl.saxion.cage.twitteradapter.Entities.Entities;
 import nl.saxion.cage.twitteradapter.Entities.Hashtags;
 
 public class Feed extends AppCompatActivity {
@@ -117,6 +118,8 @@ public class Feed extends AppCompatActivity {
                 hashtagList.add(hashtag);
             }
 
+            Entities entities = new Entities(hashtagList);
+
 //        List<Media> media = (List<Media>) JEntities.getJSONArray("media");
 //        List<URL> urls = (List<URL>) JEntities.getJSONArray("urls");
 //        List<User_Mention> user_mentions = (List<User_Mention>) JEntities.getJSONArray("user_mentions");
@@ -124,7 +127,7 @@ public class Feed extends AppCompatActivity {
 //        Entities entities = new Entities(hashtags, media, urls, user_mentions);
 
             Users user = new Users(screen_name, name);
-            tweets.add(new Tweets(user, text, retweets, createdAt, favourites));
+            tweets.add(new Tweets(user, text, retweets, createdAt, favourites, entities));
         }
     }
 }

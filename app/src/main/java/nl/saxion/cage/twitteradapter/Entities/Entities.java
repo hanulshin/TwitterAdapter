@@ -17,6 +17,10 @@ public class Entities {
         this.user_mentions = user_mentions;
     }
 
+    public Entities(List<Hashtags> hashtags) {
+        this.hashtags = hashtags;
+    }
+
     /**
      * 
      */
