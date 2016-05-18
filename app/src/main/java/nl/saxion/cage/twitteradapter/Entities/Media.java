@@ -51,7 +51,7 @@ public class Media {
     /**
      * 
      */
-    public Object sizes;
+    public Sizes sizes;
 
     /**
      * 
@@ -69,9 +69,9 @@ public class Media {
     public String type;
 
     /**
-     * 
+     *
      */
-    public String url;
+    public URL url;
 
 
 

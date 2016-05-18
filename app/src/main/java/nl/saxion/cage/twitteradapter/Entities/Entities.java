@@ -10,7 +10,11 @@ public class Entities {
     /**
      * Default constructor
      */
-    public Entities() {
+    public Entities(List<Hashtags> hashtags, List<Media> media, List<URL> urls, List<User_Mention> user_mentions) {
+        this.hashtags = hashtags;
+        this.media = media;
+        this.urls = urls;
+        this.user_mentions = user_mentions;
     }
 
     /**

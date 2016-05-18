@@ -14,12 +14,13 @@ public class Tweets  {
     /**
      * Default constructor
      */
-    public Tweets(Users user, String text, int retweet_count, String created_at,int favourite_count) {
+    public Tweets(Users user, String text, int retweet_count, String created_at, int favourite_count, Entities entities) {
         this.user = user;
         this.text = text;
         this.retweet_count = retweet_count;
         this.created_at = created_at;
         this.favourite_count = favourite_count;
+        this.entities = entities;
     }
 
     public int getFavourite_count() {
@@ -40,6 +41,10 @@ public class Tweets  {
 
     public String getCreated_at() {
         return created_at;
+    }
+
+    public Entities getEntities() {
+        return entities;
     }
 
     /**
@@ -211,9 +216,4 @@ public class Tweets  {
      * 
      */
     private String withheld_scope;
-
-
-
-
-
 }

@@ -12,22 +12,32 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import nl.saxion.cage.twitteradapter.Entities.Entities;
+import nl.saxion.cage.twitteradapter.Entities.Hashtags;
+import nl.saxion.cage.twitteradapter.Entities.Media;
+import nl.saxion.cage.twitteradapter.Entities.URL;
+import nl.saxion.cage.twitteradapter.Entities.User_Mention;
+
 public class Feed extends AppCompatActivity {
+
+    //create list for tweets
+    List<Tweets> tweets = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.card_tweet);
 
-        //create list for tweets
-        List<Tweets> tweets = new ArrayList<>();
+        try {
+            readJsonToObjects("tweets.json");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         CardAdapter adapter = new CardAdapter(this, R.layout.card_item, tweets);
 
@@ -37,37 +47,6 @@ public class Feed extends AppCompatActivity {
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
         recList.setAdapter(adapter);
-
-
-
-        String file = null;
-        try {
-            file = readAssetIntoString("tweets.json");
-            JSONObject stateObj = new JSONObject(file);
-            JSONArray tweetArray = stateObj.getJSONArray("statuses");
-            for (int i = 0; i < tweetArray.length(); i++) {
-                JSONObject tweetObj = tweetArray.getJSONObject(i);
-
-                String text = tweetObj.getString("text");
-                String createdAt = tweetObj.getString("created_at");
-                int retweets = tweetObj.getInt("retweet_count");
-                int favourites = tweetObj.getInt("favorite_count");
-
-                JSONObject userObj = tweetObj.getJSONObject("user");
-
-                String name = userObj.getString("name");
-                String screen_name = userObj.getString("screen_name");
-
-                Users user = new Users(screen_name, name);
-
-                tweets.add(new Tweets(user, text, retweets, createdAt, favourites));
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -101,5 +80,40 @@ public class Feed extends AppCompatActivity {
             }
         }
         return sb.toString();
+    }
+
+    /**
+     * Parses JSON file into objects
+     *
+     * @param file name of the JSON file to be parsed.
+     */
+    private void readJsonToObjects(String file) throws IOException, JSONException {
+        file = readAssetIntoString(file);
+        JSONObject jObj = new JSONObject(file);
+
+        JSONObject JEntities = jObj.getJSONObject("entities");
+        List<Hashtags> hashtags = (List<Hashtags>) JEntities.getJSONArray("hashtags");
+        List<Media> media = (List<Media>) JEntities.getJSONArray("media");
+        List<URL> urls = (List<URL>) JEntities.getJSONArray("urls");
+        List<User_Mention> user_mentions = (List<User_Mention>) JEntities.getJSONArray("user_mentions");
+
+        Entities entities = new Entities(hashtags, media, urls, user_mentions);
+
+        JSONArray tweetArray = jObj.getJSONArray("statuses");
+        for (int i = 0; i < tweetArray.length(); i++) {
+            JSONObject tweetObj = tweetArray.getJSONObject(i);
+
+            String text = tweetObj.getString("text");
+            String createdAt = tweetObj.getString("created_at");
+            int retweets = tweetObj.getInt("retweet_count");
+            int favourites = tweetObj.getInt("favorite_count");
+
+            JSONObject userObj = tweetObj.getJSONObject("user");
+            String name = userObj.getString("name");
+            String screen_name = userObj.getString("screen_name");
+
+            Users user = new Users(screen_name, name);
+            tweets.add(new Tweets(user, text, retweets, createdAt, favourites, entities));
+        }
     }
 }
