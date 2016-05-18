@@ -40,9 +40,9 @@
         <TextView
             android:layout_width="300dp"
             android:layout_height="wrap_content"
+            android:textColor="#ffffff"
             android:text="text"
             android:id="@+id/TextView"
-            android:textColor="#ffffff"
             android:layout_below="@+id/DateView"
             android:layout_alignStart="@+id/NameView" />
 

@@ -7,6 +7,22 @@ import java.util.*;
  */
 public class Entities {
 
+    public List<Hashtags> getHashtags() {
+        return hashtags;
+    }
+
+    public List<Media> getMedia() {
+        return media;
+    }
+
+    public List<URL> getUrls() {
+        return urls;
+    }
+
+    public List<User_Mention> getUser_mentions() {
+        return user_mentions;
+    }
+
     /**
      * Default constructor
      */

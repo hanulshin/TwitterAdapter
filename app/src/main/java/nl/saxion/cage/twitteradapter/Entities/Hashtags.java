@@ -16,6 +16,15 @@ public class Hashtags {
     public Hashtags(int indices[], String text) {
         this.indices = indices;
         this.text = text;
+
+    }
+
+    public int[] getIndices() {
+        return indices;
+    }
+
+    public String getText() {
+        return text;
     }
 
     /**

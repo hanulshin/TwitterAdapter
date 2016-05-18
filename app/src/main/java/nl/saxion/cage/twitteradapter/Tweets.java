@@ -49,6 +49,10 @@ public class Tweets  {
         return created_at;
     }
 
+    public void setText(String text) {
+        this.text = text;
+    }
+
     public Entities getEntities() {
         return entities;
     }

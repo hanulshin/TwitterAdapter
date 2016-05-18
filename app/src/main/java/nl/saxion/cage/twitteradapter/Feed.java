@@ -128,6 +128,9 @@ public class Feed extends AppCompatActivity {
 
             Users user = new Users(screen_name, name);
             tweets.add(new Tweets(user, text, retweets, createdAt, favourites, entities));
+//            tweets.get(0).setText(tweets.get(0).getText()
+//                    .replace(tweets.get(0).getEntities().getHashtags().get(0).getText(),"poooop"));
+
         }
     }
 }
