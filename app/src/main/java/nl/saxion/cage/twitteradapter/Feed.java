@@ -36,7 +36,7 @@ public class Feed extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        CardAdapter adapter = new CardAdapter(this, R.layout.card_item, tweets);
+        CardAdapter adapter = new CardAdapter(this, R.layout.card_item_alt, tweets);
 
         RecyclerView recList = (RecyclerView) findViewById(R.id.cardList);
         recList.setHasFixedSize(true);

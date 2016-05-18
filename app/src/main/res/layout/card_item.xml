@@ -4,9 +4,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="100dp"
     card_view:cardCornerRadius="2dp"
-    card_view:cardBackgroundColor="@color/colorPrimary"
+    card_view:cardBackgroundColor="@color/primary"
     android:layout_margin="5dp">
 
     <RelativeLayout
@@ -18,14 +18,12 @@
             android:layout_height="wrap_content"
             android:text="name"
             android:id="@+id/NameView"
-            android:layout_marginStart="30dp"
             android:textSize="18dp"
             android:textStyle="bold"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/accent"
             android:layout_marginLeft="10dp"
             android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="10dp" />
+            android:layout_alignStart="@+id/TextView" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -34,8 +32,7 @@
             android:id="@+id/ScreenNameView"
             android:layout_marginLeft="3dp"
             android:layout_alignBottom="@+id/NameView"
-            android:layout_toEndOf="@+id/NameView"
-            android:layout_marginBottom="1dp" />
+            android:layout_alignStart="@+id/LikeView" />
 
         <TextView
             android:layout_width="300dp"
@@ -44,7 +41,8 @@
             android:text="text"
             android:id="@+id/TextView"
             android:layout_below="@+id/DateView"
-            android:layout_alignStart="@+id/NameView" />
+            android:layout_toEndOf="@+id/imageView"
+            android:layout_marginLeft="10dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -52,17 +50,18 @@
             android:text="retweets: 2"
             android:id="@+id/RetweetView"
             android:layout_marginLeft="7dp"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/accent"
             android:textStyle="bold"
-            android:layout_alignParentBottom="true"
-            android:layout_alignEnd="@+id/TextView" />
+            android:layout_below="@+id/TextView"
+            android:layout_toEndOf="@+id/LikeView"
+            android:layout_marginStart="25dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="likes: 5"
             android:id="@+id/LikeView"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/accent"
             android:textStyle="bold"
             android:layout_below="@+id/TextView"
             android:layout_centerHorizontal="true" />
@@ -73,8 +72,16 @@
             android:text="date"
             android:id="@+id/DateView"
             android:textColor="#d2d2d2"
-            android:layout_below="@+id/ScreenNameView"
-            android:layout_alignEnd="@+id/TextView" />
+            android:layout_below="@+id/NameView"
+            android:layout_alignParentEnd="true" />
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/imageView"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:background="#48b9f6" />
 
     </RelativeLayout>
   </android.support.v7.widget.CardView>

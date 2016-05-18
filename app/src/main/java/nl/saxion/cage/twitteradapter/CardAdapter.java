@@ -2,7 +2,7 @@ package nl.saxion.cage.twitteradapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
-import android.text.style.BackgroundColorSpan;
+import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,18 +31,21 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
     public void onBindViewHolder(CardViewHolder cardViewHolder, int i) {
         tweet = tweetsList.get(i);
 
-        if (tweet.getEntities().getHashtags().size() > 0) {
-            String text = tweet.getText();
-            Spannable spanText = Spannable.Factory.getInstance().newSpannable(text);
-            spanText.setSpan(new BackgroundColorSpan(0xFFFFFF00), tweet.getEntities().getHashtags().get(0).getIndices()[0],
-                    tweet.getEntities().getHashtags().get(0).getIndices()[1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        String tweetText = tweet.getText().replace("\n"," ");
+
+        cardViewHolder.textText.setText(tweet.getText());
+        for (int j = 0; j < tweet.getEntities().getHashtags().size(); j++) {
+            Spannable spanText = Spannable.Factory.getInstance().newSpannable(tweetText);
+            for (int k = 0; k < tweet.getEntities().getHashtags().size(); k++) {
+                spanText.setSpan(new UnderlineSpan(), tweet.getEntities().getHashtags().get(k).getIndices()[0],
+                        tweet.getEntities().getHashtags().get(k).getIndices()[1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
             cardViewHolder.textText.setText(spanText);
         }
 
         cardViewHolder.nameText.setText(tweet.getUser().getName());
-        cardViewHolder.screenNameText.setText(tweet.getUser().getScreen_name());
+        cardViewHolder.screenNameText.setText("@"+tweet.getUser().getScreen_name());
         cardViewHolder.dateText.setText(tweet.getCreated_at());
-
         cardViewHolder.likesText.setText("Likes: " + String.valueOf(tweet.getFavourite_count()));
         cardViewHolder.retweetsCountText.setText("Retweet: " + String.valueOf(tweet.getRetweet_count()));
     }
@@ -51,7 +54,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
     public CardViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
-                inflate(R.layout.card_item, viewGroup, false);
+                inflate(R.layout.card_item_alt, viewGroup, false);
         return new CardViewHolder(itemView);
     }
 
