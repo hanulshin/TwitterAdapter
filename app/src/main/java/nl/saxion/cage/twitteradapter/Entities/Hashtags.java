@@ -9,8 +9,13 @@ public class Hashtags {
 
     /**
      * Default constructor
+     *
+     * @param indices
+     * @param text
      */
-    public Hashtags() {
+    public Hashtags(List<Integer> indices, String text) {
+        this.indices = indices;
+        this.text = text;
     }
 
     /**

@@ -1,7 +1,5 @@
 package nl.saxion.cage.twitteradapter;
 
-import android.support.v7.widget.RecyclerView;
-
 import java.util.*;
 
 import nl.saxion.cage.twitteradapter.Entities.Entities;
@@ -21,6 +19,14 @@ public class Tweets  {
         this.created_at = created_at;
         this.favourite_count = favourite_count;
         this.entities = entities;
+    }
+
+    public Tweets(Users user, String text, int retweet_count, String created_at, int favourite_count) {
+        this.user = user;
+        this.text = text;
+        this.retweet_count = retweet_count;
+        this.created_at = created_at;
+        this.favourite_count = favourite_count;
     }
 
     public int getFavourite_count() {

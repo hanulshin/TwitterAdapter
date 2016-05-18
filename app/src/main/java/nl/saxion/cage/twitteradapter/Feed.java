@@ -91,15 +91,8 @@ public class Feed extends AppCompatActivity {
         file = readAssetIntoString(file);
         JSONObject jObj = new JSONObject(file);
 
-        JSONObject JEntities = jObj.getJSONObject("entities");
-        List<Hashtags> hashtags = (List<Hashtags>) JEntities.getJSONArray("hashtags");
-        List<Media> media = (List<Media>) JEntities.getJSONArray("media");
-        List<URL> urls = (List<URL>) JEntities.getJSONArray("urls");
-        List<User_Mention> user_mentions = (List<User_Mention>) JEntities.getJSONArray("user_mentions");
-
-        Entities entities = new Entities(hashtags, media, urls, user_mentions);
-
         JSONArray tweetArray = jObj.getJSONArray("statuses");
+
         for (int i = 0; i < tweetArray.length(); i++) {
             JSONObject tweetObj = tweetArray.getJSONObject(i);
 
@@ -112,8 +105,22 @@ public class Feed extends AppCompatActivity {
             String name = userObj.getString("name");
             String screen_name = userObj.getString("screen_name");
 
+            JSONObject JEntities = tweetObj.getJSONObject("entities");
+
+            JSONArray JHashtags = JEntities.getJSONArray("hashtags");
+            ArrayList<Hashtags> hashtags = new ArrayList<>();
+
+            for (int j = 0; j <JHashtags.length() ; j++) {
+                Hashtags hashtag = new Hashtags();
+            }
+//        List<Media> media = (List<Media>) JEntities.getJSONArray("media");
+//        List<URL> urls = (List<URL>) JEntities.getJSONArray("urls");
+//        List<User_Mention> user_mentions = (List<User_Mention>) JEntities.getJSONArray("user_mentions");
+//
+//        Entities entities = new Entities(hashtags, media, urls, user_mentions);
+
             Users user = new Users(screen_name, name);
-            tweets.add(new Tweets(user, text, retweets, createdAt, favourites, entities));
+            tweets.add(new Tweets(user, text, retweets, createdAt, favourites));
         }
     }
 }
