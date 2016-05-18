@@ -15,11 +15,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import nl.saxion.cage.twitteradapter.Entities.Entities;
 import nl.saxion.cage.twitteradapter.Entities.Hashtags;
-import nl.saxion.cage.twitteradapter.Entities.Media;
-import nl.saxion.cage.twitteradapter.Entities.URL;
-import nl.saxion.cage.twitteradapter.Entities.User_Mention;
 
 public class Feed extends AppCompatActivity {
 
