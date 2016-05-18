@@ -107,12 +107,20 @@ public class Feed extends AppCompatActivity {
 
             JSONObject JEntities = tweetObj.getJSONObject("entities");
 
-            JSONArray JHashtags = JEntities.getJSONArray("hashtags");
-            ArrayList<Hashtags> hashtags = new ArrayList<>();
+            ArrayList<Hashtags> hashtagList = new ArrayList<>();
 
-            for (int j = 0; j <JHashtags.length() ; j++) {
-                Hashtags hashtag = new Hashtags();
+            JSONArray JHashtagArray = JEntities.getJSONArray("hashtags");
+            for (int j = 0; j < JHashtagArray.length(); j++) {
+                JSONObject JHashtags = JHashtagArray.getJSONObject(j);
+                String hashText = JHashtags.getString("text");
+                JSONArray JIndices = JHashtags.getJSONArray("indices");
+                int indices[] = new int[2];
+                indices[0] = JIndices.getInt(0);
+                indices[1] = JIndices.getInt(1);
+                Hashtags hashtag = new Hashtags(indices, hashText);
+                hashtagList.add(hashtag);
             }
+
 //        List<Media> media = (List<Media>) JEntities.getJSONArray("media");
 //        List<URL> urls = (List<URL>) JEntities.getJSONArray("urls");
 //        List<User_Mention> user_mentions = (List<User_Mention>) JEntities.getJSONArray("user_mentions");

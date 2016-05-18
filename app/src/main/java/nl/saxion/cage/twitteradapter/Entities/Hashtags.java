@@ -13,7 +13,7 @@ public class Hashtags {
      * @param indices
      * @param text
      */
-    public Hashtags(List<Integer> indices, String text) {
+    public Hashtags(int indices[], String text) {
         this.indices = indices;
         this.text = text;
     }
@@ -21,7 +21,7 @@ public class Hashtags {
     /**
      * 
      */
-    public List<Integer> indices;
+    public int indices[];
 
     /**
      * 
