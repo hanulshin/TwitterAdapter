@@ -10,9 +10,6 @@ import android.widget.TextView;
 
 import java.util.List;
 
-/**
- * Created by Hanulshin on 2016-05-16.
- */
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder> {
     Tweets tweet;
 

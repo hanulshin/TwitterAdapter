@@ -20,7 +20,6 @@ import nl.saxion.cage.twitteradapter.Entities.Hashtags;
 
 public class Feed extends AppCompatActivity {
 
-    //create list for tweets
     List<Tweets> tweets = new ArrayList<>();
 
     @Override

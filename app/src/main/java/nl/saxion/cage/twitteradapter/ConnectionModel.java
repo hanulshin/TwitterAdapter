@@ -7,9 +7,6 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 
-/**
- * Created by Cage on 5/17/16.
- */
 public class ConnectionModel {
     ConnectionModel(){
         URL url = null;
