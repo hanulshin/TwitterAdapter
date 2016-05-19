@@ -3,26 +3,28 @@ package nl.saxion.cage.twitteradapter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * Created by Cage on 5/19/16.
  */
 public abstract class LoadProfileAsync extends AsyncTask< String, Double, byte[]> {
 
+    static Bitmap bitmap;
     protected static Bitmap doInBackground(String src) {
         try {
-            java.net.URL url = new java.net.URL(src);
-            HttpURLConnection connection = (HttpURLConnection) url
-                    .openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            return myBitmap;
+            URL url = new URL(src);
+            Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+            return bmp;
+        } catch (MalformedURLException ex) {
+            ex.printStackTrace();
+            return null;
         } catch (IOException e) {
             e.printStackTrace();
             return null;

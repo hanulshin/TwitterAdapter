@@ -76,7 +76,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
             retweetsCountText = (TextView) convertView.findViewById(R.id.RetweetView);
             likesText = (TextView) convertView.findViewById(R.id.LikeView);
             dateText = (TextView) convertView.findViewById(R.id.DateView);
-            profileImage = (ImageView) convertView.findViewById(R.id.profileImageView);
+            profileImage = (ImageView) convertView.findViewById(R.id.profileView);
         }
     }
 }
