@@ -142,6 +142,8 @@ public class Users {
      */
     public boolean profile_background_tile;
 
+
+
     /**
      *
      */
@@ -237,5 +239,8 @@ public class Users {
      */
     public String withheld_scope;
 
+    public String getProfile_image_url() {
+        return profile_image_url;
+    }
 
 }

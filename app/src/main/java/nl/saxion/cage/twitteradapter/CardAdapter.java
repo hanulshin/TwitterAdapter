@@ -6,6 +6,7 @@ import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -45,6 +46,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         cardViewHolder.dateText.setText(tweet.getCreated_at());
         cardViewHolder.likesText.setText("Likes: " + String.valueOf(tweet.getFavourite_count()));
         cardViewHolder.retweetsCountText.setText("Retweet: " + String.valueOf(tweet.getRetweet_count()));
+        cardViewHolder.profileImage.setImageBitmap(LoadProfileAsync.doInBackground(tweet.getUser().getProfile_image_url()));
     }
 
     @Override
@@ -63,6 +65,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         protected TextView retweetsCountText;
         protected TextView likesText;
         protected TextView dateText;
+        protected ImageView profileImage;
 
         public CardViewHolder(View convertView) {
             super(convertView);
@@ -73,31 +76,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
             retweetsCountText = (TextView) convertView.findViewById(R.id.RetweetView);
             likesText = (TextView) convertView.findViewById(R.id.LikeView);
             dateText = (TextView) convertView.findViewById(R.id.DateView);
-        }
-
-        public void setTextText(TextView textText) {
-
-            this.textText = textText;
-        }
-
-        public void setNameText(TextView nameText) {
-            this.nameText = nameText;
-        }
-
-        public void setScreenNameText(TextView screenNameText) {
-            this.screenNameText = screenNameText;
-        }
-
-        public void setRetweetsCountText(TextView retweetsCountText) {
-            this.retweetsCountText = retweetsCountText;
-        }
-
-        public void setLikesText(TextView likesText) {
-            this.likesText = likesText;
-        }
-
-        public void setDateText(TextView dateText) {
-            this.dateText = dateText;
+            profileImage = (ImageView) convertView.findViewById(R.id.profileImageView);
         }
     }
 }
