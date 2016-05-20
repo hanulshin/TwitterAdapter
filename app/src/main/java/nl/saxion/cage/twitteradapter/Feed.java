@@ -101,6 +101,8 @@ public class Feed extends AppCompatActivity {
             String name = userObj.getString("name");
             String screen_name = userObj.getString("screen_name");
 
+            String profile_image_url=userObj.getString("profile_image_url");
+
             JSONObject JEntities = tweetObj.getJSONObject("entities");
 
             ArrayList<Hashtags> hashtagList = new ArrayList<>();
@@ -125,11 +127,10 @@ public class Feed extends AppCompatActivity {
 //
 //        Entities entities = new Entities(hashtags, media, urls, user_mentions);
 
-            Users user = new Users(screen_name, name);
+            Users user = new Users(screen_name, name,profile_image_url);
             tweets.add(new Tweets(user, text, retweets, createdAt, favourites, entities));
-//            tweets.get(0).setText(tweets.get(0).getText()
-//                    .replace(tweets.get(0).getEntities().getHashtags().get(0).getText(),"poooop"));
 
         }
+
     }
 }
