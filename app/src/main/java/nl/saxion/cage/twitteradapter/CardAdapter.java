@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.List;
 
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder> {
@@ -46,7 +47,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         cardViewHolder.dateText.setText(tweet.getCreated_at());
         cardViewHolder.likesText.setText("Likes: " + String.valueOf(tweet.getFavourite_count()));
         cardViewHolder.retweetsCountText.setText("Retweet: " + String.valueOf(tweet.getRetweet_count()));
-        cardViewHolder.profileImage.setImageBitmap(LoadProfileAsync.doInBackground(tweet.getUser().getProfile_image_url()));
+        cardViewHolder.profileImage.setImageBitmap();
     }
 
     @Override

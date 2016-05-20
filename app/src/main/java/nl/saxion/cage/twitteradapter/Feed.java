@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.ImageView;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -103,6 +105,12 @@ public class Feed extends AppCompatActivity {
 
             String profile_image_url=userObj.getString("profile_image_url");
 
+            ImageView image = (ImageView) findViewById(R.id.profileView);
+            image.setTag(profile_image_url);
+
+            LoadProfileAsync loadProfileAsync = new LoadProfileAsync();
+            loadProfileAsync.execute(image);
+
             JSONObject JEntities = tweetObj.getJSONObject("entities");
 
             ArrayList<Hashtags> hashtagList = new ArrayList<>();
@@ -124,10 +132,11 @@ public class Feed extends AppCompatActivity {
 //        List<Media> media = (List<Media>) JEntities.getJSONArray("media");
 //        List<URL> urls = (List<URL>) JEntities.getJSONArray("urls");
 //        List<User_Mention> user_mentions = (List<User_Mention>) JEntities.getJSONArray("user_mentions");
-//
 //        Entities entities = new Entities(hashtags, media, urls, user_mentions);
 
-            Users user = new Users(screen_name, name,profile_image_url);
+
+
+            Users user = new Users(screen_name, name, profile_image_url);
             tweets.add(new Tweets(user, text, retweets, createdAt, favourites, entities));
 
         }

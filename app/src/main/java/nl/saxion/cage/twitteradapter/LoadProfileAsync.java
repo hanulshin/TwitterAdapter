@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.ImageView;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,10 +15,23 @@ import java.net.URL;
 /**
  * Created by Cage on 5/19/16.
  */
-public abstract class LoadProfileAsync extends AsyncTask< String, Double, byte[]> {
+public class LoadProfileAsync extends AsyncTask< ImageView, Void, Bitmap> {
 
     static Bitmap bitmap;
-    protected static Bitmap doInBackground(String src) {
+    ImageView imageView = null;
+
+    @Override
+    protected Bitmap doInBackground(ImageView... imageViews) {
+        this.imageView = imageViews[0];
+        return download_image((String)imageView.getTag());
+    }
+
+    @Override
+    protected void onPostExecute(Bitmap bitmap) {
+
+    }
+
+    private Bitmap download_image(String src) {
         try {
             URL url = new URL(src);
             Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
@@ -29,20 +43,5 @@ public abstract class LoadProfileAsync extends AsyncTask< String, Double, byte[]
             e.printStackTrace();
             return null;
         }
-    }
-
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-    }
-
-    @Override
-    protected void onProgressUpdate(Double... values) {
-        super.onProgressUpdate(values);
-    }
-
-    @Override
-    protected void onPostExecute(byte[] bytes) {
-        super.onPostExecute(bytes);
     }
 }

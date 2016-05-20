@@ -1,5 +1,7 @@
 package nl.saxion.cage.twitteradapter;
 
+import android.graphics.Bitmap;
+
 import nl.saxion.cage.twitteradapter.Entities.Entities;
 
 /**
@@ -10,10 +12,11 @@ public class Users {
     /**
      * Default constructor
      */
-    public Users(String screen_name, String name, String profile_image_url) {
+    public Users(String screen_name, String name, String profile_image_url, Bitmap profile_image_bmp) {
         this.screen_name = screen_name;
         this.name = name;
         this.profile_image_url=profile_image_url;
+        this.profile_image_bmp = profile_image_bmp;
     }
 
     public String getScreen_name() {
@@ -56,7 +59,7 @@ public class Users {
     /**
      *
      */
-    public Entities entities;
+    private Entities entities;
 
     /**
      *
@@ -116,7 +119,7 @@ public class Users {
     /**
      *
      */
-    public String name;
+    private String name;
 
     /**
      *
@@ -153,7 +156,9 @@ public class Users {
     /**
      *
      */
-    public String profile_image_url;
+    private String profile_image_url;
+
+    private Bitmap profile_image_bmp;
 
     /**
      *

@@ -7,7 +7,7 @@
     android:layout_height="100dp"
     card_view:cardCornerRadius="2dp"
     card_view:cardBackgroundColor="@color/primary"
-    android:layout_margin="5dp">
+    android:layout_margin="2dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -19,13 +19,13 @@
             android:id="@+id/profileView"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
-            android:background="#48b9f6"
+            android:background="#f960d8"
             android:translationZ="5dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/icons"
+            android:textColor="@color/dim_foreground_material_light"
             android:text="text"
             android:id="@+id/TextView"
             android:layout_marginLeft="10dp"
@@ -40,7 +40,7 @@
             android:text="retweets: 2"
             android:id="@+id/RetweetView"
             android:layout_marginLeft="7dp"
-            android:textColor="@color/primary_light"
+            android:textColor="@color/secondary_text"
             android:textStyle="bold"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:text="likes: 5"
             android:id="@+id/LikeView"
-            android:textColor="@color/primary_light"
+            android:textColor="@color/secondary_text"
             android:textStyle="bold"
             android:layout_alignParentBottom="true"
             android:layout_toStartOf="@+id/RetweetView"
@@ -86,7 +86,7 @@
             android:id="@+id/NameView"
             android:textSize="18dp"
             android:textStyle="bold"
-            android:textColor="@color/icons"
+            android:textColor="@android:color/holo_blue_bright"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
             android:layout_marginLeft="5dp"
