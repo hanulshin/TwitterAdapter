@@ -7,26 +7,26 @@ import java.util.*;
  */
 public class Size {
 
+
+
+    /**
+     * 
+     */
+    private int h;
+
+    /**
+     * 
+     */
+    private String resize;
+
+    /**
+     * 
+     */
+    private int w;
+
     /**
      * Default constructor
      */
     public Size() {
     }
-
-    /**
-     * 
-     */
-    public int h;
-
-    /**
-     * 
-     */
-    public String resize;
-
-    /**
-     * 
-     */
-    public int w;
-
-
 }

@@ -6,6 +6,15 @@ import java.util.*;
  * 
  */
 public class Hashtags {
+    /**
+     *
+     */
+    private int indices[];
+
+    /**
+     *
+     */
+    private String text;
 
     /**
      * Default constructor
@@ -27,15 +36,6 @@ public class Hashtags {
         return text;
     }
 
-    /**
-     * 
-     */
-    public int indices[];
-
-    /**
-     * 
-     */
-    public String text;
 
 
 }

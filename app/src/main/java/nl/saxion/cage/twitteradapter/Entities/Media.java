@@ -7,71 +7,72 @@ import java.util.*;
  */
 public class Media {
 
+
+    /**
+     * 
+     */
+    private String display_url;
+
+    /**
+     * 
+     */
+    private String expanded_url;
+
+    /**
+     * 
+     */
+    private int id;
+
+    /**
+     * 
+     */
+    private String id_str;
+
+    /**
+     * 
+     */
+    private List<Integer> indices;
+
+    /**
+     * 
+     */
+    private String media_url;
+
+    /**
+     * 
+     */
+    private String media_url_https;
+
+    /**
+     * 
+     */
+    private Sizes sizes;
+
+    /**
+     * 
+     */
+    private int source_status_id;
+
+    /**
+     * 
+     */
+    private String source_status_id_str;
+
+    /**
+     * 
+     */
+    private String type;
+
+    /**
+     *
+     */
+    private URL url;
+
     /**
      * Default constructor
      */
     public Media() {
     }
-
-    /**
-     * 
-     */
-    public String display_url;
-
-    /**
-     * 
-     */
-    public String expanded_url;
-
-    /**
-     * 
-     */
-    public int id;
-
-    /**
-     * 
-     */
-    public String id_str;
-
-    /**
-     * 
-     */
-    public List<Integer> indices;
-
-    /**
-     * 
-     */
-    public String media_url;
-
-    /**
-     * 
-     */
-    public String media_url_https;
-
-    /**
-     * 
-     */
-    public Sizes sizes;
-
-    /**
-     * 
-     */
-    public int source_status_id;
-
-    /**
-     * 
-     */
-    public String source_status_id_str;
-
-    /**
-     * 
-     */
-    public String type;
-
-    /**
-     *
-     */
-    public URL url;
 
 
 

@@ -1,5 +1,6 @@
 package nl.saxion.cage.twitteradapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.style.UnderlineSpan;
@@ -9,16 +10,22 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.io.IOException;
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder> {
     Tweets tweet;
 
     private List<Tweets> tweetsList;
-
-    public CardAdapter(Feed feed, int item_tweet, List<Tweets> tweetsList) {
+    static Context con;
+    static String  src=null;
+    static List<Users> users = new ArrayList<>();
+    public CardAdapter(Feed feed, int item_tweet, List<Tweets> tweetsList, Context con, List<Users> users) {
         this.tweetsList = tweetsList;
+        this.con=con;
+        this.users=users;
     }
 
     @Override
@@ -46,8 +53,12 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         cardViewHolder.screenNameText.setText("@"+tweet.getUser().getScreen_name());
         cardViewHolder.dateText.setText(tweet.getCreated_at());
         cardViewHolder.likesText.setText("Likes: " + String.valueOf(tweet.getFavourite_count()));
-        cardViewHolder.retweetsCountText.setText("Retweet: " + String.valueOf(tweet.getRetweet_count()));
-        cardViewHolder.profileImage.setImageBitmap();
+        //cardViewHolder.profileImage.setImageBitmap();
+        Picasso.with(con).load(users.get(i).getProfile_image_url()).into(cardViewHolder.profileImage);
+
+//        cardViewHolder.retweetsCountText.setText("Retweet: " + String.valueOf(tweet.getRetweet_count()));
+        //cardViewHolder.profileImage.setImageBitmap();
+
     }
 
     @Override
@@ -55,10 +66,12 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
                 inflate(R.layout.card_item_alt, viewGroup, false);
+
         return new CardViewHolder(itemView);
     }
 
     public static class CardViewHolder extends RecyclerView.ViewHolder {
+
 
         protected TextView textText;
         protected TextView nameText;
@@ -67,6 +80,11 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         protected TextView likesText;
         protected TextView dateText;
         protected ImageView profileImage;
+
+
+        public ImageView getProfileImage() {
+            return profileImage;
+        }
 
         public CardViewHolder(View convertView) {
             super(convertView);
@@ -77,7 +95,19 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
             retweetsCountText = (TextView) convertView.findViewById(R.id.RetweetView);
             likesText = (TextView) convertView.findViewById(R.id.LikeView);
             dateText = (TextView) convertView.findViewById(R.id.DateView);
-            profileImage = (ImageView) convertView.findViewById(R.id.profileView);
+            profileImage = (ImageView) convertView.findViewById(R.id.imageView);
+
+
+
         }
+        public String getSourceAndSetIt(){
+
+            for (int i = 0; i <users.size(); i++) {
+
+                Picasso.with(con).load(users.get(i).getProfile_image_url()).into(profileImage);
+            }
+            return src;
+        }
+
     }
 }

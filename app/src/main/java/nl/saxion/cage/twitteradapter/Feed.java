@@ -7,6 +7,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
 
+import com.squareup.picasso.Picasso;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,13 +25,16 @@ import nl.saxion.cage.twitteradapter.Entities.Hashtags;
 public class Feed extends AppCompatActivity {
 
     List<Tweets> tweets = new ArrayList<>();
-
+    List<Users> users = new ArrayList<>();
+    //CardAdapter adapter = new CardAdapter(this, R.layout.card_item_alt, tweets);
+   // ImageView imgView = (ImageView) convertView.findViewById(R.id.imageView);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.card_tweet);
 
         try {
+
             readJsonToObjects("tweets.json");
         } catch (IOException e) {
             e.printStackTrace();
@@ -37,7 +42,7 @@ public class Feed extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        CardAdapter adapter = new CardAdapter(this, R.layout.card_item_alt, tweets);
+        CardAdapter adapter = new CardAdapter(this, R.layout.card_item_alt, tweets,this,users);
 
         RecyclerView recList = (RecyclerView) findViewById(R.id.cardList);
         recList.setHasFixedSize(true);
@@ -80,6 +85,10 @@ public class Feed extends AppCompatActivity {
         return sb.toString();
     }
 
+    public List<Users> getUsers() {
+        return users;
+    }
+
     /**
      * Parses JSON file into objects
      *
@@ -105,11 +114,16 @@ public class Feed extends AppCompatActivity {
 
             String profile_image_url=userObj.getString("profile_image_url");
 
-            ImageView image = (ImageView) findViewById(R.id.profileView);
-            image.setTag(profile_image_url);
 
-            LoadProfileAsync loadProfileAsync = new LoadProfileAsync();
-            loadProfileAsync.execute(image);
+//            image.setTag(profile_image_url);
+
+
+
+
+
+
+            //LoadProfileAsync loadProfileAsync = new LoadProfileAsync();
+            //loadProfileAsync.execute(image);
 
             JSONObject JEntities = tweetObj.getJSONObject("entities");
 
@@ -137,6 +151,7 @@ public class Feed extends AppCompatActivity {
 
 
             Users user = new Users(screen_name, name, profile_image_url);
+            users.add(user);
             tweets.add(new Tweets(user, text, retweets, createdAt, favourites, entities));
 
         }

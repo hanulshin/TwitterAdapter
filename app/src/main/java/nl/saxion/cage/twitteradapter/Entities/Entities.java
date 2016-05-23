@@ -3,9 +3,28 @@ package nl.saxion.cage.twitteradapter.Entities;
 import java.util.*;
 
 /**
- * 
+ *
  */
 public class Entities {
+    /**
+     *
+     */
+    private List<Hashtags> hashtags;
+
+    /**
+     *
+     */
+    private List<Media> media;
+
+    /**
+     *
+     */
+    private List<URL> urls;
+
+    /**
+     *
+     */
+    public List<User_Mention> user_mentions;
 
     public List<Hashtags> getHashtags() {
         return hashtags;
@@ -37,24 +56,6 @@ public class Entities {
         this.hashtags = hashtags;
     }
 
-    /**
-     * 
-     */
-    public List<Hashtags> hashtags;
 
-    /**
-     * 
-     */
-    public List<Media> media;
-
-    /**
-     * 
-     */
-    public List<URL> urls;
-
-    /**
-     * 
-     */
-    public List<User_Mention> user_mentions;
 
 }

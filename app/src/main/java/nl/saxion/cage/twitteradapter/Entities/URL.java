@@ -7,11 +7,7 @@ import java.util.*;
  */
 public class URL {
 
-    /**
-     * Default constructor
-     */
-    public URL() {
-    }
+
 
     /**
      * 
@@ -33,5 +29,10 @@ public class URL {
      */
     public String url;
 
+    /**
+     * Default constructor
+     */
+    public URL() {
+    }
 
 }

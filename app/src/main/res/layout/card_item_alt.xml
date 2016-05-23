@@ -14,25 +14,25 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:id="@+id/profileView"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/imageView"
             android:background="#f960d8"
-            android:translationZ="5dp" />
+            android:translationZ="5dp"
+            android:layout_above="@+id/DateView"
+            android:layout_alignStart="@+id/DateView" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
             android:textColor="@color/dim_foreground_material_light"
             android:text="text"
             android:id="@+id/TextView"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_alignWithParentIfMissing="false"
-            android:layout_alignTop="@+id/ScreenNameView"
-            android:layout_toEndOf="@+id/profileView" />
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/ScreenNameView" />
 
         <TextView
             android:layout_width="wrap_content"

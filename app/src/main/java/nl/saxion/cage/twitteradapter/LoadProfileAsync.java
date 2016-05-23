@@ -23,7 +23,8 @@ public class LoadProfileAsync extends AsyncTask< ImageView, Void, Bitmap> {
     @Override
     protected Bitmap doInBackground(ImageView... imageViews) {
         this.imageView = imageViews[0];
-        return download_image((String)imageView.getTag());
+return null;
+        //return download_image((String)imageView.getTag());
     }
 
     @Override

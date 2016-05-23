@@ -16,22 +16,22 @@ public class Sizes {
     /**
      * 
      */
-    public Object thumb;
+    private Object thumb;
 
     /**
      * 
      */
-    public Object large;
+    private Object large;
 
     /**
      * 
      */
-    public Object medium;
+    private Object medium;
 
     /**
      * 
      */
-    public Object small;
+    private Object small;
 
 
 }
