@@ -25,7 +25,6 @@ import nl.saxion.cage.twitteradapter.Entities.Hashtags;
 public class Feed extends AppCompatActivity {
 
     List<Tweets> tweets = new ArrayList<>();
-    List<Users> users = new ArrayList<>();
     //CardAdapter adapter = new CardAdapter(this, R.layout.card_item_alt, tweets);
    // ImageView imgView = (ImageView) convertView.findViewById(R.id.imageView);
     @Override
@@ -34,7 +33,6 @@ public class Feed extends AppCompatActivity {
         setContentView(R.layout.card_tweet);
 
         try {
-
             readJsonToObjects("tweets.json");
         } catch (IOException e) {
             e.printStackTrace();
@@ -42,7 +40,7 @@ public class Feed extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        CardAdapter adapter = new CardAdapter(this, R.layout.card_item_alt, tweets,this,users);
+        CardAdapter adapter = new CardAdapter(this, R.layout.card_item_alt, tweets,this);
 
         RecyclerView recList = (RecyclerView) findViewById(R.id.cardList);
         recList.setHasFixedSize(true);
@@ -85,9 +83,6 @@ public class Feed extends AppCompatActivity {
         return sb.toString();
     }
 
-    public List<Users> getUsers() {
-        return users;
-    }
 
     /**
      * Parses JSON file into objects
@@ -151,7 +146,7 @@ public class Feed extends AppCompatActivity {
 
 
             Users user = new Users(screen_name, name, profile_image_url);
-            users.add(user);
+
             tweets.add(new Tweets(user, text, retweets, createdAt, favourites, entities));
 
         }

@@ -1,8 +1,10 @@
 package nl.saxion.cage.twitteradapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
+import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,13 +21,12 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
     Tweets tweet;
 
     private List<Tweets> tweetsList;
-    static Context con;
-    static String  src=null;
-    static List<Users> users = new ArrayList<>();
-    public CardAdapter(Feed feed, int item_tweet, List<Tweets> tweetsList, Context con, List<Users> users) {
+     Context con;
+     String  src=null;
+    public CardAdapter(Feed feed, int item_tweet, List<Tweets> tweetsList, Context con) {
         this.tweetsList = tweetsList;
         this.con=con;
-        this.users=users;
+
     }
 
     @Override
@@ -43,7 +44,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         for (int j = 0; j < tweet.getEntities().getHashtags().size(); j++) {
             Spannable spanText = Spannable.Factory.getInstance().newSpannable(tweetText);
             for (int k = 0; k < tweet.getEntities().getHashtags().size(); k++) {
-                spanText.setSpan(new UnderlineSpan(), tweet.getEntities().getHashtags().get(k).getIndices()[0],
+                spanText.setSpan(new ForegroundColorSpan(Color.GREEN), tweet.getEntities().getHashtags().get(k).getIndices()[0],
                         tweet.getEntities().getHashtags().get(k).getIndices()[1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
             cardViewHolder.textText.setText(spanText);
@@ -54,8 +55,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         cardViewHolder.dateText.setText(tweet.getCreated_at());
         cardViewHolder.likesText.setText("Likes: " + String.valueOf(tweet.getFavourite_count()));
         //cardViewHolder.profileImage.setImageBitmap();
-        Picasso.with(con).load(users.get(i).getProfile_image_url()).into(cardViewHolder.profileImage);
-
+        Picasso.with(con).load(tweet.getUser().getProfile_image_url()).into(cardViewHolder.profileImage);
+       // users.get(i).getProfile_image_url()
 //        cardViewHolder.retweetsCountText.setText("Retweet: " + String.valueOf(tweet.getRetweet_count()));
         //cardViewHolder.profileImage.setImageBitmap();
 
@@ -97,17 +98,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
             dateText = (TextView) convertView.findViewById(R.id.DateView);
             profileImage = (ImageView) convertView.findViewById(R.id.imageView);
 
-
-
         }
-        public String getSourceAndSetIt(){
 
-            for (int i = 0; i <users.size(); i++) {
-
-                Picasso.with(con).load(users.get(i).getProfile_image_url()).into(profileImage);
-            }
-            return src;
-        }
 
     }
 }
