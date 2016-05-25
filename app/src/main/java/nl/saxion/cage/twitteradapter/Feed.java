@@ -12,6 +12,7 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,8 +26,9 @@ import nl.saxion.cage.twitteradapter.Entities.Hashtags;
 public class Feed extends AppCompatActivity {
 
     List<Tweets> tweets = new ArrayList<>();
+
     //CardAdapter adapter = new CardAdapter(this, R.layout.card_item_alt, tweets);
-   // ImageView imgView = (ImageView) convertView.findViewById(R.id.imageView);
+    // ImageView imgView = (ImageView) convertView.findViewById(R.id.imageView);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,14 +42,17 @@ public class Feed extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        CardAdapter adapter = new CardAdapter(this, R.layout.card_item_alt, tweets,this);
-
+        CardAdapter adapter = new CardAdapter(this, R.layout.card_item_alt, tweets, this);
         RecyclerView recList = (RecyclerView) findViewById(R.id.cardList);
         recList.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
         recList.setAdapter(adapter);
+        Connection conn = new Connection();
+        conn.execute("TEST");
+
+
     }
 
     /**
@@ -107,14 +112,10 @@ public class Feed extends AppCompatActivity {
             String name = userObj.getString("name");
             String screen_name = userObj.getString("screen_name");
 
-            String profile_image_url=userObj.getString("profile_image_url");
+            String profile_image_url = userObj.getString("profile_image_url");
 
 
 //            image.setTag(profile_image_url);
-
-
-
-
 
 
             //LoadProfileAsync loadProfileAsync = new LoadProfileAsync();
@@ -143,13 +144,8 @@ public class Feed extends AppCompatActivity {
 //        List<User_Mention> user_mentions = (List<User_Mention>) JEntities.getJSONArray("user_mentions");
 //        Entities entities = new Entities(hashtags, media, urls, user_mentions);
 
-
-
             Users user = new Users(screen_name, name, profile_image_url);
-
             tweets.add(new Tweets(user, text, retweets, createdAt, favourites, entities));
-
         }
-
     }
 }
