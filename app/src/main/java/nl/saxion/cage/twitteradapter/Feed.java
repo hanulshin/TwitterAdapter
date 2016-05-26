@@ -45,14 +45,15 @@ public class Feed extends AppCompatActivity {
         CardAdapter adapter = new CardAdapter(this, R.layout.card_item_alt, tweets, this);
         RecyclerView recList = (RecyclerView) findViewById(R.id.cardList);
         recList.setHasFixedSize(true);
+
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
+
         recList.setLayoutManager(llm);
         recList.setAdapter(adapter);
+
         Connection conn = new Connection();
-        conn.execute("TEST");
-
-
+        conn.execute("saxion");
     }
 
     /**
