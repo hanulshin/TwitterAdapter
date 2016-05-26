@@ -26,7 +26,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
     public CardAdapter(Feed feed, int item_tweet, List<Tweets> tweetsList, Context con) {
         this.tweetsList = tweetsList;
         this.con=con;
-
     }
 
     @Override

@@ -153,8 +153,11 @@ public class Connection extends AsyncTask<String, Void, Void> {
             //connection headers
             conn.setRequestMethod("GET");
             conn.addRequestProperty("Authorization", "Bearer " + bearerToken);
+            conn.setRequestProperty("Accept-Charset", "UTF-8");
 
+            conn.setConnectTimeout (5000) ;
             conn.setDoOutput(true);
+            conn.setDoInput(true);
 
             int response = conn.getResponseCode();
             if (response == 200) {
