@@ -28,8 +28,6 @@ public class Feed extends AppCompatActivity {
 
     List<Tweets> tweets = new ArrayList<>();
 
-    //CardAdapter adapter = new CardAdapter(this, R.layout.card_item_alt, tweets);
-    // ImageView imgView = (ImageView) convertView.findViewById(R.id.imageView);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,8 +51,11 @@ public class Feed extends AppCompatActivity {
         recList.setLayoutManager(llm);
         recList.setAdapter(adapter);
 
+        //create connection and query the twitter api
         Connection conn = new Connection();
-        conn.execute("saxion");
+        conn.execute("@saxion");
+
+        //try to get the response from the query
         try {
             conn.get();
         } catch (InterruptedException e) {

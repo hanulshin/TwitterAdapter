@@ -69,7 +69,7 @@ public class Connection extends AsyncTask<String, Void, String> {
                 Log.d("token", bearerToken);
                 IOUtils.closeQuietly(is);
             } else {
-                Log.d("(((", "fail");
+                Log.d("Connection", String.valueOf(conn.getResponseCode()));
             }
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -120,7 +120,7 @@ public class Connection extends AsyncTask<String, Void, String> {
                 String connResponse = IOUtils.toString(is, "UTF-8");
 
                 String tweets = connResponse;
-                Log.d("tweets:", connResponse);
+                Log.d("Tweets", connResponse);
                 IOUtils.closeQuietly(is);
             } else {
                 Log.d("(((",conn.getResponseMessage());

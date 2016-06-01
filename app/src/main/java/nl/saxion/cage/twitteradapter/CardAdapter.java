@@ -37,12 +37,10 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
     public void onBindViewHolder(CardViewHolder cardViewHolder, int i) {
         tweet = tweetsList.get(i);
 
-        String tweetText = tweet.getText().replace("\n"," ");
-
         cardViewHolder.textText.setText(tweet.getText());
 
         for (int j = 0; j < tweet.getEntities().getHashtags().size(); j++) {
-            Spannable spanText = Spannable.Factory.getInstance().newSpannable(tweetText);
+            Spannable spanText = Spannable.Factory.getInstance().newSpannable(tweet.getText());
             for (int k = 0; k < tweet.getEntities().getHashtags().size(); k++) {
                 spanText.setSpan(new ForegroundColorSpan(Color.GREEN), tweet.getEntities().getHashtags().get(k).getIndices()[0],
                         tweet.getEntities().getHashtags().get(k).getIndices()[1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -54,11 +52,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         cardViewHolder.screenNameText.setText("@"+tweet.getUser().getScreen_name());
         cardViewHolder.dateText.setText(tweet.getCreated_at());
         cardViewHolder.likesText.setText("Likes: " + String.valueOf(tweet.getFavourite_count()));
-        //cardViewHolder.profileImage.setImageBitmap();
         Picasso.with(con).load(tweet.getUser().getProfile_image_url()).into(cardViewHolder.profileImage);
-       // users.get(i).getProfile_image_url()
-//        cardViewHolder.retweetsCountText.setText("Retweet: " + String.valueOf(tweet.getRetweet_count()));
-        //cardViewHolder.profileImage.setImageBitmap();
 
     }
 
@@ -80,10 +74,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         protected TextView likesText;
         protected TextView dateText;
         protected ImageView profileImage;
-
-        public ImageView getProfileImage() {
-            return profileImage;
-        }
 
         public CardViewHolder(View convertView) {
             super(convertView);
