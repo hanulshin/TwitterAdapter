@@ -19,62 +19,17 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLEncoder;
 
-public class Connection extends AsyncTask<String, Void, Void> {
+public class Connection extends AsyncTask<String, Void, String> {
     private static final String API_KEY = "BABNgm313dL2rRXf3iRM11lL8";
     private static final String API_SECRET = "WR2VFNTaJBRGmDCUettxUGPss50ZPOQaVlO8wsUYoHPMKlQkrG";
     private static final String CHARSET_UTF_8 = "UTF-8";
 
     Connection() {
-//        URL url = null;
-//        try {
-//            url = new URL("http://<url>");
-//        } catch (MalformedURLException e) {
-//            e.printStackTrace();
-//        }
-//        HttpURLConnection conn = null;
-//
-//        try {
-//            conn = (HttpURLConnection) url.openConnection();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        conn.setReadTimeout(10000);
-//        conn.setConnectTimeout(15000);
-//        conn.setDoInput(true);
-//        int response = 0;
-//
-//        try {
-//            response = conn.getResponseCode();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        if (response == 200) {
-//            //everything is okay :D
-//        } else {
-//            //we fucked up
-//        }
-//
-//        try {
-//            conn.setRequestMethod("GET");
-//        } catch (ProtocolException e) {
-//            e.printStackTrace();
-//        }
-//
-//        //tells client we want to get input from it
-////        conn.setDoInput(true);
-//
-//        try {
-//            InputStream is = conn.getInputStream();
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
+
     }
 
     @Override
-    protected Void doInBackground(String... params) {
+    protected String doInBackground(String... params) {
         requestData(params[0], retrieveToken());
         return null;
     }
@@ -83,7 +38,6 @@ public class Connection extends AsyncTask<String, Void, Void> {
         String bearerToken = "";
         // Prepare request
         try {
-
             URL url = new URL("https://api.twitter.com/oauth2/token");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
@@ -139,13 +93,15 @@ public class Connection extends AsyncTask<String, Void, Void> {
 
     public String requestData(String searchTerm, String bearerToken) {
 
-
         //the url we need to query
         //https://api.twitter.com/1.1/search/tweets.json?q=%40twitterapi
         try {
 
             //search api url
-            URL url = new URL("https://api.twitter.com/1.1/search/tweets.json?q=%40twitterapi");
+            String searchUrl = "https://api.twitter.com/1.1/search/tweets.json?q=";
+            String encodedTerm = URLEncoder.encode(searchTerm, CHARSET_UTF_8);
+
+            URL url = new URL(searchUrl+encodedTerm);
 
             //create connection
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -153,10 +109,9 @@ public class Connection extends AsyncTask<String, Void, Void> {
             //connection headers
             conn.setRequestMethod("GET");
             conn.addRequestProperty("Authorization", "Bearer " + bearerToken);
-            conn.setRequestProperty("Accept-Charset", "UTF-8");
+            conn.addRequestProperty("Content-Type", "application/json");
 
             conn.setConnectTimeout (5000) ;
-            conn.setDoOutput(true);
             conn.setDoInput(true);
 
             int response = conn.getResponseCode();

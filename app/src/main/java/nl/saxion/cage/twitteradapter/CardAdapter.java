@@ -40,6 +40,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         String tweetText = tweet.getText().replace("\n"," ");
 
         cardViewHolder.textText.setText(tweet.getText());
+
         for (int j = 0; j < tweet.getEntities().getHashtags().size(); j++) {
             Spannable spanText = Spannable.Factory.getInstance().newSpannable(tweetText);
             for (int k = 0; k < tweet.getEntities().getHashtags().size(); k++) {
@@ -72,7 +73,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
 
     public static class CardViewHolder extends RecyclerView.ViewHolder {
 
-
         protected TextView textText;
         protected TextView nameText;
         protected TextView screenNameText;
@@ -80,7 +80,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         protected TextView likesText;
         protected TextView dateText;
         protected ImageView profileImage;
-
 
         public ImageView getProfileImage() {
             return profileImage;
@@ -96,9 +95,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
             likesText = (TextView) convertView.findViewById(R.id.LikeView);
             dateText = (TextView) convertView.findViewById(R.id.DateView);
             profileImage = (ImageView) convertView.findViewById(R.id.imageView);
-
         }
-
-
     }
 }
