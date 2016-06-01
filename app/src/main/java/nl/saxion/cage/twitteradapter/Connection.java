@@ -145,7 +145,7 @@ public class Connection extends AsyncTask<String, Void, Void> {
         try {
 
             //search api url
-            URL url = new URL("https://api.twitter.com/1.1/search/tweets.json?q=%40twitterapi");
+            URL url = new URL("https://api.twitter.com/1.1/search/tweets.json?q=twitter");
 
             //create connection
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -156,7 +156,7 @@ public class Connection extends AsyncTask<String, Void, Void> {
             conn.setRequestProperty("Accept-Charset", "UTF-8");
 
             conn.setConnectTimeout (5000) ;
-            conn.setDoOutput(true);
+//            conn.setDoOutput(true);
             conn.setDoInput(true);
 
             int response = conn.getResponseCode();
@@ -168,7 +168,7 @@ public class Connection extends AsyncTask<String, Void, Void> {
                 Log.d("tweets:", connResponse);
                 IOUtils.closeQuietly(is);
             } else {
-                Log.d("(((",conn.getResponseMessage());
+                Log.d("(((","fdsfsfs");
             }
 
         } catch (ProtocolException e) {
