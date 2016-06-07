@@ -24,6 +24,7 @@ import java.util.concurrent.ExecutionException;
 import nl.saxion.cage.twitteradapter.Entities.Entities;
 import nl.saxion.cage.twitteradapter.Entities.Hashtags;
 import nl.saxion.cage.twitteradapter.Entities.URL;
+import nl.saxion.cage.twitteradapter.Entities.User_Mention;
 
 public class Feed extends AppCompatActivity {
 
@@ -163,7 +164,20 @@ public class Feed extends AppCompatActivity {
                 urlList.add(url);
             }
 
-            Entities entities = new Entities(hashtagList,urlList);
+            ArrayList<User_Mention> mentionList = new ArrayList<>();
+            JSONArray JMentionArray = JEntities.getJSONArray("user_mentions");
+            for (int p = 0; p < JMentionArray.length(); p++) {
+                JSONObject Jmention = JURLArray.getJSONObject(p);
+                JSONArray JIndices = Jmention.getJSONArray("indices");
+                int indices[] = new int[2];
+                indices[0] = JIndices.getInt(0);
+                indices[1] = JIndices.getInt(1);
+                User_Mention mention =new User_Mention(indices);
+                mentionList.add(mention);
+            }
+
+
+            Entities entities = new Entities(hashtagList, urlList,mentionList);
 
 //        List<Media> media = (List<Media>) JEntities.getJSONArray("media");
 //        List<URL> urls = (List<URL>) JEntities.getJSONArray("urls");

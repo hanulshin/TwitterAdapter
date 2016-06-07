@@ -38,10 +38,11 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         tweet = tweetsList.get(i);
 
         cardViewHolder.textText.setText(tweet.getText());
-        if(tweet.getEntities().getUrls().size()<=tweet.getEntities().getHashtags().size()){
+        if(tweet.getEntities().getUrls().size()<tweet.getEntities().getHashtags().size()){
 
             for (int j = 0; j < tweet.getEntities().getHashtags().size(); j++) {
                 Spannable spanText = Spannable.Factory.getInstance().newSpannable(tweet.getText());
+
                 for (int k = 0; k < tweet.getEntities().getHashtags().size(); k++) {
                     spanText.setSpan(new ForegroundColorSpan(Color.parseColor("#2baeff")), tweet.getEntities().getHashtags().get(k).getIndices()[0],
                             tweet.getEntities().getHashtags().get(k).getIndices()[1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -49,6 +50,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
 //                    spanText.setSpan(new ForegroundColorSpan(Color.RED), tweet.getEntities().getUrls().get(k).getIndices()[0],
 //                            tweet.getEntities().getUrls().get(k).getIndices()[1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
+
                 cardViewHolder.textText.setText(spanText);
             }
         }

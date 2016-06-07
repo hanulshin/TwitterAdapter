@@ -23,10 +23,18 @@ public class User_Mention {
      */
     public String id_str;
 
+    public User_Mention(int[] indices) {
+        this.indices = indices;
+    }
+
     /**
      *
      */
-    public List<Integer> indices;
+    private int indices[];
+
+    public int[] getIndices() {
+        return indices;
+    }
 
     /**
      *
