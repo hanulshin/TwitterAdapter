@@ -8,7 +8,6 @@ import java.util.*;
 public class URL {
 
 
-
     /**
      * 
      */
@@ -22,17 +21,29 @@ public class URL {
     /**
      * 
      */
-    public List<Integer> indices;
-
+    //public List<Integer> indices;
+    private int indices[];
     /**
      * 
      */
+
+
     public String url;
 
     /**
      * Default constructor
      */
-    public URL() {
+    public URL(int indices[], String url) {
+        this.indices = indices;
+        this.url = url;
+
     }
 
+    public String getUrl() {
+        return url;
+    }
+
+    public int[] getIndices() {
+        return indices;
+    }
 }

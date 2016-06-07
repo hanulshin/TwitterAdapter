@@ -23,6 +23,7 @@ import java.util.concurrent.ExecutionException;
 
 import nl.saxion.cage.twitteradapter.Entities.Entities;
 import nl.saxion.cage.twitteradapter.Entities.Hashtags;
+import nl.saxion.cage.twitteradapter.Entities.URL;
 
 public class Feed extends AppCompatActivity {
 
@@ -147,7 +148,22 @@ public class Feed extends AppCompatActivity {
                 hashtagList.add(hashtag);
             }
 
-            Entities entities = new Entities(hashtagList);
+
+            ArrayList<URL> urlList = new ArrayList<>();
+//////
+            JSONArray JURLArray = JEntities.getJSONArray("urls");
+            for (int p = 0; p < JURLArray.length(); p++) {
+                JSONObject Jurl = JURLArray.getJSONObject(p);
+//                String urlText = Jurl.getString("text");
+                JSONArray JIndices = Jurl.getJSONArray("indices");
+                int indices[] = new int[2];
+                indices[0] = JIndices.getInt(0);
+                indices[1] = JIndices.getInt(1);
+                URL url = new URL(indices, "");
+                urlList.add(url);
+            }
+
+            Entities entities = new Entities(hashtagList,urlList);
 
 //        List<Media> media = (List<Media>) JEntities.getJSONArray("media");
 //        List<URL> urls = (List<URL>) JEntities.getJSONArray("urls");
