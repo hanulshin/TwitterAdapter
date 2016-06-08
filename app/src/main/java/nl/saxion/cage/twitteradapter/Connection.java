@@ -20,7 +20,6 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 public class Connection extends AsyncTask<String, Void, String> {
-    public AsyncResponse delegate=null;
     private static final String API_KEY = "BABNgm313dL2rRXf3iRM11lL8";
     private static final String API_SECRET = "WR2VFNTaJBRGmDCUettxUGPss50ZPOQaVlO8wsUYoHPMKlQkrG";
     private static final String CHARSET_UTF_8 = "UTF-8";
