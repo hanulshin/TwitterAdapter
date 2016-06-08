@@ -2,15 +2,19 @@ package nl.saxion.cage.twitteradapter;
 
 import android.content.Intent;
 import android.content.res.AssetManager;
+import android.support.annotation.IntegerRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
@@ -31,6 +35,8 @@ import nl.saxion.cage.twitteradapter.Entities.Hashtags;
 import nl.saxion.cage.twitteradapter.Entities.URL;
 import nl.saxion.cage.twitteradapter.Entities.User_Mention;
 
+import static android.widget.TextView.*;
+
 public class Feed extends AppCompatActivity implements AsyncResponse {
 
     List<Tweets> tweets = new ArrayList<>();
@@ -40,31 +46,35 @@ public class Feed extends AppCompatActivity implements AsyncResponse {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.card_tweet);
-//        Button buttonBG = (Button) findViewById(R.id.search);
-//        buttonBG.setBackgroundResource(R.drawable.searchicon);
-        Button searchButton = (Button) findViewById(R.id.search);
+        setContentView(R.layout.list_tweet);
 
-        assert searchButton != null;
-        searchButton.setOnClickListener(new View.OnClickListener() {
+        final EditText editSearch = (EditText) findViewById(R.id.editSearch);
+
+        OnEditorActionListener actionListener = new OnEditorActionListener() {
             @Override
-            public void onClick(View v) {
-                EditText mEdit = (EditText) findViewById(R.id.searchField);
-                Connection conn = new Connection();
-                String poop = mEdit.getText().toString();
-                conn.execute(poop);
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                Log.d("actionID", Integer.toString(actionId));
+                if (actionId == 5) {
+                    //we pressed the enter key!
+                    queryTwitter(editSearch.getText().toString());
+                    return true;
+                }
+                return false;
             }
-        });
+        };
 
 
-        try {
-            String tweetsFile = readAssetIntoString("tweets.json");
-            readJsonToObjects(tweetsFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        assert editSearch != null;
+        editSearch.setOnEditorActionListener(actionListener);
+
+//        try {
+//            String tweetsFile = readAssetIntoString("tweets.json");
+//            readJsonToObjects(tweetsFile);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
 
         adapter = new CardAdapter(this, R.layout.card_item_alt, tweets, this);
         RecyclerView recList = (RecyclerView) findViewById(R.id.cardList);
@@ -76,10 +86,14 @@ public class Feed extends AppCompatActivity implements AsyncResponse {
         recList.setLayoutManager(llm);
         recList.setAdapter(adapter);
 
+
+    }
+
+    private void queryTwitter(String searchTerm){
         //create connection and query the twitter api
         Connection conn = new Connection();
         conn.delegate = this;
-        conn.execute("poop");
+        conn.execute(searchTerm);
         if (searchJSON != null) {
             System.out.println(searchJSON);
         } else {

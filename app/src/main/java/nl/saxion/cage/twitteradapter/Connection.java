@@ -128,7 +128,7 @@ public class Connection extends AsyncTask<String, Void, String> {
                 Log.d("Tweets", connResponse);
                 IOUtils.closeQuietly(is);
             } else {
-                Log.d("(((",conn.getResponseMessage());
+                Log.d("Response error",conn.getResponseMessage());
             }
 
         } catch (ProtocolException e) {
