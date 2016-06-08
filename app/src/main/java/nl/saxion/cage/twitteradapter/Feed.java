@@ -1,10 +1,15 @@
 package nl.saxion.cage.twitteradapter;
 
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
@@ -26,24 +31,42 @@ import nl.saxion.cage.twitteradapter.Entities.Hashtags;
 import nl.saxion.cage.twitteradapter.Entities.URL;
 import nl.saxion.cage.twitteradapter.Entities.User_Mention;
 
-public class Feed extends AppCompatActivity {
+public class Feed extends AppCompatActivity implements AsyncResponse {
 
     List<Tweets> tweets = new ArrayList<>();
+    String searchJSON;
+    CardAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.card_tweet);
+//        Button buttonBG = (Button) findViewById(R.id.search);
+//        buttonBG.setBackgroundResource(R.drawable.searchicon);
+        Button searchButton = (Button) findViewById(R.id.search);
+
+        assert searchButton != null;
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText mEdit = (EditText) findViewById(R.id.searchField);
+                Connection conn = new Connection();
+                String poop = mEdit.getText().toString();
+                conn.execute(poop);
+            }
+        });
+
 
         try {
-            readJsonToObjects("tweets.json");
+            String tweetsFile = readAssetIntoString("tweets.json");
+            readJsonToObjects(tweetsFile);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        CardAdapter adapter = new CardAdapter(this, R.layout.card_item_alt, tweets, this);
+        adapter = new CardAdapter(this, R.layout.card_item_alt, tweets, this);
         RecyclerView recList = (RecyclerView) findViewById(R.id.cardList);
         recList.setHasFixedSize(true);
 
@@ -55,9 +78,14 @@ public class Feed extends AppCompatActivity {
 
         //create connection and query the twitter api
         Connection conn = new Connection();
-        conn.execute("@saxion");
+        conn.delegate = this;
+        conn.execute("poop");
+        if (searchJSON != null) {
+            System.out.println(searchJSON);
+        } else {
+            System.out.println("searchJson is null");
+        }
 
-        //try to get the response from the query
         try {
             conn.get();
         } catch (InterruptedException e) {
@@ -107,9 +135,9 @@ public class Feed extends AppCompatActivity {
      * @param file name of the JSON file to be parsed.
      */
     private void readJsonToObjects(String file) throws IOException, JSONException {
-        file = readAssetIntoString(file);
-        JSONObject jObj = new JSONObject(file);
 
+        tweets.clear();
+        JSONObject jObj = new JSONObject(file);
         JSONArray tweetArray = jObj.getJSONArray("statuses");
 
         for (int i = 0; i < tweetArray.length(); i++) {
@@ -167,17 +195,17 @@ public class Feed extends AppCompatActivity {
             ArrayList<User_Mention> mentionList = new ArrayList<>();
             JSONArray JMentionArray = JEntities.getJSONArray("user_mentions");
             for (int p = 0; p < JMentionArray.length(); p++) {
-                JSONObject Jmention = JURLArray.getJSONObject(p);
+                JSONObject Jmention = JMentionArray.getJSONObject(p);
                 JSONArray JIndices = Jmention.getJSONArray("indices");
                 int indices[] = new int[2];
                 indices[0] = JIndices.getInt(0);
                 indices[1] = JIndices.getInt(1);
-                User_Mention mention =new User_Mention(indices);
+                User_Mention mention = new User_Mention(indices);
                 mentionList.add(mention);
             }
 
 
-            Entities entities = new Entities(hashtagList, urlList,mentionList);
+            Entities entities = new Entities(hashtagList, urlList, mentionList);
 
 //        List<Media> media = (List<Media>) JEntities.getJSONArray("media");
 //        List<URL> urls = (List<URL>) JEntities.getJSONArray("urls");
@@ -187,5 +215,25 @@ public class Feed extends AppCompatActivity {
             Users user = new Users(screen_name, name, profile_image_url);
             tweets.add(new Tweets(user, text, retweets, createdAt, favourites, entities));
         }
+    }
+
+    @Override
+    public void processFinish(String output) {
+        //recieve output
+        searchJSON = output;
+        if (searchJSON != null) {
+            try {
+                readJsonToObjects(output);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            System.out.println("OK" + output);
+            adapter.notifyDataSetChanged();
+        } else {
+            System.out.println("LOL");
+        }
+
     }
 }

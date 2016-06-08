@@ -17,6 +17,9 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import nl.saxion.cage.twitteradapter.Entities.Entities;
+import nl.saxion.cage.twitteradapter.Entities.URL;
+
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder> {
     Tweets tweet;
 
@@ -37,35 +40,35 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
     public void onBindViewHolder(CardViewHolder cardViewHolder, int i) {
         tweet = tweetsList.get(i);
 
-        cardViewHolder.textText.setText(tweet.getText());
-        if(tweet.getEntities().getUrls().size()<tweet.getEntities().getHashtags().size()){
-
-            for (int j = 0; j < tweet.getEntities().getHashtags().size(); j++) {
-                Spannable spanText = Spannable.Factory.getInstance().newSpannable(tweet.getText());
-
-                for (int k = 0; k < tweet.getEntities().getHashtags().size(); k++) {
-                    spanText.setSpan(new ForegroundColorSpan(Color.parseColor("#2baeff")), tweet.getEntities().getHashtags().get(k).getIndices()[0],
-                            tweet.getEntities().getHashtags().get(k).getIndices()[1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-//                    spanText.setSpan(new ForegroundColorSpan(Color.RED), tweet.getEntities().getUrls().get(k).getIndices()[0],
-//                            tweet.getEntities().getUrls().get(k).getIndices()[1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                }
-
-                cardViewHolder.textText.setText(spanText);
-            }
-        }
-        else{
-            for (int j = 0; j < tweet.getEntities().getUrls().size(); j++) {
-                Spannable spanText = Spannable.Factory.getInstance().newSpannable(tweet.getText());
-                for (int k = 0; k < tweet.getEntities().getUrls().size(); k++) {
-                    spanText.setSpan(new ForegroundColorSpan(Color.RED), tweet.getEntities().getUrls().get(k).getIndices()[0],
-                            tweet.getEntities().getUrls().get(k).getIndices()[1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        cardViewHolder.textText.setText(tweet.getText());
+//        if(tweet.getEntities().getUrls().size()<tweet.getEntities().getHashtags().size()){
+//
+//            for (int j = 0; j < tweet.getEntities().getHashtags().size(); j++) {
+//                Spannable spanText = Spannable.Factory.getInstance().newSpannable(tweet.getText());
+//
+//                for (int k = 0; k < tweet.getEntities().getHashtags().size(); k++) {
 //                    spanText.setSpan(new ForegroundColorSpan(Color.parseColor("#2baeff")), tweet.getEntities().getHashtags().get(k).getIndices()[0],
 //                            tweet.getEntities().getHashtags().get(k).getIndices()[1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                }
-                cardViewHolder.textText.setText(spanText);
-            }
-        }
+//
+////                    spanText.setSpan(new ForegroundColorSpan(Color.RED), tweet.getEntities().getUrls().get(k).getIndices()[0],
+////                            tweet.getEntities().getUrls().get(k).getIndices()[1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//                }
+//
+//                cardViewHolder.textText.setText(spanText);
+//            }
+//        }
+//        else{
+//            for (int j = 0; j < tweet.getEntities().getUrls().size(); j++) {
+//                Spannable spanText = Spannable.Factory.getInstance().newSpannable(tweet.getText());
+//                for (int k = 0; k < tweet.getEntities().getUrls().size(); k++) {
+////                    spanText.setSpan(new ForegroundColorSpan(Color.RED), tweet.getEntities().getUrls().get(k).getIndices()[0],
+////                            tweet.getEntities().getUrls().get(k).getIndices()[1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+////                    spanText.setSpan(new ForegroundColorSpan(Color.parseColor("#2baeff")), tweet.getEntities().getHashtags().get(k).getIndices()[0],
+////                           tweet.getEntities().getHashtags().get(k).getIndices()[1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//                }
+//                cardViewHolder.textText.setText(spanText);
+//            }
+//        }
 //
 //        for (int j = 0; j < tweet.getEntities().getHashtags().size(); j++) {
 //            Spannable spanText = Spannable.Factory.getInstance().newSpannable(tweet.getText());
@@ -77,15 +80,44 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
 //        }
 
 //        String tweetTextU = tweet.getText().replace("\n"," ");
-//        for (int h = 0; h < tweet.getEntities().getUrls().size(); h++) {
-//            Spannable spanTextURL = Spannable.Factory.getInstance().newSpannable(tweetTextU);
-//            for (int g = 0; g < tweet.getEntities().getUrls().size(); g++) {
-//                spanTextURL.setSpan(new ForegroundColorSpan(Color.RED), tweet.getEntities().getUrls().get(g).getIndices()[0],
-//                        tweet.getEntities().getUrls().get(g).getIndices()[1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-//            }
-//            cardViewHolder.textText.setText(spanTextURL);
-//
-//        }
+
+        /*
+        the first and only spantext we need to create
+         */
+        Spannable spanText = Spannable.Factory.getInstance().newSpannable(tweet.getText());
+
+        //urls
+        setSpan(Color.parseColor("#2baeff"), tweet.getEntities().getUrls().get(g).getIndices()[0], spanText)
+        //hashtags
+
+        //user mentions
+
+
+
+
+
+        for (int h = 0; h < tweet.getEntities().getUrls().size(); h++) {
+            for (int g = 0; g < tweet.getEntities().getUrls().size(); g++) {
+                spanText.setSpan(new ForegroundColorSpan(Color.parseColor("#2baeff")), tweet.getEntities().getUrls().get(g).getIndices()[0],
+                        tweet.getEntities().getUrls().get(g).getIndices()[1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        }
+
+        for (int j = 0; j < tweet.getEntities().getHashtags().size(); j++) {
+            for (int k = 0; k < tweet.getEntities().getHashtags().size(); k++) {
+                spanText.setSpan(new ForegroundColorSpan(Color.parseColor("#2baeff")), tweet.getEntities().getHashtags().get(k).getIndices()[0],
+                        tweet.getEntities().getHashtags().get(k).getIndices()[1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        }
+
+        for (int j = 0; j < tweet.getEntities().getUser_mentions().size(); j++) {
+            for (int k = 0; k < tweet.getEntities().getUser_mentions().size(); k++) {
+                spanText.setSpan(new ForegroundColorSpan(Color.parseColor("#2baeff")), tweet.getEntities().getUser_mentions().get(k).getIndices()[0],
+                        tweet.getEntities().getUser_mentions().get(k).getIndices()[1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        }
+
+        cardViewHolder.textText.setText(spanText);
 
         cardViewHolder.nameText.setText(tweet.getUser().getName());
         cardViewHolder.screenNameText.setText("@"+tweet.getUser().getScreen_name());
@@ -94,6 +126,18 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         Picasso.with(con).load(tweet.getUser().getProfile_image_url()).into(cardViewHolder.profileImage);
 
     }
+
+    Spannable setSpan(int color, int size, Entities entities, Spannable spanText) {
+
+        int[] indices = entities.getIndices();
+        for (int h = 0; h < size; h++) {
+            for (int g = 0; g < size; g++) {
+                spanText.setSpan(new ForegroundColorSpan(color), indices[0], indices[1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        }
+        return spanText;
+    }
+
 
     @Override
     public CardViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {

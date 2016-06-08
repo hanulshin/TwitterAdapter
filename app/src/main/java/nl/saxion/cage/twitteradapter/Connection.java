@@ -20,6 +20,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 public class Connection extends AsyncTask<String, Void, String> {
+    public AsyncResponse delegate=null;
     private static final String API_KEY = "BABNgm313dL2rRXf3iRM11lL8";
     private static final String API_SECRET = "WR2VFNTaJBRGmDCUettxUGPss50ZPOQaVlO8wsUYoHPMKlQkrG";
     private static final String CHARSET_UTF_8 = "UTF-8";
@@ -30,8 +31,12 @@ public class Connection extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... params) {
-        requestData(params[0], retrieveToken());
-        return null;
+        return  requestData(params[0], retrieveToken());
+    }
+
+    @Override
+    protected void onPostExecute(String result) {
+        delegate.processFinish(result);
     }
 
     private String retrieveToken() {
@@ -92,7 +97,7 @@ public class Connection extends AsyncTask<String, Void, String> {
     }
 
     public String requestData(String searchTerm, String bearerToken) {
-
+        String tweets = null;
         //the url we need to query
         //https://api.twitter.com/1.1/search/tweets.json?q=%40twitterapi
         try {
@@ -119,7 +124,7 @@ public class Connection extends AsyncTask<String, Void, String> {
                 InputStream is = conn.getInputStream();
                 String connResponse = IOUtils.toString(is, "UTF-8");
 
-                String tweets = connResponse;
+                 tweets = connResponse;
                 Log.d("Tweets", connResponse);
                 IOUtils.closeQuietly(is);
             } else {
@@ -133,6 +138,6 @@ public class Connection extends AsyncTask<String, Void, String> {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
+        return tweets;
     }
 }

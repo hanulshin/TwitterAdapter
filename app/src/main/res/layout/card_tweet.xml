@@ -6,5 +6,26 @@
         android:id="@+id/cardList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        />
+        android:layout_alignParentTop="true"
+        android:layout_alignEnd="@+id/search"
+        android:layout_marginTop="70dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/searchField"
+        android:width="300dp"
+        android:layout_alignBottom="@+id/search"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/search" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="fitCenter"
+        android:text="Search"
+        android:id="@+id/search"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:width="5dp" />
 </RelativeLayout>
