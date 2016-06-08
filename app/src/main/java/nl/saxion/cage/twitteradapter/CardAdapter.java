@@ -38,15 +38,54 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         tweet = tweetsList.get(i);
 
         cardViewHolder.textText.setText(tweet.getText());
+        if(tweet.getEntities().getUrls().size()<tweet.getEntities().getHashtags().size()){
 
-        for (int j = 0; j < tweet.getEntities().getHashtags().size(); j++) {
-            Spannable spanText = Spannable.Factory.getInstance().newSpannable(tweet.getText());
-            for (int k = 0; k < tweet.getEntities().getHashtags().size(); k++) {
-                spanText.setSpan(new ForegroundColorSpan(Color.GREEN), tweet.getEntities().getHashtags().get(k).getIndices()[0],
-                        tweet.getEntities().getHashtags().get(k).getIndices()[1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            for (int j = 0; j < tweet.getEntities().getHashtags().size(); j++) {
+                Spannable spanText = Spannable.Factory.getInstance().newSpannable(tweet.getText());
+
+                for (int k = 0; k < tweet.getEntities().getHashtags().size(); k++) {
+                    spanText.setSpan(new ForegroundColorSpan(Color.parseColor("#2baeff")), tweet.getEntities().getHashtags().get(k).getIndices()[0],
+                            tweet.getEntities().getHashtags().get(k).getIndices()[1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+//                    spanText.setSpan(new ForegroundColorSpan(Color.RED), tweet.getEntities().getUrls().get(k).getIndices()[0],
+//                            tweet.getEntities().getUrls().get(k).getIndices()[1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+
+                cardViewHolder.textText.setText(spanText);
             }
-            cardViewHolder.textText.setText(spanText);
         }
+        else{
+            for (int j = 0; j < tweet.getEntities().getUrls().size(); j++) {
+                Spannable spanText = Spannable.Factory.getInstance().newSpannable(tweet.getText());
+                for (int k = 0; k < tweet.getEntities().getUrls().size(); k++) {
+                    spanText.setSpan(new ForegroundColorSpan(Color.RED), tweet.getEntities().getUrls().get(k).getIndices()[0],
+                            tweet.getEntities().getUrls().get(k).getIndices()[1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//                    spanText.setSpan(new ForegroundColorSpan(Color.parseColor("#2baeff")), tweet.getEntities().getHashtags().get(k).getIndices()[0],
+//                            tweet.getEntities().getHashtags().get(k).getIndices()[1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+                cardViewHolder.textText.setText(spanText);
+            }
+        }
+//
+//        for (int j = 0; j < tweet.getEntities().getHashtags().size(); j++) {
+//            Spannable spanText = Spannable.Factory.getInstance().newSpannable(tweet.getText());
+//            for (int k = 0; k < tweet.getEntities().getHashtags().size(); k++) {
+//                spanText.setSpan(new ForegroundColorSpan(Color.parseColor("#2baeff")), tweet.getEntities().getHashtags().get(k).getIndices()[0],
+//                        tweet.getEntities().getHashtags().get(k).getIndices()[1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//            }
+//            cardViewHolder.textText.setText(spanText);
+//        }
+
+//        String tweetTextU = tweet.getText().replace("\n"," ");
+//        for (int h = 0; h < tweet.getEntities().getUrls().size(); h++) {
+//            Spannable spanTextURL = Spannable.Factory.getInstance().newSpannable(tweetTextU);
+//            for (int g = 0; g < tweet.getEntities().getUrls().size(); g++) {
+//                spanTextURL.setSpan(new ForegroundColorSpan(Color.RED), tweet.getEntities().getUrls().get(g).getIndices()[0],
+//                        tweet.getEntities().getUrls().get(g).getIndices()[1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//            }
+//            cardViewHolder.textText.setText(spanTextURL);
+//
+//        }
 
         cardViewHolder.nameText.setText(tweet.getUser().getName());
         cardViewHolder.screenNameText.setText("@"+tweet.getUser().getScreen_name());

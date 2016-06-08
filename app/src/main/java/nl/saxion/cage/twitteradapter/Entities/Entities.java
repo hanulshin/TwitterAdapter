@@ -51,10 +51,18 @@ public class Entities {
         this.urls = urls;
         this.user_mentions = user_mentions;
     }
+    public Entities(List<Hashtags> hashtags, List<URL> urls,List<User_Mention> user_mentions) {
+        this.hashtags = hashtags;
+        this.urls = urls;
+        this.user_mentions = user_mentions;
+    }
+
 
     public Entities(List<Hashtags> hashtags) {
         this.hashtags = hashtags;
     }
+
+
 
 
 
