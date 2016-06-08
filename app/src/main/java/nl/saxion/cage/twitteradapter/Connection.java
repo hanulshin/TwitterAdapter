@@ -25,18 +25,14 @@ public class Connection extends AsyncTask<String, Void, String> {
     private static final String API_SECRET = "WR2VFNTaJBRGmDCUettxUGPss50ZPOQaVlO8wsUYoHPMKlQkrG";
     private static final String CHARSET_UTF_8 = "UTF-8";
 
-    Connection() {
-
-    }
-
     @Override
     protected String doInBackground(String... params) {
         return  requestData(params[0], retrieveToken());
     }
 
     @Override
-    protected void onPostExecute(String result) {
-        delegate.processFinish(result);
+    protected void onPostExecute(String s) {
+        super.onPostExecute(s);
     }
 
     private String retrieveToken() {
@@ -62,10 +58,17 @@ public class Connection extends AsyncTask<String, Void, String> {
             byte[] body = "grant_type=client_credentials".getBytes("UTF-8");
             conn.setFixedLengthStreamingMode(body.length);
 
+            //set up output stream
             BufferedOutputStream os = new BufferedOutputStream(conn.getOutputStream());
+
+            //write and close output stream
             os.write(body);
             os.close();
+
+            //grab response code
             int response = conn.getResponseCode();
+
+            //test code
             if (response == 200) {
                 InputStream is = conn.getInputStream();
                 String connResponse = IOUtils.toString(is, "UTF-8");
@@ -124,7 +127,7 @@ public class Connection extends AsyncTask<String, Void, String> {
                 InputStream is = conn.getInputStream();
                 String connResponse = IOUtils.toString(is, "UTF-8");
 
-                 tweets = connResponse;
+                tweets = connResponse;
                 Log.d("Tweets", connResponse);
                 IOUtils.closeQuietly(is);
             } else {

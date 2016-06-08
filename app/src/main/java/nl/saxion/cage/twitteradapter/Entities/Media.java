@@ -31,7 +31,7 @@ public class Media {
     /**
      * 
      */
-    private List<Integer> indices;
+    private int[] indices;
 
     /**
      * 
@@ -66,12 +66,14 @@ public class Media {
     /**
      *
      */
-    private URL url;
+    private String url;
 
     /**
      * Default constructor
      */
-    public Media() {
+    public Media(int[] indices, String url) {
+        this.indices = indices;
+        this.url = url;
     }
 
 
