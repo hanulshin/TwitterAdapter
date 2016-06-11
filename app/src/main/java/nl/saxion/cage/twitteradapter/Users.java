@@ -17,7 +17,6 @@ public class Users {
         this.screen_name = screen_name;
         this.name = name;
         this.profile_image_url=profile_image_url;
-        this.profile_image_bmp = profile_image_bmp;
     }
 
     public String getScreen_name() {
@@ -146,8 +145,6 @@ public class Users {
      *
      */
     public boolean profile_background_tile;
-
-
 
     /**
      *

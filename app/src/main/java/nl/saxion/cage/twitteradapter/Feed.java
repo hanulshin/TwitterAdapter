@@ -1,11 +1,15 @@
 package nl.saxion.cage.twitteradapter;
 
+import android.content.Context;
 import android.content.res.AssetManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
+import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import org.json.JSONArray;
@@ -20,7 +24,6 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import nl.saxion.cage.twitteradapter.Entities.Entities;
 import nl.saxion.cage.twitteradapter.Entities.Hashtags;
-import nl.saxion.cage.twitteradapter.Entities.Media;
 import nl.saxion.cage.twitteradapter.Entities.URL;
 import nl.saxion.cage.twitteradapter.Entities.User_Mention;
 import static android.widget.TextView.*;
@@ -39,25 +42,34 @@ public class Feed extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.list_tweet);
+        setContentView(R.layout.feed_screen);
 
         final EditText editSearch = (EditText) findViewById(R.id.editSearch);
 
         OnEditorActionListener actionListener = new OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == 5) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+
+                    //query twitter api and clear search bar
                     queryTwitter(editSearch.getText().toString());
                     editSearch.setText("");
+
+                    //hide keyboard
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(editSearch.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
+
+                    //the key has been pressed
                     return true;
                 }
                 return false;
             }
         };
 
-        assert editSearch != null;
+        //listens to key presses on keyboard
         editSearch.setOnEditorActionListener(actionListener);
 
+        //card view adapter
         adapter = new CardAdapter(this, R.layout.card_item_alt, tweets, this);
         RecyclerView recList = (RecyclerView) findViewById(R.id.cardList);
         recList.setHasFixedSize(true);
@@ -72,9 +84,6 @@ public class Feed extends AppCompatActivity {
     private void queryTwitter(String searchTerm){
         //create connection
         Connection conn = new Connection();
-
-        //set delegate for parsing response and updating the tweet list
-        //conn.delegate = this;
 
         //query twitter
         conn.execute(searchTerm);
