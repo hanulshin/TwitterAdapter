@@ -67,7 +67,7 @@ public class Connection extends AsyncTask<String, Void, String> {
             //grab response code
             int response = conn.getResponseCode();
 
-            //test code
+            //response code
             if (response == 200) {
                 InputStream is = conn.getInputStream();
                 String connResponse = IOUtils.toString(is, "UTF-8");

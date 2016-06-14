@@ -4,14 +4,80 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="wrap_content"
     card_view:cardCornerRadius="2dp"
     card_view:cardBackgroundColor="@color/primary"
-    android:layout_margin="5dp">
+    android:layout_margin="2dp"
+    android:translationZ="2dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/profileView"
+            android:background="#f960d8"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_margin="5dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/bright_foreground_inverse_material_dark"
+            android:text="text"
+            android:id="@+id/TextView"
+            android:layout_marginRight="10dp"
+            android:layout_alignWithParentIfMissing="false"
+            android:layout_below="@+id/NameView"
+            android:layout_alignStart="@+id/NameView" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="retweets: 2"
+            android:id="@+id/RetweetView"
+            android:layout_marginLeft="5dp"
+            android:textColor="@color/secondary_text"
+            android:textStyle="bold"
+            android:layout_alignBaseline="@+id/LikeView"
+            android:layout_alignBottom="@+id/LikeView"
+            android:layout_alignEnd="@+id/TextView" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="likes: 5"
+            android:id="@+id/LikeView"
+            android:textColor="@color/secondary_text"
+            android:textStyle="bold"
+            android:translationZ="0dp"
+            android:layout_alignBaseline="@+id/DateView"
+            android:layout_alignBottom="@+id/DateView"
+            android:layout_toStartOf="@+id/RetweetView" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="date"
+            android:id="@+id/DateView"
+            android:textColor="@color/secondary_text"
+            android:layout_below="@+id/mediaImage"
+            android:layout_alignStart="@+id/profileView" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="\@screen_name"
+            android:id="@+id/ScreenNameView"
+            android:textColor="@color/material_grey_600"
+            android:layout_marginLeft="5dp"
+            android:textSize="15dp"
+            android:layout_alignBaseline="@+id/NameView"
+            android:layout_alignBottom="@+id/NameView"
+            android:layout_toEndOf="@+id/NameView" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -20,68 +86,18 @@
             android:id="@+id/NameView"
             android:textSize="18dp"
             android:textStyle="bold"
-            android:textColor="@color/accent"
-            android:layout_marginLeft="10dp"
+            android:textColor="@android:color/black"
             android:layout_alignParentTop="true"
-            android:layout_alignStart="@+id/TextView" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="\@screen_name"
-            android:id="@+id/ScreenNameView"
-            android:layout_marginLeft="3dp"
-            android:layout_alignBottom="@+id/NameView"
-            android:layout_alignStart="@+id/LikeView" />
-
-        <TextView
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:textColor="#ffffff"
-            android:text="text"
-            android:id="@+id/TextView"
-            android:layout_below="@+id/DateView"
-            android:layout_toEndOf="@+id/imageView"
-            android:layout_marginLeft="10dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="retweets: 2"
-            android:id="@+id/RetweetView"
-            android:layout_marginLeft="7dp"
-            android:textColor="@color/accent"
-            android:textStyle="bold"
-            android:layout_below="@+id/TextView"
-            android:layout_toEndOf="@+id/LikeView"
-            android:layout_marginStart="25dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="likes: 5"
-            android:id="@+id/LikeView"
-            android:textColor="@color/accent"
-            android:textStyle="bold"
-            android:layout_below="@+id/TextView"
-            android:layout_centerHorizontal="true" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="date"
-            android:id="@+id/DateView"
-            android:textColor="#d2d2d2"
-            android:layout_below="@+id/NameView"
-            android:layout_alignParentEnd="true" />
+            android:layout_toEndOf="@+id/profileView" />
 
         <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:id="@+id/imageView"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
-            android:background="#48b9f6" />
+            android:layout_width="280dp"
+            android:layout_height="15dp"
+            android:id="@+id/mediaImage"
+            android:layout_alignWithParentIfMissing="false"
+            android:layout_below="@+id/TextView"
+            android:layout_toEndOf="@+id/profileView"
+            android:layout_alignBottom="@+id/profileView" />
 
     </RelativeLayout>
   </android.support.v7.widget.CardView>

@@ -73,9 +73,10 @@ public class Media {
      */
     public Media(int[] indices, String url) {
         this.indices = indices;
-        this.url = url;
+        this.media_url = url;
     }
 
-
-
+    public String getMedia_url() {
+        return media_url;
+    }
 }
