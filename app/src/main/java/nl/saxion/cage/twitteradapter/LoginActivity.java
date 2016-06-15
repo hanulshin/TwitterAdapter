@@ -1,12 +1,17 @@
 package nl.saxion.cage.twitteradapter;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 
 import com.github.scribejava.apis.TwitterApi;
@@ -19,12 +24,20 @@ import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.*;
 
 public class LoginActivity extends AppCompatActivity {
+    private WebView webView=null;
+    private Activity mActivity = null;
+    private ProgressDialog mDialog = null;
     private static final String API_KEY = "BABNgm313dL2rRXf3iRM11lL8";
     private static final String API_SECRET = "WR2VFNTaJBRGmDCUettxUGPss50ZPOQaVlO8wsUYoHPMKlQkrG";
+    private static final String TAG = LoginActivity.class
+            .getSimpleName();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        mActivity = this;
+
         if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
@@ -34,6 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         assert button != null;
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                setContentView(R.layout.web_view_login);
 //didn't create OAUTH10aService class because there is a default one
                 com.github.scribejava.core.oauth.OAuth10aService authService =
                         new ServiceBuilder()
@@ -43,16 +57,113 @@ public class LoginActivity extends AppCompatActivity {
                                 .build(TwitterApi.instance());//changed from API to api, getInstance to instance
                 final OAuth1RequestToken requestToken = authService.getRequestToken();
                 String authUrl = authService.getAuthorizationUrl(requestToken);
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(authUrl));
-                startActivity(browserIntent);
-                Log.d("auth",authUrl);
-                final OAuth1AccessToken accessToken = authService.getAccessToken(requestToken, "");// "verifier you got frAom the user/callback"
-                final OAuthRequest request = new OAuthRequest(Verb.GET, "https://api.twitter.com/1.1/account/verify_credentials.json", authService);
-                authService.signRequest(accessToken, request); // the access token from step 4
-                final Response response = request.send();
-                System.out.println(response.getBody());
+
+
+                webView = (WebView) findViewById(R.id.webView);
+
+                webView.setWebViewClient(new MyWebViewClient());
+                webView.loadUrl(authUrl);
+
+
+//                final OAuth1AccessToken accessToken = authService.getAccessToken(requestToken, verifier);// "verifier you got frAom the user/callback"
+//                final OAuthRequest request = new OAuthRequest(Verb.GET, "https://api.twitter.com/1.1/account/verify_credentials.json", authService);
+//                authService.signRequest(accessToken, request); // the access token from step 4
+//                final Response response = request.send();
+//                System.out.println(response.getBody());
             }
         });
 
+    }
+    @Override
+    protected void onStop() {
+        cancelProgressDialog();
+        super.onStop();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        WebView webView = (WebView) findViewById(R.id.webView);
+        if(webView!=null)
+        {
+            if(webView.canGoBack())
+            {
+                webView.goBack();
+            }
+            else
+            {
+                super.onBackPressed();
+            }
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        cancelProgressDialog();
+        super.onPause();
+    }
+
+    private void cancelProgressDialog() {
+        if (mDialog != null) {
+            mDialog.dismiss();
+            mDialog.cancel();
+            mDialog = null;
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        this.onRestart();
+    }
+
+
+
+    private class MyWebViewClient extends WebViewClient {
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            try {
+                if (mDialog != null && mDialog.isShowing()) {
+                    mDialog.dismiss();
+                    mDialog = null;
+                }
+            } catch (Exception exception) {
+            }
+        }
+
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            super.onPageStarted(view, url, favicon);
+            if (mDialog == null)
+                mDialog = new ProgressDialog(LoginActivity.this);
+            mDialog.setMessage("Loading..");
+
+            if (!(mActivity.isFinishing())) {
+                mDialog.show();
+            }
+        }
+
+        @Override
+        public void onLoadResource(WebView view, String url) {
+            Log.i(TAG, "Loading Resources");
+            Log.i(TAG,
+                    "Resource Loading Progress : " + view.getProgress());
+            if (view.getProgress() >= 70) {
+                cancelProgressDialog();
+            }
+        }
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            Uri uri = Uri.parse(url);
+            String verifier = uri.getQueryParameter("oauth_verifier");
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra("oauth_verifier", verifier);
+            setResult(RESULT_OK, resultIntent);
+            Log.d("msg",verifier);
+            finish();
+            return false;
+
+        }
     }
 }
