@@ -24,13 +24,14 @@ import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.*;
 
 public class LoginActivity extends AppCompatActivity {
-    private WebView webView=null;
+    private WebView webView = null;
     private Activity mActivity = null;
     private ProgressDialog mDialog = null;
     private static final String API_KEY = "BABNgm313dL2rRXf3iRM11lL8";
     private static final String API_SECRET = "WR2VFNTaJBRGmDCUettxUGPss50ZPOQaVlO8wsUYoHPMKlQkrG";
     private static final String TAG = LoginActivity.class
             .getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
             StrictMode.setThreadPolicy(policy);
         }
 
-        Button button= (Button) findViewById(R.id.twitter_login_btn);
+        Button button = (Button) findViewById(R.id.twitter_login_btn);
         assert button != null;
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -65,15 +66,16 @@ public class LoginActivity extends AppCompatActivity {
                 webView.loadUrl(authUrl);
 
 
-//                final OAuth1AccessToken accessToken = authService.getAccessToken(requestToken, verifier);// "verifier you got frAom the user/callback"
-//                final OAuthRequest request = new OAuthRequest(Verb.GET, "https://api.twitter.com/1.1/account/verify_credentials.json", authService);
-//                authService.signRequest(accessToken, request); // the access token from step 4
-//                final Response response = request.send();
-//                System.out.println(response.getBody());
+                final OAuth1AccessToken accessToken = authService.getAccessToken(requestToken, verifier);// "verifier you got frAom the user/callback"
+                final OAuthRequest request = new OAuthRequest(Verb.GET, "https://api.twitter.com/1.1/account/verify_credentials.json", authService);
+                authService.signRequest(accessToken, request); // the access token from step 4
+                final Response response = request.send();
+                System.out.println(response.getBody());
             }
         });
 
     }
+
     @Override
     protected void onStop() {
         cancelProgressDialog();
@@ -84,14 +86,10 @@ public class LoginActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         WebView webView = (WebView) findViewById(R.id.webView);
-        if(webView!=null)
-        {
-            if(webView.canGoBack())
-            {
+        if (webView != null) {
+            if (webView.canGoBack()) {
                 webView.goBack();
-            }
-            else
-            {
+            } else {
                 super.onBackPressed();
             }
         }
@@ -115,7 +113,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onResume() {
         this.onRestart();
     }
-
 
 
     private class MyWebViewClient extends WebViewClient {
@@ -160,7 +157,7 @@ public class LoginActivity extends AppCompatActivity {
             Intent resultIntent = new Intent();
             resultIntent.putExtra("oauth_verifier", verifier);
             setResult(RESULT_OK, resultIntent);
-            Log.d("msg",verifier);
+            Log.d("msg", verifier);
             finish();
             return false;
 
