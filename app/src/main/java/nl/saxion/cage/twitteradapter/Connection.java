@@ -4,6 +4,15 @@ import android.os.AsyncTask;
 import android.util.Base64;
 import android.util.Log;
 
+import com.github.scribejava.apis.TwitterApi;
+import com.github.scribejava.core.builder.ServiceBuilder;
+import com.github.scribejava.core.model.OAuth1AccessToken;
+import com.github.scribejava.core.model.OAuth1RequestToken;
+import com.github.scribejava.core.model.OAuthRequest;
+import com.github.scribejava.core.model.Response;
+import com.github.scribejava.core.model.Verb;
+import com.github.scribejava.core.oauth.OAuth10aService;
+
 import org.apache.commons.io.IOUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,7 +35,7 @@ public class Connection extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... params) {
-        return  requestData(params[0], retrieveToken());
+        return requestData(params[0], retrieveToken());
     }
 
     @Override
@@ -89,6 +98,8 @@ public class Connection extends AsyncTask<String, Void, String> {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+
         return bearerToken;
     }
 
@@ -108,7 +119,7 @@ public class Connection extends AsyncTask<String, Void, String> {
             String searchUrl = "https://api.twitter.com/1.1/search/tweets.json?q=";
             String encodedTerm = URLEncoder.encode(searchTerm, CHARSET_UTF_8);
 
-            URL url = new URL(searchUrl+encodedTerm);
+            URL url = new URL(searchUrl + encodedTerm);
 
             //create connection
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -118,7 +129,7 @@ public class Connection extends AsyncTask<String, Void, String> {
             conn.addRequestProperty("Authorization", "Bearer " + bearerToken);
             conn.addRequestProperty("Content-Type", "application/json");
 
-            conn.setConnectTimeout (5000) ;
+            conn.setConnectTimeout(5000);
             conn.setDoInput(true);
 
             int response = conn.getResponseCode();
@@ -130,7 +141,7 @@ public class Connection extends AsyncTask<String, Void, String> {
                 Log.d("Tweets", connResponse);
                 IOUtils.closeQuietly(is);
             } else {
-                Log.d("Response error",conn.getResponseMessage());
+                Log.d("Response error", conn.getResponseMessage());
             }
 
         } catch (ProtocolException e) {

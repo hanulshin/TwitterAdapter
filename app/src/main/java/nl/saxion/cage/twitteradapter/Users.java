@@ -13,10 +13,10 @@ public class Users {
      * Default constructor
      */
     //Bitmap profile_image_bmp
-    public Users(String screen_name, String name, String profile_image_url ) {
+    public Users(String screen_name, String name, String profile_image_url) {
         this.screen_name = screen_name;
         this.name = name;
-        this.profile_image_url=profile_image_url;
+        this.profile_image_url = profile_image_url;
     }
 
     public String getScreen_name() {
