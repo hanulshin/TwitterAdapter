@@ -107,6 +107,7 @@ public class Feed extends AppCompatActivity {
 
                 //update the card view
                 adapter.notifyDataSetChanged();
+
             }
         } catch (InterruptedException e) {
             e.printStackTrace();

@@ -1,6 +1,8 @@
 package nl.saxion.cage.twitteradapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
@@ -63,9 +65,16 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
 
         Picasso.with(context).load(tweet.getUser().getProfile_image_url()).into(cardViewHolder.profileImage);
 
+        Bitmap bitmap = BitmapFactory.decodeFile("/res/drawable/searchicon.png");
 
-        for (int j = 0; j < tweet.getEntities().getMedia().size(); j++) {
-            Picasso.with(context).load(tweet.getEntities().getMedia().get(j).getMedia_url()).resize(1000, 500).centerCrop().into(cardViewHolder.media);
+        cardViewHolder.media.setImageBitmap(bitmap);
+
+        if (tweet.getEntities().getMedia().size() > 0){
+            Picasso.with(context)
+                    .load(tweet.getEntities().getMedia().get(0).getMedia_url())
+                    .resize(1500, 900)
+                    .centerCrop()
+                    .into(cardViewHolder.media);
         }
     }
 
