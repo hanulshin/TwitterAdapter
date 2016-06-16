@@ -19,7 +19,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
     Tweets tweet;
 
     private List<Tweets> tweetsList;
-     Context context;
+    Context context;
 
     public CardAdapter(Feed feed, int item_tweet, List<Tweets> tweetsList, Context con) {
         this.tweetsList = tweetsList;
@@ -57,14 +57,15 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
 
         cardViewHolder.textText.setText(spanText);
         cardViewHolder.nameText.setText(tweet.getUser().getName());
-        cardViewHolder.screenNameText.setText("@"+tweet.getUser().getScreen_name());
+        cardViewHolder.screenNameText.setText("@" + tweet.getUser().getScreen_name());
         cardViewHolder.dateText.setText(tweet.getCreated_at());
         cardViewHolder.likesText.setText("Likes: " + String.valueOf(tweet.getFavourite_count()));
 
         Picasso.with(context).load(tweet.getUser().getProfile_image_url()).into(cardViewHolder.profileImage);
 
+
         for (int j = 0; j < tweet.getEntities().getMedia().size(); j++) {
-            Picasso.with(context).load(tweet.getEntities().getMedia().get(j).getMedia_url()).resize(cardViewHolder.media.getWidth(), cardViewHolder.media.getHeight()).centerCrop().into(cardViewHolder.media);
+            Picasso.with(context).load(tweet.getEntities().getMedia().get(j).getMedia_url()).resize(1000, 500).centerCrop().into(cardViewHolder.media);
         }
     }
 
@@ -79,17 +80,10 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
 
     @Override
     public CardViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        if (tweetsList.get(i).getEntities().getMedia().size() == 0) {
-            View itemView = LayoutInflater.
-                    from(viewGroup.getContext()).
-                    inflate(R.layout.card_item, viewGroup, false);
-            return new CardViewHolder(itemView);
-        } else {
-            View itemView = LayoutInflater.
-                    from(viewGroup.getContext()).
-                    inflate(R.layout.card_item_picture, viewGroup, false);
-            return new CardViewHolder(itemView);
-        }
+        View itemView = LayoutInflater.
+                from(viewGroup.getContext()).
+                inflate(R.layout.card_item_picture, viewGroup, false);
+        return new CardViewHolder(itemView);
     }
 
     public static class CardViewHolder extends RecyclerView.ViewHolder {

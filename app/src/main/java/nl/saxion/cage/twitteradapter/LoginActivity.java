@@ -31,6 +31,8 @@ public class LoginActivity extends AppCompatActivity {
     private static final String API_SECRET = "WR2VFNTaJBRGmDCUettxUGPss50ZPOQaVlO8wsUYoHPMKlQkrG";
     private static final String TAG = LoginActivity.class
             .getSimpleName();
+    com.github.scribejava.core.oauth.OAuth10aService authService;
+    OAuth1RequestToken requestToken = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,13 +52,13 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 setContentView(R.layout.web_view_login);
 //didn't create OAUTH10aService class because there is a default one
-                com.github.scribejava.core.oauth.OAuth10aService authService =
+                authService =
                         new ServiceBuilder()
                                 .apiKey(API_KEY)
                                 .apiSecret(API_SECRET)
                                 .callback("http://www.cagitter.com"/*OAUTH_CALLBACK_URL*/)// not used in git, but said to use in slides
                                 .build(TwitterApi.instance());//changed from API to api, getInstance to instance
-                final OAuth1RequestToken requestToken = authService.getRequestToken();
+                requestToken = authService.getRequestToken();
                 String authUrl = authService.getAuthorizationUrl(requestToken);
 
 
@@ -66,11 +68,11 @@ public class LoginActivity extends AppCompatActivity {
                 webView.loadUrl(authUrl);
 
 
-                final OAuth1AccessToken accessToken = authService.getAccessToken(requestToken, verifier);// "verifier you got frAom the user/callback"
-                final OAuthRequest request = new OAuthRequest(Verb.GET, "https://api.twitter.com/1.1/account/verify_credentials.json", authService);
-                authService.signRequest(accessToken, request); // the access token from step 4
-                final Response response = request.send();
-                System.out.println(response.getBody());
+//                final OAuth1AccessToken accessToken = authService.getAccessToken(requestToken, verifier);// "verifier you got frAom the user/callback"
+//                final OAuthRequest request = new OAuthRequest(Verb.GET, "https://api.twitter.com/1.1/account/verify_credentials.json", authService);
+//                authService.signRequest(accessToken, request); // the access token from step 4
+//                final Response response = request.send();
+//                System.out.println(response.getBody());
             }
         });
 
@@ -155,9 +157,24 @@ public class LoginActivity extends AppCompatActivity {
             Uri uri = Uri.parse(url);
             String verifier = uri.getQueryParameter("oauth_verifier");
             Intent resultIntent = new Intent();
+
+            //getting the verifier if user login and password are correct
             resultIntent.putExtra("oauth_verifier", verifier);
             setResult(RESULT_OK, resultIntent);
+
+            //showing the verifier in logcat
             Log.d("msg", verifier);
+
+            //retrieving access token, which will allow us to permanently access user account
+            final OAuth1AccessToken accessToken = authService.getAccessToken(requestToken, verifier);
+
+            //pending for json file which will contain user information
+            final OAuthRequest request = new OAuthRequest(Verb.GET, "https://api.twitter.com/1.1/account/verify_credentials.json", authService);
+            authService.signRequest(accessToken, request); // the access token from step 4
+            final Response response = request.send();
+
+            //printing json file to logcat
+            Log.d("resp",response.getBody());
             finish();
             return false;
 

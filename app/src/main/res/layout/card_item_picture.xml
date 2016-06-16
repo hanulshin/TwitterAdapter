@@ -31,8 +31,8 @@
             android:id="@+id/TextView"
             android:layout_marginRight="10dp"
             android:layout_alignWithParentIfMissing="false"
-            android:layout_below="@+id/NameView"
-            android:layout_alignStart="@+id/NameView" />
+            android:layout_below="@+id/ScreenNameView"
+            android:layout_alignStart="@+id/ScreenNameView" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -73,11 +73,9 @@
             android:text="\@screen_name"
             android:id="@+id/ScreenNameView"
             android:textColor="@color/material_grey_600"
-            android:layout_marginLeft="5dp"
             android:textSize="15dp"
-            android:layout_alignBaseline="@+id/NameView"
-            android:layout_alignBottom="@+id/NameView"
-            android:layout_toEndOf="@+id/NameView" />
+            android:layout_below="@+id/NameView"
+            android:layout_alignStart="@+id/NameView" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -92,11 +90,12 @@
 
         <ImageView
             android:layout_width="280dp"
-            android:layout_height="150dp"
+            android:layout_height="wrap_content"
             android:id="@+id/mediaImage"
             android:layout_alignWithParentIfMissing="false"
-            android:layout_below="@+id/profileView"
-            android:layout_toEndOf="@+id/profileView" />
+            android:layout_below="@+id/TextView"
+            android:layout_toEndOf="@+id/profileView"
+            android:layout_marginTop="5dp" />
 
     </RelativeLayout>
   </android.support.v7.widget.CardView>
