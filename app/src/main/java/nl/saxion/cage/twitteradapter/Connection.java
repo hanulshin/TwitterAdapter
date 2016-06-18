@@ -111,10 +111,8 @@ public class Connection extends AsyncTask<String, Void, String> {
 
     public String requestData(String searchTerm, String bearerToken) {
         String tweets = null;
-        //the url we need to query
-        //https://api.twitter.com/1.1/search/tweets.json?q=%40twitterapi
-        try {
 
+        try {
             //search api url
             String searchUrl = "https://api.twitter.com/1.1/search/tweets.json?q=";
             String encodedTerm = URLEncoder.encode(searchTerm, CHARSET_UTF_8);

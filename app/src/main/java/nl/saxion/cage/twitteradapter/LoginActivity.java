@@ -21,25 +21,27 @@ import com.github.scribejava.core.model.OAuth1RequestToken;
 import com.github.scribejava.core.model.OAuthRequest;
 import com.github.scribejava.core.model.Response;
 import com.github.scribejava.core.model.Verb;
-import com.github.scribejava.core.oauth.*;
 
 public class LoginActivity extends AppCompatActivity {
+    //define views
     private WebView webView = null;
-    private Activity mActivity = null;
+    private Activity myActivity = null;
     private ProgressDialog mDialog = null;
+
+    //key & secret for getting accessToken
     private static final String API_KEY = "BABNgm313dL2rRXf3iRM11lL8";
     private static final String API_SECRET = "WR2VFNTaJBRGmDCUettxUGPss50ZPOQaVlO8wsUYoHPMKlQkrG";
-    private static final String TAG = LoginActivity.class
-            .getSimpleName();
-    com.github.scribejava.core.oauth.OAuth10aService authService;
-    OAuth1RequestToken requestToken = null;
+
+    //for oAuth authorization
+    private com.github.scribejava.core.oauth.OAuth10aService authService;
+    private OAuth1RequestToken requestToken = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        mActivity = this;
+        myActivity = this;
 
         if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -51,7 +53,8 @@ public class LoginActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setContentView(R.layout.web_view_login);
-//didn't create OAUTH10aService class because there is a default one
+
+                //didn't create OAUTH10aService class because there is a default one
                 authService =
                         new ServiceBuilder()
                                 .apiKey(API_KEY)
@@ -61,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
                 requestToken = authService.getRequestToken();
                 String authUrl = authService.getAuthorizationUrl(requestToken);
 
-
+                //
                 webView = (WebView) findViewById(R.id.webView);
 
                 webView.setWebViewClient(new MyWebViewClient());
@@ -137,16 +140,13 @@ public class LoginActivity extends AppCompatActivity {
                 mDialog = new ProgressDialog(LoginActivity.this);
             mDialog.setMessage("Loading..");
 
-            if (!(mActivity.isFinishing())) {
+            if (!(myActivity.isFinishing())) {
                 mDialog.show();
             }
         }
 
         @Override
         public void onLoadResource(WebView view, String url) {
-            Log.i(TAG, "Loading Resources");
-            Log.i(TAG,
-                    "Resource Loading Progress : " + view.getProgress());
             if (view.getProgress() >= 70) {
                 cancelProgressDialog();
             }

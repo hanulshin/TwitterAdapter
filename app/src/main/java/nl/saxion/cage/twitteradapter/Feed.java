@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import org.json.JSONArray;
@@ -31,26 +32,36 @@ import static android.widget.TextView.*;
 
 public class Feed extends AppCompatActivity {
 
+    //access token
+    private String accessToken = null;
+
     //list of tweets
-    List<Tweets> tweets = new ArrayList<>();
+    private List<Tweets> tweets = new ArrayList<>();
 
     //current json file of tweets
-    String searchJSON;
+    private String searchJSON;
 
     //adapter for cardView
-    CardAdapter adapter;
+    private CardAdapter adapter;
+
+    //search bar and profile button
+    private EditText editSearch;
+    private Button profileButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.feed_screen);
 
-
+        //login screen
         Intent loginIntent = new Intent(this, LoginActivity.class);
         startActivity(loginIntent);
 
-        final EditText editSearch = (EditText) findViewById(R.id.editSearch);
+        //define editText view for search bar, and profile button
+        editSearch = (EditText) findViewById(R.id.editSearch);
+        profileButton = (Button) findViewById(R.id.profileButton);
 
+        //listens to key presses on keyboard
         OnEditorActionListener actionListener = new OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -70,20 +81,20 @@ public class Feed extends AppCompatActivity {
                 return false;
             }
         };
-
-        //listens to key presses on keyboard
         editSearch.setOnEditorActionListener(actionListener);
 
         //card view adapter
         adapter = new CardAdapter(this, R.layout.card_item, tweets, this);
-        RecyclerView recList = (RecyclerView) findViewById(R.id.cardList);
-        recList.setHasFixedSize(true);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.cardList);
+        recyclerView.setHasFixedSize(true);
 
+        //linear layout manager used for recyclerView (cardView)
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
 
-        recList.setLayoutManager(llm);
-        recList.setAdapter(adapter);
+        //set recyclerView layout manager & adapter
+        recyclerView.setLayoutManager(llm);
+        recyclerView.setAdapter(adapter);
     }
 
     private void queryTwitter(String searchTerm){
@@ -244,9 +255,13 @@ public class Feed extends AppCompatActivity {
                 }
             }
 
+            //create new entities object with extracted json data
             Entities entities = new Entities(hashtagList, mediaArray, urlArray, userMentionArray);
 
+            //create new user object with extracted json data
             Users user = new Users(screen_name, name, profile_image_url);
+
+            //create and add new Tweet to list of tweets with json data, and user & entities object
             tweets.add(new Tweets(user, text, retweets, createdAt, favourites, entities));
         }
     }

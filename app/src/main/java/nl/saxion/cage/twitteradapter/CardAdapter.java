@@ -63,13 +63,16 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         cardViewHolder.dateText.setText(tweet.getCreated_at());
         cardViewHolder.likesText.setText("Likes: " + String.valueOf(tweet.getFavourite_count()));
 
+        //load profile image
         Picasso.with(context).load(tweet.getUser().getProfile_image_url()).into(cardViewHolder.profileImage);
 
-        Bitmap bitmap = BitmapFactory.decodeFile("/res/drawable/searchicon.png");
-
+        //reset media image (it gets messed up when it isn't reset)
+        Bitmap bitmap = BitmapFactory.decodeFile("IMAGE_RESET");
         cardViewHolder.media.setImageBitmap(bitmap);
 
-        if (tweet.getEntities().getMedia().size() > 0){
+        //load media image
+        if (tweet.getEntities().getMedia(
+        ).size() > 0){
             Picasso.with(context)
                     .load(tweet.getEntities().getMedia().get(0).getMedia_url())
                     .resize(1500, 900)
@@ -78,6 +81,15 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         }
     }
 
+    /**
+     * highlights a portion of text with color
+     *
+     * @param color
+     * @param size
+     * @param indices
+     * @param spanText
+     * @return the highlighted text
+     */
     Spannable setSpan(int color, int size, int[] indices, Spannable spanText) {
         for (int h = 0; h < size; h++) {
             for (int g = 0; g < size; g++) {
