@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import org.json.JSONArray;
@@ -36,7 +35,7 @@ public class Feed extends AppCompatActivity {
     private String accessToken = null;
 
     //list of tweets
-    private List<Tweets> tweets = new ArrayList<>();
+    List<Tweets> tweets = new ArrayList<>();
 
     //current json file of tweets
     private String searchJSON;
@@ -55,7 +54,9 @@ public class Feed extends AppCompatActivity {
 
         //login screen
         Intent loginIntent = new Intent(this, LoginActivity.class);
-        startActivity(loginIntent);
+        startActivityForResult(loginIntent,1);
+
+
 
         //define editText view for search bar, and profile button
         editSearch = (EditText) findViewById(R.id.editSearch);
@@ -95,6 +96,13 @@ public class Feed extends AppCompatActivity {
         //set recyclerView layout manager & adapter
         recyclerView.setLayoutManager(llm);
         recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data == null) {return;}
+        accessToken = data.getStringExtra("accessToken");
+        Log.d("ItIsInFeed",accessToken);
     }
 
     private void queryTwitter(String searchTerm){
