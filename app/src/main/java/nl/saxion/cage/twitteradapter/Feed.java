@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -33,7 +34,7 @@ public class Feed extends AppCompatActivity {
 
     //list of tweets
     List<Tweets> tweets = new ArrayList<>();
-
+    String accessToken="noo";
     //current json file of tweets
     String searchJSON;
 
@@ -47,7 +48,9 @@ public class Feed extends AppCompatActivity {
 
 
         Intent loginIntent = new Intent(this, LoginActivity.class);
-        startActivity(loginIntent);
+        startActivityForResult(loginIntent,1);
+
+
 
         final EditText editSearch = (EditText) findViewById(R.id.editSearch);
 
@@ -81,9 +84,15 @@ public class Feed extends AppCompatActivity {
 
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
-
         recList.setLayoutManager(llm);
         recList.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data == null) {return;}
+        accessToken = data.getStringExtra("accessToken");
+        Log.d("ItIsInFeed",accessToken);
     }
 
     private void queryTwitter(String searchTerm){
