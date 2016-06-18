@@ -11,7 +11,7 @@
         android:layout_alignParentEnd="true" />
 
     <EditText
-        android:layout_width="330dp"
+        android:layout_width="270dp"
         android:layout_height="40dp"
         android:id="@+id/editSearch"
         android:background="@color/primary"
@@ -20,7 +20,8 @@
         android:layout_alignBottom="@+id/button"
         android:elegantTextHeight="false"
         android:imeOptions="actionSearch"
-        android:layout_toStartOf="@+id/profileButton" />
+        android:layout_alignEnd="@+id/profileButton"
+        android:layout_toEndOf="@+id/button" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -42,7 +43,7 @@
         android:layout_height="wrap_content"
         android:text="Profile"
         android:id="@+id/profileButton"
-        android:layout_above="@+id/cardList"
+        android:layout_below="@+id/editSearch"
         android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

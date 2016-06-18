@@ -7,9 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import org.json.JSONArray;
@@ -56,8 +58,6 @@ public class Feed extends AppCompatActivity {
         Intent loginIntent = new Intent(this, LoginActivity.class);
         startActivityForResult(loginIntent,1);
 
-
-
         //define editText view for search bar, and profile button
         editSearch = (EditText) findViewById(R.id.editSearch);
         profileButton = (Button) findViewById(R.id.profileButton);
@@ -102,7 +102,7 @@ public class Feed extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data == null) {return;}
         accessToken = data.getStringExtra("accessToken");
-        Log.d("ItIsInFeed",accessToken);
+        Log.d("accessToken",accessToken);
     }
 
     private void queryTwitter(String searchTerm){

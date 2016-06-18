@@ -3,24 +3,12 @@ package nl.saxion.cage.twitteradapter;
 import android.os.AsyncTask;
 import android.util.Base64;
 import android.util.Log;
-
-import com.github.scribejava.apis.TwitterApi;
-import com.github.scribejava.core.builder.ServiceBuilder;
-import com.github.scribejava.core.model.OAuth1AccessToken;
-import com.github.scribejava.core.model.OAuth1RequestToken;
-import com.github.scribejava.core.model.OAuthRequest;
-import com.github.scribejava.core.model.Response;
-import com.github.scribejava.core.model.Verb;
-import com.github.scribejava.core.oauth.OAuth10aService;
-
 import org.apache.commons.io.IOUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -98,8 +86,6 @@ public class Connection extends AsyncTask<String, Void, String> {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
         return bearerToken;
     }
 
@@ -126,7 +112,6 @@ public class Connection extends AsyncTask<String, Void, String> {
             conn.setRequestMethod("GET");
             conn.addRequestProperty("Authorization", "Bearer " + bearerToken);
             conn.addRequestProperty("Content-Type", "application/json");
-
             conn.setConnectTimeout(5000);
             conn.setDoInput(true);
 

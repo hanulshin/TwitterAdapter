@@ -1,12 +1,14 @@
 package nl.saxion.cage.twitteradapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +21,8 @@ import java.util.List;
 
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder> {
     Tweets tweet;
+
+    String url;
 
     private List<Tweets> tweetsList;
     Context context;
@@ -34,7 +38,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
     }
 
     @Override
-    public void onBindViewHolder(CardViewHolder cardViewHolder, int i) {
+    public void onBindViewHolder(final CardViewHolder cardViewHolder, final int i) {
         //get tweet from position
         tweet = tweetsList.get(i);
 
@@ -57,6 +61,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
             setSpan(highlightColor, tweet.getEntities().getUser_mentions().size(), tweet.getEntities().getUser_mentions().get(j).getIndices(), spanText);
         }
 
+        //set text in textViews
         cardViewHolder.textText.setText(spanText);
         cardViewHolder.nameText.setText(tweet.getUser().getName());
         cardViewHolder.screenNameText.setText("@" + tweet.getUser().getScreen_name());
@@ -72,13 +77,26 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
 
         //load media image
         if (tweet.getEntities().getMedia(
-        ).size() > 0){
+        ).size() > 0) {
+            url = tweet.getEntities().getMedia().get(0).getMedia_url();
+            Log.d("url", url);
             Picasso.with(context)
                     .load(tweet.getEntities().getMedia().get(0).getMedia_url())
                     .resize(1500, 900)
                     .centerCrop()
                     .into(cardViewHolder.media);
         }
+
+        //set OnClickListener for images
+        cardViewHolder.media.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ZoomActivity.class);
+//                    intent.putExtra("imageUrl", tweet.getEntities().getMedia().get(0).getMedia_url());
+                intent.putExtra("imageUrl", url);
+                context.startActivity(intent);
+            }
+        });
     }
 
     /**
@@ -118,7 +136,9 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         protected TextView dateText;
         protected ImageView profileImage;
         protected ImageView media;
+        protected View view;
 
+        //cardViewHolder for accessing views
         public CardViewHolder(View convertView) {
             super(convertView);
 
