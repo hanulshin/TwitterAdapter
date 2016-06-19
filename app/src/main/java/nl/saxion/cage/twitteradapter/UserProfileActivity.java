@@ -86,6 +86,7 @@ public class UserProfileActivity extends AppCompatActivity {
         nameText.setText(user.getName());
         screenNameText.setText("@"+user.getScreen_name());
         //load profile image
+
         Picasso.with(this).load(user.getProfile_image_url()).into(profileImage);
 
         descriptionText.setText(user.getDescription());
