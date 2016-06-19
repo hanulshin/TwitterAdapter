@@ -19,6 +19,32 @@ public class Users {
         this.profile_image_url = profile_image_url;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public int getFollowers_count() {
+        return followers_count;
+    }
+
+    public int getFavourites_count() {
+        return favourites_count;
+    }
+
+    public int getStatuses_count() {
+        return statuses_count;
+    }
+
+    public Users(String screen_name, String name, String profile_image_url, String description, int followers_count, int friends_count, int statuses_count ) {
+        this.screen_name = screen_name;
+        this.name = name;
+        this.profile_image_url = profile_image_url;
+        this.description = description;
+        this.followers_count = followers_count;
+        this.friends_count = friends_count;
+        this.statuses_count = statuses_count;
+    }
+
     public String getScreen_name() {
         return screen_name;
     }
@@ -75,6 +101,10 @@ public class Users {
      *
      */
     public int followers_count;
+
+    public int getFriends_count() {
+        return friends_count;
+    }
 
     /**
      *

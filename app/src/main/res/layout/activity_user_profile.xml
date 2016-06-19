@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:id="@+id/profile_image_url"
+        android:adjustViewBounds="true"
+        android:layout_marginStart="45dp"
+        android:layout_marginTop="49dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="screen_name"
+        android:id="@+id/screen_name"
+        android:layout_marginStart="52dp"
+        android:layout_alignBottom="@+id/profile_image_url"
+        android:layout_toEndOf="@+id/profile_image_url" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Name"
+        android:id="@+id/name"
+        android:layout_above="@+id/screen_name"
+        android:layout_alignStart="@+id/screen_name" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Followers_count"
+        android:id="@+id/followers_count"
+        android:layout_below="@+id/screen_name"
+        android:layout_alignStart="@+id/screen_name"
+        android:layout_marginTop="72dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="friends_count"
+        android:id="@+id/friends_count"
+        android:layout_alignBaseline="@+id/followers_count"
+        android:layout_alignBottom="@+id/followers_count"
+        android:layout_toStartOf="@+id/screen_name" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Statuses_count"
+        android:id="@+id/statuses_count"
+        android:layout_above="@+id/friends_count"
+        android:layout_alignStart="@+id/followers_count"
+        android:layout_marginBottom="40dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Description"
+        android:id="@+id/description"
+        android:layout_below="@+id/friends_count"
+        android:layout_toStartOf="@+id/screen_name" />
+</RelativeLayout>

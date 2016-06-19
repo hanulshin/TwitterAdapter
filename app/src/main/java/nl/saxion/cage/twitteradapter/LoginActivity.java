@@ -174,10 +174,10 @@ public class LoginActivity extends AppCompatActivity {
             final Response response = request.send();
 
             //printing json file to logcat
-            Log.d("resp",response.getBody());
+            Log.d("resp",accessToken.toString());
 
             Intent intent = new Intent();
-            intent.putExtra("accessToken", response.getBody());
+            intent.putExtra("accessToken", accessToken);
             setResult(RESULT_OK, intent);
             finish();
             return false;

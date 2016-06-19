@@ -9,11 +9,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.github.scribejava.core.model.OAuth1AccessToken;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,6 +25,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -31,10 +36,12 @@ import nl.saxion.cage.twitteradapter.Entities.URL;
 import nl.saxion.cage.twitteradapter.Entities.User_Mention;
 import static android.widget.TextView.*;
 
+
 public class Feed extends AppCompatActivity {
 
+    Context context = this;
     //access token
-    private String accessToken = null;
+    private OAuth1AccessToken accessToken = null;
 
     //list of tweets
     List<Tweets> tweets = new ArrayList<>();
@@ -57,6 +64,8 @@ public class Feed extends AppCompatActivity {
         //login screen
         Intent loginIntent = new Intent(this, LoginActivity.class);
         startActivityForResult(loginIntent,1);
+
+
 
         //define editText view for search bar, and profile button
         editSearch = (EditText) findViewById(R.id.editSearch);
@@ -81,6 +90,7 @@ public class Feed extends AppCompatActivity {
                 }
                 return false;
             }
+
         };
         editSearch.setOnEditorActionListener(actionListener);
 
@@ -92,17 +102,33 @@ public class Feed extends AppCompatActivity {
         //linear layout manager used for recyclerView (cardView)
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
-
         //set recyclerView layout manager & adapter
         recyclerView.setLayoutManager(llm);
         recyclerView.setAdapter(adapter);
+
+
+        profileButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+               if (accessToken != null){
+                   Log.d("Buttton bprees",accessToken.toString());
+                   //user profile screen
+                   Intent intent = new Intent(context, UserProfileActivity.class);
+                   intent.putExtra("accessToken", accessToken);
+                   startActivity(intent);
+
+               }
+            }
+        });
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data == null) {return;}
-        accessToken = data.getStringExtra("accessToken");
-        Log.d("accessToken",accessToken);
+
+        //get access token from data intent
+        accessToken = (OAuth1AccessToken) data.getExtras().getSerializable("accessToken");
+        Log.d("yomama",accessToken.toString());
+
     }
 
     private void queryTwitter(String searchTerm){
