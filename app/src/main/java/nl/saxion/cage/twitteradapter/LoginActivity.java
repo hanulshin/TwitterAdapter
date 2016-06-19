@@ -119,7 +119,6 @@ public class LoginActivity extends AppCompatActivity {
         this.onRestart();
     }
 
-
     private class MyWebViewClient extends WebViewClient {
 
         @Override

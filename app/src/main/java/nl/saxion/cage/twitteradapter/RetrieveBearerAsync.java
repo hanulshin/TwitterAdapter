@@ -16,14 +16,16 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLEncoder;
 
-public class Connection extends AsyncTask<String, Void, String> {
+public class RetrieveBearerAsync extends AsyncTask<String, Void, String> {
+
+    //api key and secret
     private static final String API_KEY = "BABNgm313dL2rRXf3iRM11lL8";
     private static final String API_SECRET = "WR2VFNTaJBRGmDCUettxUGPss50ZPOQaVlO8wsUYoHPMKlQkrG";
     private static final String CHARSET_UTF_8 = "UTF-8";
 
     @Override
     protected String doInBackground(String... params) {
-        return requestData(params[0], retrieveToken());
+        return retrieveToken();
     }
 
     @Override
@@ -31,8 +33,15 @@ public class Connection extends AsyncTask<String, Void, String> {
         super.onPostExecute(s);
     }
 
+    /**
+     * retrieves bearer token from twitter with api key and secret
+     *
+     * @return bearerToken
+     */
     private String retrieveToken() {
-        String bearerToken = "";
+        // Set blank bearerToken
+        String jsonToken = "";
+
         // Prepare request
         try {
             URL url = new URL("https://api.twitter.com/oauth2/token");
@@ -64,17 +73,16 @@ public class Connection extends AsyncTask<String, Void, String> {
             //grab response code
             int response = conn.getResponseCode();
 
-            //response code
+            //check response
             if (response == 200) {
                 InputStream is = conn.getInputStream();
                 String connResponse = IOUtils.toString(is, "UTF-8");
-
-                bearerToken = parseJsonToken(connResponse);
-                Log.d("token", bearerToken);
+                jsonToken = parseJsonToken(connResponse);
                 IOUtils.closeQuietly(is);
             } else {
                 Log.d("Connection", String.valueOf(conn.getResponseCode()));
             }
+
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (ProtocolException e) {
@@ -86,54 +94,22 @@ public class Connection extends AsyncTask<String, Void, String> {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return bearerToken;
+
+        return jsonToken;
     }
 
-    public String parseJsonToken(String file) throws JSONException {
-        JSONObject jObj = new JSONObject(file);
-        String token = jObj.getString("access_token");
-        return token;
-    }
+    /**
+     * Parses bearer token json file to string format
+     *
+     * @param jsonToken the json string we receive as a response of retrieveToken
+     * @return parsed token
+     * @throws JSONException
+     */
+    public String parseJsonToken(String jsonToken) throws JSONException {
+        //create new JSONobject from the file
+        JSONObject jObj = new JSONObject(jsonToken);
 
-    public String requestData(String searchTerm, String bearerToken) {
-        String tweets = null;
-
-        try {
-            //search api url
-            String searchUrl = "https://api.twitter.com/1.1/search/tweets.json?q=";
-            String encodedTerm = URLEncoder.encode(searchTerm, CHARSET_UTF_8);
-
-            URL url = new URL(searchUrl + encodedTerm);
-
-            //create connection
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
-            //connection headers
-            conn.setRequestMethod("GET");
-            conn.addRequestProperty("Authorization", "Bearer " + bearerToken);
-            conn.addRequestProperty("Content-Type", "application/json");
-            conn.setConnectTimeout(5000);
-            conn.setDoInput(true);
-
-            int response = conn.getResponseCode();
-            if (response == 200) {
-                InputStream is = conn.getInputStream();
-                String connResponse = IOUtils.toString(is, "UTF-8");
-
-                tweets = connResponse;
-                Log.d("Tweets", connResponse);
-                IOUtils.closeQuietly(is);
-            } else {
-                Log.d("Response error", conn.getResponseMessage());
-            }
-
-        } catch (ProtocolException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return tweets;
+        //return token String
+        return jObj.getString("access_token");
     }
 }

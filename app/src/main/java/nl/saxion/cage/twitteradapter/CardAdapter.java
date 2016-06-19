@@ -82,7 +82,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
             Log.d("url", url);
             Picasso.with(context)
                     .load(tweet.getEntities().getMedia().get(0).getMedia_url())
-                    .resize(1500, 900)
+                    .resize(1500, 500)
                     .centerCrop()
                     .into(cardViewHolder.media);
         }
@@ -92,7 +92,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, ZoomActivity.class);
-//                    intent.putExtra("imageUrl", tweet.getEntities().getMedia().get(0).getMedia_url());
                 intent.putExtra("imageUrl", url);
                 context.startActivity(intent);
             }

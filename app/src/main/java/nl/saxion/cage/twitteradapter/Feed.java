@@ -13,10 +13,13 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,17 +27,20 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+
 import nl.saxion.cage.twitteradapter.Entities.Entities;
 import nl.saxion.cage.twitteradapter.Entities.Hashtags;
 import nl.saxion.cage.twitteradapter.Entities.Media;
 import nl.saxion.cage.twitteradapter.Entities.URL;
 import nl.saxion.cage.twitteradapter.Entities.User_Mention;
+
 import static android.widget.TextView.*;
 
 public class Feed extends AppCompatActivity {
 
     //access token
     private String accessToken = null;
+    private String bearerToken = null;
 
     //list of tweets
     List<Tweets> tweets = new ArrayList<>();
@@ -56,7 +62,7 @@ public class Feed extends AppCompatActivity {
 
         //login screen
         Intent loginIntent = new Intent(this, LoginActivity.class);
-        startActivityForResult(loginIntent,1);
+        startActivityForResult(loginIntent, 1);
 
         //define editText view for search bar, and profile button
         editSearch = (EditText) findViewById(R.id.editSearch);
@@ -68,12 +74,12 @@ public class Feed extends AppCompatActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
 
-                    //query twitter api and clear search bar
-                    queryTwitter(editSearch.getText().toString());
+                    //search twitter and clear search bar
+                    search(editSearch.getText().toString());
                     editSearch.setText("");
 
                     //hide keyboard
-                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(editSearch.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
 
                     //the key has been pressed
@@ -100,24 +106,60 @@ public class Feed extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (data == null) {return;}
+        if (data == null) {
+            return;
+        }
         accessToken = data.getStringExtra("accessToken");
-        Log.d("accessToken",accessToken);
+        Log.d("accessToken", accessToken);
     }
 
-    private void queryTwitter(String searchTerm){
-        //create connection
-        Connection conn = new Connection();
+    private void search(String searchTerm) {
 
-        //query twitter
-        conn.execute(searchTerm);
+        //check if we have bearerToken
+        if (bearerToken == null) {
 
-        //get response of twitter query
+            System.out.println("loading token");
+            //retrieve new bearerToken
+            RetrieveBearerAsync retrieveToken = new RetrieveBearerAsync();
+            retrieveToken.execute();
+
+            //try to get the token
+            try {
+                System.out.println("getting token");
+                bearerToken = retrieveToken.get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+
+        System.out.println("searching twitter");
+        SearchTwitterAsync searchTwitter = new SearchTwitterAsync();
+        searchTwitter.execute(searchTerm, bearerToken);
+
         try {
-            searchJSON = conn.get();
+
+            //search twitter
+            searchJSON = searchTwitter.get();
+
             if (searchJSON != null) {
                 try {
+                    //get start time
+                    long startTime = System.currentTimeMillis();
+
+                    //read objects
                     readJsonToObjects(searchJSON);
+
+                    //get end time
+                    long endTime = System.currentTimeMillis();
+
+                    //calculate total time
+                    long totalTime = endTime - startTime;
+
+                    //print total time
+                    Log.d("object loading time", Long.toString(totalTime) + "ms");
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (JSONException e) {
@@ -126,7 +168,8 @@ public class Feed extends AppCompatActivity {
 
                 //update the card view
                 adapter.notifyDataSetChanged();
-
+            } else {
+                Log.d("searchJson status", "null");
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -134,6 +177,41 @@ public class Feed extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+
+//        //create connection
+//        Connection conn = new Connection();
+//
+//        //query twitter
+//        conn.execute(searchTerm);
+//
+//        //get response of twitter query
+//        try {
+//            searchJSON = conn.get();
+//            if (searchJSON != null) {
+//                try {
+//                    //get start time
+//                    long startTime = System.currentTimeMillis();
+//
+//                    //read objects
+//                    readJsonToObjects(searchJSON);
+//
+//
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                //update the card view
+//                adapter.notifyDataSetChanged();
+//
+//            }
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        } catch (ExecutionException e) {
+//            e.printStackTrace();
+//        }
 
     /**
      * Reads an asset file and returns a string with the full contents.
