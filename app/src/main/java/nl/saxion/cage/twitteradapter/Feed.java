@@ -9,37 +9,40 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.github.scribejava.core.model.OAuth1AccessToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-
 import nl.saxion.cage.twitteradapter.Entities.Entities;
 import nl.saxion.cage.twitteradapter.Entities.Hashtags;
 import nl.saxion.cage.twitteradapter.Entities.Media;
 import nl.saxion.cage.twitteradapter.Entities.URL;
 import nl.saxion.cage.twitteradapter.Entities.User_Mention;
-
 import static android.widget.TextView.*;
 
 public class Feed extends AppCompatActivity {
 
-    //access token
-    private String accessToken = null;
+    //define context
+    Context context = this;
+
+    //access and bearer token
+    private OAuth1AccessToken accessToken = null;
     private String bearerToken = null;
 
     //list of tweets
@@ -62,7 +65,7 @@ public class Feed extends AppCompatActivity {
 
         //login screen
         Intent loginIntent = new Intent(this, LoginActivity.class);
-        startActivityForResult(loginIntent, 1);
+        startActivityForResult(loginIntent,1);
 
         //define editText view for search bar, and profile button
         editSearch = (EditText) findViewById(R.id.editSearch);
@@ -79,7 +82,7 @@ public class Feed extends AppCompatActivity {
                     editSearch.setText("");
 
                     //hide keyboard
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(editSearch.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
 
                     //the key has been pressed
@@ -102,15 +105,30 @@ public class Feed extends AppCompatActivity {
         //set recyclerView layout manager & adapter
         recyclerView.setLayoutManager(llm);
         recyclerView.setAdapter(adapter);
+
+
+        profileButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+               if (accessToken != null){
+                   Log.d("Buttton bprees",accessToken.toString());
+                   //user profile screen
+                   Intent intent = new Intent(context, UserProfileActivity.class);
+                   intent.putExtra("accessToken", accessToken);
+                   startActivity(intent);
+
+               }
+            }
+        });
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (data == null) {
-            return;
-        }
-        accessToken = data.getStringExtra("accessToken");
-        Log.d("accessToken", accessToken);
+        if (data == null) {return;}
+
+        //get access token from data intent
+        accessToken = (OAuth1AccessToken) data.getExtras().getSerializable("accessToken");
+        Log.d("yomama",accessToken.toString());
+
     }
 
     private void search(String searchTerm) {
@@ -177,41 +195,6 @@ public class Feed extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
-
-//        //create connection
-//        Connection conn = new Connection();
-//
-//        //query twitter
-//        conn.execute(searchTerm);
-//
-//        //get response of twitter query
-//        try {
-//            searchJSON = conn.get();
-//            if (searchJSON != null) {
-//                try {
-//                    //get start time
-//                    long startTime = System.currentTimeMillis();
-//
-//                    //read objects
-//                    readJsonToObjects(searchJSON);
-//
-//
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                //update the card view
-//                adapter.notifyDataSetChanged();
-//
-//            }
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        } catch (ExecutionException e) {
-//            e.printStackTrace();
-//        }
 
     /**
      * Reads an asset file and returns a string with the full contents.
