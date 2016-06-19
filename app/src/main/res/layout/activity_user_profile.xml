@@ -70,4 +70,20 @@
         android:id="@+id/description"
         android:layout_below="@+id/friends_count"
         android:layout_toStartOf="@+id/screen_name" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tweet"
+        android:width="200dp"
+        android:layout_below="@+id/description"
+        android:layout_alignStart="@+id/profile_image_url" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Post"
+        android:id="@+id/post"
+        android:layout_below="@+id/tweet"
+        android:layout_alignStart="@+id/followers_count" />
 </RelativeLayout>

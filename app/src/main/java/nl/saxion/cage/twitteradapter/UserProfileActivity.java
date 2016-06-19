@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -46,7 +49,7 @@ public class UserProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
-        OAuth1AccessToken accessToken=null;
+        final OAuth1AccessToken accessToken;
         //create intent
         Intent intent = getIntent();
 
@@ -95,7 +98,17 @@ public class UserProfileActivity extends AppCompatActivity {
         friends_countText.setText("following: "+Integer.toString(user.getFriends_count()));
         statuses_countText.setText("tweets posted: "+Integer.toString(user.getStatuses_count()));
 
+        Button post = (Button) findViewById(R.id.post);
 
+        post.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PostTweets post = new PostTweets();
+                EditText tweet = (EditText) findViewById(R.id.tweet);
+                System.out.println("Text" + tweet.getText().toString());
+                post.execute(tweet.getText().toString(), accessToken.getToken(), accessToken.getTokenSecret());
+            }
+        });
     }
 
 
