@@ -20,12 +20,7 @@ public class SearchTwitterAsync extends AsyncTask<String, Void, String> {
         return requestData(params[0], params[1]);
     }
 
-    @Override
-    protected void onPostExecute(String s) {
-        super.onPostExecute(s);
-    }
-
-    /**
+     /**
      * Gets list of tweets from twitter based on searchTerm
      *
      * @param searchTerm the term that will be searched
