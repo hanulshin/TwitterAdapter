@@ -27,7 +27,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
     private List<Tweets> tweetsList;
     Context context;
 
-    public CardAdapter(Feed feed, int item_tweet, List<Tweets> tweetsList, Context con) {
+    public CardAdapter(List<Tweets> tweetsList, Context con) {
         this.tweetsList = tweetsList;
         this.context = con;
     }
@@ -67,6 +67,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         cardViewHolder.screenNameText.setText("@" + tweet.getUser().getScreen_name());
         cardViewHolder.dateText.setText(tweet.getCreated_at());
         cardViewHolder.likesText.setText("Likes: " + String.valueOf(tweet.getFavourite_count()));
+        cardViewHolder.retweetsCountText.setText("retweets: " + String.valueOf(tweet.getRetweet_count()));
 
         //load profile image
         Picasso.with(context).load(tweet.getUser().getProfile_image_url()).into(cardViewHolder.profileImage);
@@ -125,7 +126,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
     }
 
     public static class CardViewHolder extends RecyclerView.ViewHolder {
-
         //define views
         protected TextView textText;
         protected TextView nameText;

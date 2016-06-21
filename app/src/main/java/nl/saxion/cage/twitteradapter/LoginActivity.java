@@ -66,7 +66,6 @@ public class LoginActivity extends AppCompatActivity {
 
                 //
                 webView = (WebView) findViewById(R.id.webView);
-
                 webView.setWebViewClient(new MyWebViewClient());
                 webView.loadUrl(authUrl);
 
@@ -90,14 +89,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        WebView webView = (WebView) findViewById(R.id.webView);
-        if (webView != null) {
-            if (webView.canGoBack()) {
-                webView.goBack();
-            } else {
-                super.onBackPressed();
-            }
-        }
+        finish();
     }
 
     @Override
@@ -161,9 +153,6 @@ public class LoginActivity extends AppCompatActivity {
             resultIntent.putExtra("oauth_verifier", verifier);
             setResult(RESULT_OK, resultIntent);
 
-            //showing the verifier in logcat
-            Log.d("msg", verifier);
-
             //retrieving access token, which will allow us to permanently access user account
             final OAuth1AccessToken accessToken = authService.getAccessToken(requestToken, verifier);
 
@@ -172,15 +161,17 @@ public class LoginActivity extends AppCompatActivity {
             authService.signRequest(accessToken, request); // the access token from step 4
             final Response response = request.send();
 
-            //printing json file to logcat
-            Log.d("resp",accessToken.toString());
-
+            //new intent for sending info back to feed class
             Intent intent = new Intent();
+
+            //add access token
             intent.putExtra("accessToken", accessToken);
             setResult(RESULT_OK, intent);
-            finish();
-            return false;
 
+            //finish current activity
+            finish();
+
+            return false;
         }
     }
 }
