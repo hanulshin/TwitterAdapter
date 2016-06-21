@@ -69,7 +69,6 @@ public class LoginActivity extends AppCompatActivity {
                 webView.setWebViewClient(new MyWebViewClient());
                 webView.loadUrl(authUrl);
 
-
 //                final OAuth1AccessToken accessToken = authService.getAccessToken(requestToken, verifier);// "verifier you got frAom the user/callback"
 //                final OAuthRequest request = new OAuthRequest(Verb.GET, "https://api.twitter.com/1.1/account/verify_credentials.json", authService);
 //                authService.signRequest(accessToken, request); // the access token from step 4
@@ -79,37 +78,36 @@ public class LoginActivity extends AppCompatActivity {
         });
 
     }
-
-    @Override
-    protected void onStop() {
-        cancelProgressDialog();
-        super.onStop();
-    }
-
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        finish();
     }
 
-    @Override
-    protected void onPause() {
-        cancelProgressDialog();
-        super.onPause();
-    }
+//    @Override
+//    protected void onStop() {
+//        cancelProgressDialog();
+//        super.onStop();
+//    }
 
-    private void cancelProgressDialog() {
-        if (mDialog != null) {
-            mDialog.dismiss();
-            mDialog.cancel();
-            mDialog = null;
-        }
-    }
 
-    @Override
-    protected void onResume() {
-        this.onRestart();
-    }
+
+//    @Override
+//    protected void onPause() {
+//        cancelProgressDialog();
+//        super.onPause();
+//    }
+//
+//    private void cancelProgressDialog() {
+//        if (mDialog != null) {
+//            mDialog.dismiss();
+//            mDialog.cancel();
+//            mDialog = null;
+//        }
+//    }
+
+//    @Override
+//    protected void onResume() {
+//        this.onRestart();
+//    }
 
     private class MyWebViewClient extends WebViewClient {
 
@@ -136,12 +134,12 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
 
-        @Override
-        public void onLoadResource(WebView view, String url) {
-            if (view.getProgress() >= 70) {
-                cancelProgressDialog();
-            }
-        }
+//        @Override
+//        public void onLoadResource(WebView view, String url) {
+//            if (view.getProgress() >= 70) {
+//                cancelProgressDialog();
+//            }
+//        }
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {

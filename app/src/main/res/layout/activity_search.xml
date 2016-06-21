@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="nl.saxion.cage.twitteradapter.SearchActivity">
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:drawableStart="@drawable/ic_action_name"
+        android:layout_width="30dp"
+        android:layout_height="40dp"
+        android:id="@+id/button_search"
+        android:layout_gravity="right"
+        android:typeface="sans"
+        android:clickable="true"
+        android:focusableInTouchMode="false"
+        android:background="@color/primary"
+        android:translationZ="2dp"
+        android:layout_below="@+id/my_toolbar"
+        android:layout_alignParentStart="true" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list_card"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/button_search" />
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:id="@+id/edit_search"
+        android:background="@color/primary"
+        android:translationZ="2dp"
+        android:singleLine="true"
+        android:elegantTextHeight="false"
+        android:imeOptions="actionSearch"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/button_search" />
+
+</RelativeLayout>

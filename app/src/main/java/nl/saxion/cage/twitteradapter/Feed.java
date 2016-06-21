@@ -1,6 +1,6 @@
 package nl.saxion.cage.twitteradapter;
 
-import android.app.SearchManager;
+//imports
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -21,32 +20,25 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import com.github.scribejava.core.model.OAuth1AccessToken;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-
 import nl.saxion.cage.twitteradapter.Entities.Entities;
 import nl.saxion.cage.twitteradapter.Entities.Hashtags;
 import nl.saxion.cage.twitteradapter.Entities.Media;
 import nl.saxion.cage.twitteradapter.Entities.URL;
 import nl.saxion.cage.twitteradapter.Entities.User_Mention;
-
 import static android.widget.TextView.*;
 
 public class Feed extends AppCompatActivity {
-
     //define context
     Context context = this;
 
@@ -65,7 +57,6 @@ public class Feed extends AppCompatActivity {
 
     //search bar and profile button
     private EditText editSearch;
-    private Button profileButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,39 +67,39 @@ public class Feed extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
-        //define editText view for search bar, and profile button
-        editSearch = (EditText) findViewById(R.id.editSearch);
-        profileButton = (Button) findViewById(R.id.profileButton);
+        //define editText view for search bar
+        //editSearch = (EditText) findViewById(R.id.ed);
 
         //login screen
         Intent loginIntent = new Intent(this, LoginActivity.class);
         startActivityForResult(loginIntent, 1);
 
+
         //listens to key presses on keyboard
-        OnEditorActionListener actionListener = new OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-
-                    //search twitter and clear search bar
-
-                    //
-                    //search(editSearch.getText().toString());
-
-                    getHomeTimeline();
-                    editSearch.setText("");
-
-                    //hide keyboard
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(editSearch.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
-
-                    //the key has been pressed
-                    return true;
-                }
-                return false;
-            }
-        };
-        editSearch.setOnEditorActionListener(actionListener);
+//        OnEditorActionListener actionListener = new OnEditorActionListener() {
+//            @Override
+//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+//
+//                    //search twitter and clear search bar
+//
+//                    //
+//                    //search(editSearch.getText().toString());
+//
+//                    getHomeTimeline();
+//                    editSearch.setText("");
+//
+//                    //hide keyboard
+//                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//                    imm.hideSoftInputFromWindow(editSearch.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
+//
+//                    //the key has been pressed
+//                    return true;
+//                }
+//                return false;
+//            }
+//        };
+//        editSearch.setOnEditorActionListener(actionListener);
 
         //card view adapter
         adapter = new CardAdapter(tweets, this);
@@ -122,48 +113,20 @@ public class Feed extends AppCompatActivity {
         //set recyclerView layout manager & adapter
         recyclerView.setLayoutManager(llm);
         recyclerView.setAdapter(adapter);
-
-        profileButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if (accessToken != null) {
-                    //user profile screen
-                    Intent intent = new Intent(context, UserProfileActivity.class);
-                    intent.putExtra("accessToken", accessToken);
-                    startActivity(intent);
-                }
-            }
-        });
-    }
-
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
-
-//        MenuItem searchItem = menu.findItem(R.id.action_search);
-//
-//        SearchManager searchManager = (SearchManager) Feed.this.getSystemService(Context.SEARCH_SERVICE);
-//
-//        SearchView searchView = null;
-//        if (searchItem != null) {
-//            searchView = (SearchView) searchItem.getActionView();
-//        }
-//        if (searchView != null) {
-//            searchView.setSearchableInfo(searchManager.getSearchableInfo(Feed.this.getComponentName()));
-//        }4
-
-
-
-        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data == null) {
+            finish();
             return;
         }
 
         //get access token from data intent
         accessToken = (OAuth1AccessToken) data.getExtras().getSerializable("accessToken");
+
+        //load main timeline
+        getHomeTimeline();
     }
 
     private void getHomeTimeline() {
@@ -183,6 +146,37 @@ public class Feed extends AppCompatActivity {
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_home:
+                //do stuff
+                return true;
+            case R.id.action_search:
+                //search screen
+                Intent searchIntent = new Intent(context, SearchActivity.class);
+                startActivity(searchIntent);
+                return true;
+            case R.id.action_profile:
+                if (accessToken != null) {
+                    //user profile screen
+                    Intent profileIntent = new Intent(context, UserProfileActivity.class);
+                    profileIntent.putExtra("accessToken", accessToken);
+                    startActivity(profileIntent);
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
@@ -406,12 +400,6 @@ public class Feed extends AppCompatActivity {
 
         //get statuses
         JSONArray jTweetArray = jsonObject.optJSONArray("");
-
-        System.out.println(jTweetArray);
-
-        if (jTweetArray == null) {
-            jTweetArray = jsonObject.optJSONArray("");
-        }
 
         //loop through statuses
         for (int i = 0; i < jTweetArray.length(); i++) {

@@ -1,52 +1,73 @@
 package nl.saxion.cage.twitteradapter;
 
-import android.app.SearchManager;
-import android.content.Intent;
-import android.os.Bundle;
+//imports
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-
-import com.github.scribejava.core.model.OAuth1AccessToken;
-
+import android.view.KeyEvent;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-
 import nl.saxion.cage.twitteradapter.Entities.Entities;
 import nl.saxion.cage.twitteradapter.Entities.Hashtags;
 import nl.saxion.cage.twitteradapter.Entities.Media;
 import nl.saxion.cage.twitteradapter.Entities.URL;
 import nl.saxion.cage.twitteradapter.Entities.User_Mention;
 
-/**
- * Created by Cage on 6/20/16.
- */
-public class SearchResultsActivity extends AppCompatActivity {
-
-    private String bearerToken;
-    private String searchJSON;
-
-    //adapter for cardView
-    private CardAdapter adapter;
+public class SearchActivity extends AppCompatActivity {
 
     //list of tweets
     List<Tweets> tweets = new ArrayList<>();
+    private EditText editSearch;
+    private String bearerToken;
+    private String searchJSON;
+    private CardAdapter adapter;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.search_result_screen);
+        setContentView(R.layout.activity_search);
+
+        //define editText view for search bar
+        editSearch = (EditText) findViewById(R.id.edit_search);
+
+        //listens to key presses on keyboard
+        TextView.OnEditorActionListener actionListener = new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+
+                    //search twitter and clear search bar
+                    search(editSearch.getText().toString());
+                    editSearch.setText("");
+
+                    //hide keyboard
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(editSearch.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
+
+                    //the key has been pressed
+                    return true;
+                }
+                return false;
+            }
+        };
+        editSearch.setOnEditorActionListener(actionListener);
 
         //card view adapter
         adapter = new CardAdapter(tweets, this);
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.cardList);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.list_card);
         recyclerView.setHasFixedSize(true);
 
         //linear layout manager used for recyclerView (cardView)
@@ -56,23 +77,6 @@ public class SearchResultsActivity extends AppCompatActivity {
         //set recyclerView layout manager & adapter
         recyclerView.setLayoutManager(llm);
         recyclerView.setAdapter(adapter);
-
-        handleIntent(getIntent());
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        handleIntent(intent);
-    }
-
-    private void handleIntent(Intent intent) {
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-
-            System.out.println(query);
-            search(query);
-            //use the query to search your data somehow
-        }
     }
 
     private void search(String searchTerm) {
@@ -104,6 +108,7 @@ public class SearchResultsActivity extends AppCompatActivity {
 
             //update tweet list and cardView
             searchJSON = searchTwitter.get();
+            System.out.println(searchJSON);
             updateCardView();
 
         } catch (InterruptedException e) {
@@ -113,6 +118,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         }
     }
 
+
     private void updateCardView() {
         if (searchJSON != null) {
             //get start time
@@ -120,11 +126,15 @@ public class SearchResultsActivity extends AppCompatActivity {
 
             //read objects
             try {
-                readJsonToObjects(searchJSON);
-            } catch (JSONException e1) {
-            } catch (IOException e1) {
+                readJsonStatusesToObjects(searchJSON);
+            } catch (IOException ioe) {
+            } catch (JSONException e) {
+                try {
+                    readJsonStatusesToObjects(searchJSON);
+                } catch (JSONException e1) {
+                } catch (IOException e1) {
+                }
             }
-
 
             //get end time
             long endTime = System.currentTimeMillis();
@@ -139,13 +149,24 @@ public class SearchResultsActivity extends AppCompatActivity {
             adapter.notifyDataSetChanged();
         }
     }
-    private void readJsonToObjects(String file) throws IOException, JSONException {
 
+    /**
+     * Parses JSON file into objects
+     *
+     * @param file name of the JSON file to be parsed.
+     */
+    private void readJsonStatusesToObjects(String file) throws IOException, JSONException {
         //clear the current list of tweets
         tweets.clear();
 
-        //create new jsonArray for reading the file
-        JSONArray jTweetArray = new JSONArray(file);
+        //create new jObject for reading the file
+        JSONObject jObject = new JSONObject(file);
+        System.out.println(jObject);
+
+        //get statuses
+        JSONArray jTweetArray = jObject.getJSONArray("statuses");
+
+        System.out.println(jTweetArray);
 
         //loop through statuses
         for (int i = 0; i < jTweetArray.length(); i++) {

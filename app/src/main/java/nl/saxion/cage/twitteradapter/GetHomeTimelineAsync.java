@@ -20,10 +20,10 @@ public class GetHomeTimelineAsync extends AsyncTask<String, Void, String> {
     private static final String API_KEY = "BABNgm313dL2rRXf3iRM11lL8";
     private static final String API_SECRET = "WR2VFNTaJBRGmDCUettxUGPss50ZPOQaVlO8wsUYoHPMKlQkrG";
 
+    //auth service for
     private com.github.scribejava.core.oauth.OAuth10aService authService;
-    private OAuth1RequestToken requestToken = null;
-    @Override
 
+    @Override
     protected String doInBackground(String... params) {
         OAuth1AccessToken accessToken = new OAuth1AccessToken(params[0], params[1]);
         authService =
@@ -38,5 +38,4 @@ public class GetHomeTimelineAsync extends AsyncTask<String, Void, String> {
         final Response response = request.send();
         return response.getBody();
     }
-
 }
