@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -20,25 +21,32 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import com.github.scribejava.core.model.OAuth1AccessToken;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+
 import nl.saxion.cage.twitteradapter.Entities.Entities;
 import nl.saxion.cage.twitteradapter.Entities.Hashtags;
 import nl.saxion.cage.twitteradapter.Entities.Media;
 import nl.saxion.cage.twitteradapter.Entities.URL;
 import nl.saxion.cage.twitteradapter.Entities.User_Mention;
+
 import static android.widget.TextView.*;
 
 public class Feed extends AppCompatActivity {
+
     //define context
     Context context = this;
 
@@ -67,13 +75,13 @@ public class Feed extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
-        //define editText view for search bar
-        //editSearch = (EditText) findViewById(R.id.ed);
+        //define editText view for search bar, and profile button
+        editSearch = (EditText) findViewById(R.id.editSearch);
+        profileButton = (Button) findViewById(R.id.profileButton);
 
         //login screen
         Intent loginIntent = new Intent(this, LoginActivity.class);
         startActivityForResult(loginIntent, 1);
-
 
         //listens to key presses on keyboard
 //        OnEditorActionListener actionListener = new OnEditorActionListener() {
@@ -149,6 +157,43 @@ public class Feed extends AppCompatActivity {
         }
     }
 
+//    private void search(String searchTerm) {
+//        //check if we have bearerToken
+//        if (bearerToken == null) {
+//
+//            //retrieve new bearerToken
+//            RetrieveBearerAsync retrieveToken = new RetrieveBearerAsync();
+//            retrieveToken.execute();
+//
+//            //try to get the token
+//            try {
+//                System.out.println("getting token");
+//                bearerToken = retrieveToken.get();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            } catch (ExecutionException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
+//        //new searchTwitter async task
+//        SearchTwitterAsync searchTwitter = new SearchTwitterAsync();
+//
+//        //execute task
+//        searchTwitter.execute(searchTerm, bearerToken);
+//
+//        try {
+//
+//            //update tweet list and cardView
+//            searchJSON = searchTwitter.get();
+//            updateCardView();
+//
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        } catch (ExecutionException e) {
+//            e.printStackTrace();
+//        }
+//    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
