@@ -138,21 +138,6 @@ public class Feed extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
-
-//        MenuItem searchItem = menu.findItem(R.id.action_search);
-//
-//        SearchManager searchManager = (SearchManager) Feed.this.getSystemService(Context.SEARCH_SERVICE);
-//
-//        SearchView searchView = null;
-//        if (searchItem != null) {
-//            searchView = (SearchView) searchItem.getActionView();
-//        }
-//        if (searchView != null) {
-//            searchView.setSearchableInfo(searchManager.getSearchableInfo(Feed.this.getComponentName()));
-//        }4
-
-
-
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -161,7 +146,6 @@ public class Feed extends AppCompatActivity {
         if (data == null) {
             return;
         }
-
         //get access token from data intent
         accessToken = (OAuth1AccessToken) data.getExtras().getSerializable("accessToken");
     }
@@ -186,43 +170,43 @@ public class Feed extends AppCompatActivity {
         }
     }
 
-    private void search(String searchTerm) {
-        //check if we have bearerToken
-        if (bearerToken == null) {
-
-            //retrieve new bearerToken
-            RetrieveBearerAsync retrieveToken = new RetrieveBearerAsync();
-            retrieveToken.execute();
-
-            //try to get the token
-            try {
-                System.out.println("getting token");
-                bearerToken = retrieveToken.get();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
-        }
-
-        //new searchTwitter async task
-        SearchTwitterAsync searchTwitter = new SearchTwitterAsync();
-
-        //execute task
-        searchTwitter.execute(searchTerm, bearerToken);
-
-        try {
-
-            //update tweet list and cardView
-            searchJSON = searchTwitter.get();
-            updateCardView();
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-    }
+//    private void search(String searchTerm) {
+//        //check if we have bearerToken
+//        if (bearerToken == null) {
+//
+//            //retrieve new bearerToken
+//            RetrieveBearerAsync retrieveToken = new RetrieveBearerAsync();
+//            retrieveToken.execute();
+//
+//            //try to get the token
+//            try {
+//                System.out.println("getting token");
+//                bearerToken = retrieveToken.get();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            } catch (ExecutionException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
+//        //new searchTwitter async task
+//        SearchTwitterAsync searchTwitter = new SearchTwitterAsync();
+//
+//        //execute task
+//        searchTwitter.execute(searchTerm, bearerToken);
+//
+//        try {
+//
+//            //update tweet list and cardView
+//            searchJSON = searchTwitter.get();
+//            updateCardView();
+//
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        } catch (ExecutionException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     private void updateCardView() {
         if (searchJSON != null) {
