@@ -25,6 +25,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
     String url;
 
     private List<Tweets> tweetsList;
+
     Context context;
 
     public CardAdapter(List<Tweets> tweetsList, Context con) {
@@ -121,7 +122,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
     public CardViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
-                inflate(R.layout.card_item_picture, viewGroup, false);
+                inflate(R.layout.card_item, viewGroup, false);
         return new CardViewHolder(itemView);
     }
 

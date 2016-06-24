@@ -33,18 +33,20 @@ public class PostTweets extends AsyncTask<String,Void,Boolean>{
 
     @Override
     protected Boolean doInBackground(String... params) {
-
         accessToken = new OAuth1AccessToken(params[1],params[2]);
         tweet=params[0];
         postTweet();
         return true;
+
     }
+
+
 
 
     private void postTweet(){
 
         System.out.println("works" + tweet + accessToken.getToken() + accessToken.getTokenSecret());
-//didn't create OAUTH10aService class because there is a default one
+                //didn't create OAUTH10aService class because there is a default one
         authService =
                 new ServiceBuilder()
                         .apiKey(API_KEY)
