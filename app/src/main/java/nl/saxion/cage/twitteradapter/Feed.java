@@ -77,7 +77,7 @@ public class Feed extends AppCompatActivity {
 
         //define editText view for search bar, and profile button
         editSearch = (EditText) findViewById(R.id.editSearch);
-        profileButton = (Button) findViewById(R.id.profileButton);
+        //profileButton = (Button) findViewById(R.id.profileButton);
 
         //login screen
         Intent loginIntent = new Intent(this, LoginActivity.class);
