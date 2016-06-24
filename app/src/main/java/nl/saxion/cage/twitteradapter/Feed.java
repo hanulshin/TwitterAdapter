@@ -1,6 +1,6 @@
 package nl.saxion.cage.twitteradapter;
 
-//imports
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -20,25 +21,32 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import com.github.scribejava.core.model.OAuth1AccessToken;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+
 import nl.saxion.cage.twitteradapter.Entities.Entities;
 import nl.saxion.cage.twitteradapter.Entities.Hashtags;
 import nl.saxion.cage.twitteradapter.Entities.Media;
 import nl.saxion.cage.twitteradapter.Entities.URL;
 import nl.saxion.cage.twitteradapter.Entities.User_Mention;
+
 import static android.widget.TextView.*;
 
 public class Feed extends AppCompatActivity {
+
     //define context
     Context context = this;
 
@@ -57,6 +65,7 @@ public class Feed extends AppCompatActivity {
 
     //search bar and profile button
     private EditText editSearch;
+    private Button profileButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +82,6 @@ public class Feed extends AppCompatActivity {
         //login screen
         Intent loginIntent = new Intent(this, LoginActivity.class);
         startActivityForResult(loginIntent, 1);
-
 
         //listens to key presses on keyboard
 //        OnEditorActionListener actionListener = new OnEditorActionListener() {
@@ -149,74 +157,43 @@ public class Feed extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_home:
-                //do stuff
-                return true;
-            case R.id.action_search:
-                //search screen
-                Intent searchIntent = new Intent(context, SearchActivity.class);
-                startActivity(searchIntent);
-                return true;
-            case R.id.action_profile:
-                if (accessToken != null) {
-                    //user profile screen
-                    Intent profileIntent = new Intent(context, UserProfileActivity.class);
-                    profileIntent.putExtra("accessToken", accessToken);
-                    startActivity(profileIntent);
-                }
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    private void search(String searchTerm) {
-        //check if we have bearerToken
-        if (bearerToken == null) {
-
-            //retrieve new bearerToken
-            RetrieveBearerAsync retrieveToken = new RetrieveBearerAsync();
-            retrieveToken.execute();
-
-            //try to get the token
-            try {
-                System.out.println("getting token");
-                bearerToken = retrieveToken.get();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
-        }
-
-        //new searchTwitter async task
-        SearchTwitterAsync searchTwitter = new SearchTwitterAsync();
-
-        //execute task
-        searchTwitter.execute(searchTerm, bearerToken);
-
-        try {
-
-            //update tweet list and cardView
-            searchJSON = searchTwitter.get();
-            updateCardView();
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-    }
+//    private void search(String searchTerm) {
+//        //check if we have bearerToken
+//        if (bearerToken == null) {
+//
+//            //retrieve new bearerToken
+//            RetrieveBearerAsync retrieveToken = new RetrieveBearerAsync();
+//            retrieveToken.execute();
+//
+//            //try to get the token
+//            try {
+//                System.out.println("getting token");
+//                bearerToken = retrieveToken.get();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            } catch (ExecutionException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
+//        //new searchTwitter async task
+//        SearchTwitterAsync searchTwitter = new SearchTwitterAsync();
+//
+//        //execute task
+//        searchTwitter.execute(searchTerm, bearerToken);
+//
+//        try {
+//
+//            //update tweet list and cardView
+//            searchJSON = searchTwitter.get();
+//            updateCardView();
+//
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        } catch (ExecutionException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     private void updateCardView() {
         if (searchJSON != null) {
@@ -400,6 +377,12 @@ public class Feed extends AppCompatActivity {
 
         //get statuses
         JSONArray jTweetArray = jsonObject.optJSONArray("");
+
+        System.out.println(jTweetArray);
+
+        if (jTweetArray == null) {
+            jTweetArray = jsonObject.optJSONArray("");
+        }
 
         //loop through statuses
         for (int i = 0; i < jTweetArray.length(); i++) {

@@ -4,14 +4,13 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:id="@+id/profile_image_url"
         android:adjustViewBounds="true"
-        android:layout_marginStart="45dp"
-        android:layout_marginTop="49dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_margin="10dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -19,9 +18,8 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="screen_name"
         android:id="@+id/screen_name"
-        android:layout_marginStart="52dp"
-        android:layout_alignBottom="@+id/profile_image_url"
-        android:layout_toEndOf="@+id/profile_image_url" />
+        android:layout_below="@+id/name"
+        android:layout_alignStart="@+id/name" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -29,8 +27,8 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Name"
         android:id="@+id/name"
-        android:layout_above="@+id/screen_name"
-        android:layout_alignStart="@+id/screen_name" />
+        android:layout_alignTop="@+id/profile_image_url"
+        android:layout_toEndOf="@+id/profile_image_url" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -38,9 +36,8 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Followers_count"
         android:id="@+id/followers_count"
-        android:layout_below="@+id/screen_name"
-        android:layout_alignStart="@+id/screen_name"
-        android:layout_marginTop="72dp" />
+        android:layout_below="@+id/statuses_count"
+        android:layout_toEndOf="@+id/profile_image_url" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -48,9 +45,8 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="friends_count"
         android:id="@+id/friends_count"
-        android:layout_alignBaseline="@+id/followers_count"
-        android:layout_alignBottom="@+id/followers_count"
-        android:layout_toStartOf="@+id/screen_name" />
+        android:layout_below="@+id/followers_count"
+        android:layout_toEndOf="@+id/profile_image_url" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -58,9 +54,8 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Statuses_count"
         android:id="@+id/statuses_count"
-        android:layout_above="@+id/friends_count"
-        android:layout_alignStart="@+id/followers_count"
-        android:layout_marginBottom="40dp" />
+        android:layout_below="@+id/screen_name"
+        android:layout_toEndOf="@+id/profile_image_url" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -68,22 +63,14 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Description"
         android:id="@+id/description"
-        android:layout_below="@+id/friends_count"
-        android:layout_toStartOf="@+id/screen_name" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tweet"
-        android:width="200dp"
-        android:layout_below="@+id/description"
+        android:layout_below="@+id/profile_image_url"
         android:layout_alignStart="@+id/profile_image_url" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Post"
-        android:id="@+id/post"
-        android:layout_below="@+id/tweet"
-        android:layout_alignStart="@+id/followers_count" />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/profile_list"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/description"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="10dp" />
 </RelativeLayout>
