@@ -67,8 +67,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         cardViewHolder.nameText.setText(tweet.getUser().getName());
         cardViewHolder.screenNameText.setText("@" + tweet.getUser().getScreen_name());
         cardViewHolder.dateText.setText(tweet.getCreated_at());
-        cardViewHolder.likesText.setText("Likes: " + String.valueOf(tweet.getFavourite_count()));
-        cardViewHolder.retweetsCountText.setText("retweets: " + String.valueOf(tweet.getRetweet_count()));
+        cardViewHolder.likesText.setText(String.valueOf(tweet.getFavourite_count()));
+        cardViewHolder.retweetsCountText.setText(String.valueOf(tweet.getRetweet_count()));
 
         //load profile image
         Picasso.with(context).load(tweet.getUser().getProfile_image_url()).into(cardViewHolder.profileImage);

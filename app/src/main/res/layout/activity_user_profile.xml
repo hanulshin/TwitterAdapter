@@ -70,7 +70,22 @@
         android:id="@+id/profile_list"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
+        android:layout_below="@+id/post"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="post"
+        android:id="@+id/post"
         android:layout_below="@+id/description"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="10dp" />
+        android:layout_marginLeft="5dp" />
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tweet"
+        android:layout_alignTop="@+id/post"
+        android:layout_toEndOf="@+id/post" />
 </RelativeLayout>

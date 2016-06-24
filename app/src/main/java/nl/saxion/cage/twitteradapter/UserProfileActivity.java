@@ -1,13 +1,18 @@
 package nl.saxion.cage.twitteradapter;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.scribejava.apis.TwitterApi;
 import com.github.scribejava.core.builder.ServiceBuilder;
@@ -50,7 +55,7 @@ public class UserProfileActivity extends AppCompatActivity {
     private CardAdapter adapter;
 
     //access and bearer token
-    private OAuth1AccessToken accessToken = null;
+    private OAuth1AccessToken accessToken;
     private String bearerToken = null;
 
     //current json file of tweets
@@ -61,11 +66,12 @@ public class UserProfileActivity extends AppCompatActivity {
 
     Users user;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
-        OAuth1AccessToken accessToken = null;
 
         //card view adapter
         adapter = new CardAdapter(tweets, this);
@@ -85,6 +91,8 @@ public class UserProfileActivity extends AppCompatActivity {
 
         //get extras from intent
         accessToken = (OAuth1AccessToken) intent.getExtras().getSerializable("accessToken");
+
+        getUserTimeline();
 
         authService =
                 new ServiceBuilder()
@@ -107,6 +115,22 @@ public class UserProfileActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        Button post = (Button) findViewById(R.id.post);
+
+        post.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PostTweets post = new PostTweets();
+                EditText tweet = (EditText) findViewById(R.id.tweet);
+                post.execute(tweet.getText().toString(), accessToken.getToken(), accessToken.getTokenSecret());
+                tweet.setText("");
+//
+//                Toast toast = new Toast(context);
+//                toast.setText("Posted to your timeline");
+//                toast.show();
+            }
+        });
 
         nameText = (TextView) findViewById(R.id.name);
         screenNameText = (TextView) findViewById(R.id.screen_name);
@@ -148,6 +172,7 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     private void getUserTimeline() {
+        System.out.println("getting user timeline");
         if (accessToken != null) {
             GetUserTimelineAsync getTimeline = new GetUserTimelineAsync();
             getTimeline.execute(accessToken.getToken(), accessToken.getTokenSecret());
@@ -155,7 +180,8 @@ public class UserProfileActivity extends AppCompatActivity {
 
                 //update tweet list and cardView
                 searchJSON = getTimeline.get();
-                System.out.println(searchJSON);
+
+                System.out.println("searchJson: " + searchJSON);
 
                 updateCardView();
 
@@ -164,10 +190,11 @@ public class UserProfileActivity extends AppCompatActivity {
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
-        }
+        } else System.out.println("accesstoken null");
     }
 
     private void updateCardView() {
+        System.out.println("updating cardView");
         if (searchJSON != null) {
             //get start time
             long startTime = System.currentTimeMillis();
@@ -176,12 +203,9 @@ public class UserProfileActivity extends AppCompatActivity {
             try {
                 readJsonStatusesToObjects(searchJSON);
             } catch (IOException ioe) {
+                System.out.println(ioe.getMessage());
             } catch (JSONException e) {
-                try {
-                    readJsonToObjects(searchJSON);
-                } catch (JSONException e1) {
-                } catch (IOException e1) {
-                }
+                System.out.println(e.getMessage());
             }
 
             //get end time
@@ -195,6 +219,9 @@ public class UserProfileActivity extends AppCompatActivity {
 
             //update the card view
             adapter.notifyDataSetChanged();
+            System.out.println("tweets" + tweets);
+
+            System.out.println("data set changed");
         }
     }
 
@@ -205,13 +232,15 @@ public class UserProfileActivity extends AppCompatActivity {
      */
     private void readJsonStatusesToObjects(String file) throws IOException, JSONException {
         //clear the current list of tweets
-        tweets.clear();
+        //tweets.clear();
 
         //create new jsonObject for reading the file
         JSONObject jsonObject = new JSONObject(file);
+        System.out.println(jsonObject);
+        System.out.println("WTF");
 
         //get statuses
-        JSONArray jTweetArray = jsonObject.optJSONArray("");
+        JSONArray jTweetArray = null;// = jsonObject.optJSONArray("");
 
         System.out.println(jTweetArray);
 
