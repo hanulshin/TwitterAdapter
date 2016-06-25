@@ -1,26 +1,20 @@
 package nl.saxion.cage.twitteradapter;
 
+//imports
+
 import android.content.Context;
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
+import android.view.KeyEvent;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.github.scribejava.apis.TwitterApi;
-import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.model.OAuth1AccessToken;
-import com.github.scribejava.core.model.OAuthRequest;
-import com.github.scribejava.core.model.Response;
-import com.github.scribejava.core.model.Verb;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,45 +31,26 @@ import nl.saxion.cage.twitteradapter.Entities.Media;
 import nl.saxion.cage.twitteradapter.Entities.URL;
 import nl.saxion.cage.twitteradapter.Entities.User_Mention;
 
-public class UserProfileActivity extends AppCompatActivity {
-    private com.github.scribejava.core.oauth.OAuth10aService authService;
-    //key & secret for getting accessToken
-    private static final String API_KEY = "BABNgm313dL2rRXf3iRM11lL8";
-    private static final String API_SECRET = "WR2VFNTaJBRGmDCUettxUGPss50ZPOQaVlO8wsUYoHPMKlQkrG";
+public class FriendsListActivity extends AppCompatActivity {
 
-    protected TextView nameText;
-    protected TextView screenNameText;
-    protected ImageView profileImage;
-    protected TextView descriptionText;
-    protected TextView followers_countText;
-    protected TextView friends_countText;
-    protected TextView statuses_countText;
-
-    //adapter for cardView
+    //list of tweets
+    List<Tweets> tweets = new ArrayList<>();
+    private EditText editSearch;
+    private String bearerToken;
+    private String searchJSON;
     private CardAdapter adapter;
 
     //access and bearer token
     private OAuth1AccessToken accessToken;
-    private String bearerToken = null;
-
-    //current json file of tweets
-    private String searchJSON;
-
-    //list of tweets
-    List<Tweets> tweets = new ArrayList<>();
-
-    Users user;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_profile);
+        setContentView(R.layout.friend_list);
 
         //card view adapter
         adapter = new CardAdapter(tweets, this);
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.profile_list);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.list_card);
         recyclerView.setHasFixedSize(true);
 
         //linear layout manager used for recyclerView (cardView)
@@ -85,94 +60,9 @@ public class UserProfileActivity extends AppCompatActivity {
         //set recyclerView layout manager & adapter
         recyclerView.setLayoutManager(llm);
         recyclerView.setAdapter(adapter);
-
-        //create intent
-        Intent intent = getIntent();
-
-        //get extras from intent
-        accessToken = (OAuth1AccessToken) intent.getExtras().getSerializable("accessToken");
-
-        getUserTimeline();
-
-        authService =
-                new ServiceBuilder()
-                        .apiKey(API_KEY)
-                        .apiSecret(API_SECRET)
-                        .callback("http://www.cagitter.com"/*OAUTH_CALLBACK_URL*/)// not used in git, but said to use in slides
-                        .build(TwitterApi.instance());//changed from API to api, getInstance to instance
-
-        //pending for json file which will contain user information
-        final OAuthRequest request = new OAuthRequest(Verb.GET, "https://api.twitter.com/1.1/account/verify_credentials.json", authService);
-        authService.signRequest(accessToken, request); // the access token from step 4
-        final Response response = request.send();
-
-        //print json file to logcat
-        Log.d("resp", response.getBody());
-        try {
-            readJsonToObjects(response.getBody());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        Button post = (Button) findViewById(R.id.post);
-
-        post.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PostTweets post = new PostTweets();
-                EditText tweet = (EditText) findViewById(R.id.tweet);
-                post.execute(tweet.getText().toString(), accessToken.getToken(), accessToken.getTokenSecret());
-                tweet.setText("");
-                getUserTimeline();
-
-//
-//                Toast toast = new Toast(context);
-//                toast.setText("Posted to your timeline");
-//                toast.show();
-            }
-        });
-
-        nameText = (TextView) findViewById(R.id.name);
-        screenNameText = (TextView) findViewById(R.id.screen_name);
-        profileImage = (ImageView) findViewById(R.id.profile_image_url);
-        descriptionText = (TextView) findViewById(R.id.description);
-        followers_countText = (TextView) findViewById(R.id.followers_count);
-        friends_countText = (TextView) findViewById(R.id.friends_count);
-        statuses_countText = (TextView) findViewById(R.id.statuses_count);
-
-        nameText.setText(user.getName());
-        screenNameText.setText("@" + user.getScreen_name());
-        //load profile image
-        Picasso.with(this).load(user.getProfile_image_url()).into(profileImage);
-        descriptionText.setText(user.getDescription());
-        followers_countText.setText("followers: " + Integer.toString(user.getFollowers_count()));
-        friends_countText.setText("following: " + Integer.toString(user.getFriends_count()));
-        statuses_countText.setText("tweets posted: " + Integer.toString(user.getStatuses_count()));
     }
 
-    /**
-     * Parses JSON file into objects
-     *
-     * @param file name of the JSON file to be parsed.
-     */
-    private void readJsonToObjects(String file) throws IOException, JSONException {
-        //create new jsonObject for reading the file
-        JSONObject jsonObject = new JSONObject(file);
-        String name = jsonObject.getString("name");
-        String screen_name = jsonObject.getString("screen_name");
-        String profile_image_url = jsonObject.getString("profile_image_url");
-        String description = jsonObject.getString("description");
-        int followers_count = jsonObject.getInt("followers_count");
-        int friends_count = jsonObject.getInt("friends_count");
-        int statuses_count = jsonObject.getInt("statuses_count");
-
-        //create new user object with extracted json data
-        user = new Users(screen_name, name, profile_image_url, description, followers_count, friends_count, statuses_count);
-    }
-
-    private void getUserTimeline() {
+    private void getFriendsList() {
         System.out.println("getting user timeline");
         if (accessToken != null) {
             GetUserTimelineAsync getTimeline = new GetUserTimelineAsync();
@@ -196,22 +86,17 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     private void updateCardView() {
-        System.out.println("updating cardView");
         if (searchJSON != null) {
             //get start time
             long startTime = System.currentTimeMillis();
 
             //read objects
             try {
-                //readJsonTest(searchJSON);
-                readJsonStatusesToObjects(searchJSON);
+                readJsonToObjects(searchJSON);
             } catch (IOException ioe) {
-                System.out.println(ioe.getMessage());
                 ioe.printStackTrace();
-                System.out.println("wrdffeasvr");
             } catch (JSONException e) {
                 e.printStackTrace();
-                System.out.println("help me");
             }
 
             //get end time
@@ -225,9 +110,6 @@ public class UserProfileActivity extends AppCompatActivity {
 
             //update the card view
             adapter.notifyDataSetChanged();
-            System.out.println("tweets" + tweets);
-
-            System.out.println("data set changed");
         }
     }
 
@@ -236,12 +118,19 @@ public class UserProfileActivity extends AppCompatActivity {
      *
      * @param file name of the JSON file to be parsed.
      */
-    private void readJsonStatusesToObjects(String file) throws IOException, JSONException {
+    private void readJsonToObjects(String file) throws IOException, JSONException {
         //clear the current list of tweets
         tweets.clear();
-        //create new jsonObject for reading the file
-        JSONArray jTweetArray = new JSONArray(file);
+
+        //create new jObject for reading the file
+        JSONObject jObject = new JSONObject(file);
+        System.out.println(jObject);
+
+        //get statuses
+        JSONArray jTweetArray = jObject.getJSONArray("statuses");
+
         System.out.println(jTweetArray);
+
         //loop through statuses
         for (int i = 0; i < jTweetArray.length(); i++) {
             JSONObject jTweetObj = jTweetArray.getJSONObject(i);
@@ -332,4 +221,3 @@ public class UserProfileActivity extends AppCompatActivity {
         }
     }
 }
-

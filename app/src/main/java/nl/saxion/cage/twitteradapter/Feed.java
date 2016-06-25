@@ -1,6 +1,5 @@
 package nl.saxion.cage.twitteradapter;
 
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
@@ -8,42 +7,27 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-
 import com.github.scribejava.core.model.OAuth1AccessToken;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-
 import nl.saxion.cage.twitteradapter.Entities.Entities;
 import nl.saxion.cage.twitteradapter.Entities.Hashtags;
 import nl.saxion.cage.twitteradapter.Entities.Media;
 import nl.saxion.cage.twitteradapter.Entities.URL;
 import nl.saxion.cage.twitteradapter.Entities.User_Mention;
-
-import static android.widget.TextView.*;
 
 public class Feed extends AppCompatActivity {
 
@@ -127,6 +111,11 @@ public class Feed extends AppCompatActivity {
 
         //get access token from data intent
         accessToken = (OAuth1AccessToken) data.getExtras().getSerializable("accessToken");
+
+        Model model = Model.getInstance();
+        model.setAccessToken((OAuth1AccessToken) data.getExtras().getSerializable("accessToken"));
+
+        System.out.println("accessToken from model: " + model.getAccessToken().getToken());
 
         //load main timeline
         getHomeTimeline();
