@@ -13,9 +13,6 @@ import com.github.scribejava.core.model.Verb;
 
 import nl.saxion.cage.twitteradapter.Model;
 
-/**
- * Created by Cage on 6/19/16.
- */
 public class GetHomeTimelineAsync extends AsyncTask<String, Void, String> {
 
     /**

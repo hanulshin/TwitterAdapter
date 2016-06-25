@@ -80,7 +80,9 @@
             android:textColor="@color/secondary_text"
             android:textStyle="bold"
             android:translationZ="0dp"
-            android:layout_below="@+id/TextView"
+            android:layout_marginRight="52dp"
+            android:layout_marginEnd="19dp"
+            android:layout_alignTop="@+id/like"
             android:layout_toStartOf="@+id/imageButton2" />
 
         <TextView
@@ -91,16 +93,15 @@
             android:layout_marginLeft="5dp"
             android:textColor="@color/secondary_text"
             android:textStyle="bold"
-            android:layout_below="@+id/TextView"
-            android:layout_alignEnd="@+id/TextView"
-            android:layout_marginEnd="8dp" />
+            android:layout_alignBottom="@+id/imageButton2"
+            android:layout_alignEnd="@+id/TextView" />
 
         <ImageButton
             android:layout_width="15dp"
             android:layout_height="15dp"
             android:id="@+id/like"
-            android:background="@drawable/ic_favorite_black_24px"
-            android:layout_below="@+id/profileView"
+            android:background="@drawable/ic_favorite_border_black_24px"
+            android:layout_alignBottom="@+id/RetweetView"
             android:layout_toStartOf="@+id/LikeView" />
 
         <ImageButton
@@ -108,8 +109,10 @@
             android:layout_height="15dp"
             android:id="@+id/imageButton2"
             android:background="@drawable/ic_repost_black_24px"
-            android:layout_alignBottom="@+id/RetweetView"
-            android:layout_toStartOf="@+id/RetweetView" />
+
+            android:layout_below="@+id/mediaImage"
+            android:layout_toStartOf="@+id/RetweetView"
+            android:layout_marginTop="15dp" />
 
     </RelativeLayout>
   </android.support.v7.widget.CardView>

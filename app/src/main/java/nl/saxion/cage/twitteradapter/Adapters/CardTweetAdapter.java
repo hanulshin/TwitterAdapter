@@ -20,12 +20,6 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import nl.saxion.cage.twitteradapter.Actitivies.ZoomActivity;
-import nl.saxion.cage.twitteradapter.AsyncTasks.UnlikeTweetAsync;
-import nl.saxion.cage.twitteradapter.Model;
-import nl.saxion.cage.twitteradapter.R;
-import nl.saxion.cage.twitteradapter.Tweets.Tweets;
-
 public class CardTweetAdapter extends RecyclerView.Adapter<CardTweetAdapter.CardViewHolder> {
 
     /**
@@ -37,6 +31,11 @@ public class CardTweetAdapter extends RecyclerView.Adapter<CardTweetAdapter.Card
      * url for loading media image
      */
     String mediaUrl;
+
+    /**
+     * state of like button (liked or unliked)
+     */
+    boolean likeState = false;
 
     /**
      * list of tweets
@@ -128,12 +127,30 @@ public class CardTweetAdapter extends RecyclerView.Adapter<CardTweetAdapter.Card
         cardViewHolder.like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tweet.getId_str();
-                UnlikeTweetAsync unlikeTweetAsync = new UnlikeTweetAsync();
-               // LikeTweetAsync likeTweetAsync = new LikeTweetAsync();
-                unlikeTweetAsync.execute(tweet.getId_str());
-                Model model = Model.getInstance();
-                System.out.println("work "+model.getAccessToken());
+
+                if(likeState!=true){
+                    tweet.getId_str();
+                    //UnlikeTweetAsync unlikeTweetAsync = new UnlikeTweetAsync();
+                    LikeTweetAsync likeTweetAsync = new LikeTweetAsync();
+                    likeTweetAsync.execute(tweet.getId_str());
+                    Model model = Model.getInstance();
+                    System.out.println("work "+model.getAccessToken());
+                    cardViewHolder.like.setImageResource(R.drawable.ic_favorite_black_24px);
+                    likeState=true;
+                }
+                else{
+                    tweet.getId_str();
+                    UnlikeTweetAsync unlikeTweetAsync = new UnlikeTweetAsync();
+                    // LikeTweetAsync likeTweetAsync = new LikeTweetAsync();
+                    unlikeTweetAsync.execute(tweet.getId_str());
+                    Model model = Model.getInstance();
+                    cardViewHolder.like.setImageResource(R.drawable.ic_favorite_border_black_24px);
+                    System.out.println("work "+model.getAccessToken());
+                    likeState=false;
+                }
+
+
+
             }
         });
     }
