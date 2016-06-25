@@ -22,6 +22,7 @@ public class GetHomeTimelineAsync extends AsyncTask<String, Void, String> {
 
     //key & secret for getting accessToken
     private static final String API_KEY = model.getApiKey();
+
     private static final String API_SECRET = model.getApiSecret();
 
     //auth service for
