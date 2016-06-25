@@ -1,4 +1,4 @@
-package nl.saxion.cage.twitteradapter;
+package nl.saxion.cage.twitteradapter.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +20,12 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import nl.saxion.cage.twitteradapter.Actitivies.ZoomActivity;
+import nl.saxion.cage.twitteradapter.AsyncTasks.UnlikeTweetAsync;
+import nl.saxion.cage.twitteradapter.Model;
+import nl.saxion.cage.twitteradapter.R;
+import nl.saxion.cage.twitteradapter.Tweets.Tweets;
+
 public class CardTweetAdapter extends RecyclerView.Adapter<CardTweetAdapter.CardViewHolder> {
     Tweets tweet;
 
@@ -30,11 +36,6 @@ public class CardTweetAdapter extends RecyclerView.Adapter<CardTweetAdapter.Card
     Context context;
 
     public CardTweetAdapter(List<Tweets> tweetsList, Context con) {
-        this.tweetsList = tweetsList;
-        this.context = con;
-    }
-
-    public CardAdapter(List<Tweets> tweetsList, Context con, String lol) {
         this.tweetsList = tweetsList;
         this.context = con;
     }
@@ -147,16 +148,16 @@ public class CardTweetAdapter extends RecyclerView.Adapter<CardTweetAdapter.Card
 
     public static class CardViewHolder extends RecyclerView.ViewHolder {
         //define views
-        protected TextView textText;
-        protected TextView nameText;
-        protected TextView screenNameText;
-        protected TextView retweetsCountText;
-        protected TextView likesText;
-        protected TextView dateText;
-        protected ImageView profileImage;
-        protected ImageView media;
-        protected View view;
-        protected ImageButton like;
+        private TextView textText;
+        private TextView nameText;
+        private TextView screenNameText;
+        private TextView retweetsCountText;
+        private TextView likesText;
+        private TextView dateText;
+        private ImageView profileImage;
+        private ImageView media;
+        private View view;
+        private ImageButton like;
 
         //cardViewHolder for accessing views
         public CardViewHolder(View convertView) {

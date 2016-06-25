@@ -1,22 +1,22 @@
-package nl.saxion.cage.twitteradapter;
+package nl.saxion.cage.twitteradapter.Tweets;
 
 import java.util.*;
 
 /**
  * 
  */
-public class Coordinates {
+public class Bounding_box {
 
     /**
      * Default constructor
      */
-    public Coordinates() {
+    public Bounding_box() {
     }
 
     /**
      * 
      */
-    public List<Float> coordinates;
+    //public Array of Array of Array of Float coordinates;
 
     /**
      * 

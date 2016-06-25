@@ -1,4 +1,4 @@
-package nl.saxion.cage.twitteradapter;
+package nl.saxion.cage.twitteradapter.Actitivies;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -30,17 +30,26 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import nl.saxion.cage.twitteradapter.AsyncTasks.GetUserTimelineAsync;
+import nl.saxion.cage.twitteradapter.Adapters.CardTweetAdapter;
 import nl.saxion.cage.twitteradapter.Entities.Entities;
 import nl.saxion.cage.twitteradapter.Entities.Hashtags;
 import nl.saxion.cage.twitteradapter.Entities.Media;
 import nl.saxion.cage.twitteradapter.Entities.URL;
 import nl.saxion.cage.twitteradapter.Entities.User_Mention;
+import nl.saxion.cage.twitteradapter.AsyncTasks.PostTweetsAsync;
+import nl.saxion.cage.twitteradapter.Model;
+import nl.saxion.cage.twitteradapter.R;
+import nl.saxion.cage.twitteradapter.Tweets.Tweets;
+import nl.saxion.cage.twitteradapter.Users;
 
 public class UserProfileActivity extends AppCompatActivity {
     private com.github.scribejava.core.oauth.OAuth10aService authService;
+
+    static Model model = Model.getInstance();
+
     //key & secret for getting accessToken
-    private static final String API_KEY = "BABNgm313dL2rRXf3iRM11lL8";
-    private static final String API_SECRET = "WR2VFNTaJBRGmDCUettxUGPss50ZPOQaVlO8wsUYoHPMKlQkrG";
+    private static final String API_KEY = model.getApiKey();
+    private static final String API_SECRET = model.getApiSecret();
 
     private TextView nameText;
     private TextView screenNameText;
@@ -123,7 +132,7 @@ public class UserProfileActivity extends AppCompatActivity {
         post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PostTweets post = new PostTweets();
+                PostTweetsAsync post = new PostTweetsAsync();
                 EditText tweet = (EditText) findViewById(R.id.tweet);
                 post.execute(tweet.getText().toString(), accessToken.getToken(), accessToken.getTokenSecret());
                 tweet.setText("");

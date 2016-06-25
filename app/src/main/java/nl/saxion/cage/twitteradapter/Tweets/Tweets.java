@@ -1,8 +1,9 @@
-package nl.saxion.cage.twitteradapter;
+package nl.saxion.cage.twitteradapter.Tweets;
 
 import java.util.*;
 
 import nl.saxion.cage.twitteradapter.Entities.Entities;
+import nl.saxion.cage.twitteradapter.Users;
 
 /**
  * 
@@ -72,16 +73,6 @@ public class Tweets  {
      * 
      */
     private Object annotations;
-
-    /**
-     * 
-     */
-    private Collection <Contributors> contributors;
-
-    /**
-     * 
-     */
-    private Coordinates coordinates;
 
     /**
      * 

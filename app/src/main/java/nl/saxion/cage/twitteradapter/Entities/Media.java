@@ -1,12 +1,9 @@
 package nl.saxion.cage.twitteradapter.Entities;
 
-import java.util.*;
-
 /**
  * 
  */
 public class Media {
-
 
     /**
      * 
@@ -42,11 +39,6 @@ public class Media {
      * 
      */
     private String media_url_https;
-
-    /**
-     * 
-     */
-    private Sizes sizes;
 
     /**
      * 
