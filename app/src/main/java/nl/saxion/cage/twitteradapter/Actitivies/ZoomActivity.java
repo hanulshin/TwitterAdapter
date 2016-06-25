@@ -1,4 +1,4 @@
-package nl.saxion.cage.twitteradapter;
+package nl.saxion.cage.twitteradapter.Actitivies;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
+
+import nl.saxion.cage.twitteradapter.R;
 
 public class ZoomActivity extends AppCompatActivity {
 

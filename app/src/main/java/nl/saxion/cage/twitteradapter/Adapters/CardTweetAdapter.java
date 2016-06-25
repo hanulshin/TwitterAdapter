@@ -36,8 +36,6 @@ public class CardTweetAdapter extends RecyclerView.Adapter<CardTweetAdapter.Card
         this.context = con;
     }
 
-
-
     @Override
     public int getItemCount() {
         return tweetsList.size();
@@ -166,16 +164,16 @@ public class CardTweetAdapter extends RecyclerView.Adapter<CardTweetAdapter.Card
 
     public static class CardViewHolder extends RecyclerView.ViewHolder {
         //define views
-        protected TextView textText;
-        protected TextView nameText;
-        protected TextView screenNameText;
-        protected TextView retweetsCountText;
-        protected TextView likesText;
-        protected TextView dateText;
-        protected ImageView profileImage;
-        protected ImageView media;
-        protected View view;
-        protected ImageButton like;
+        private TextView textText;
+        private TextView nameText;
+        private TextView screenNameText;
+        private TextView retweetsCountText;
+        private TextView likesText;
+        private TextView dateText;
+        private ImageView profileImage;
+        private ImageView media;
+        private View view;
+        private ImageButton like;
 
         //cardViewHolder for accessing views
         public CardViewHolder(View convertView) {

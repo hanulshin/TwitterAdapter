@@ -1,4 +1,4 @@
-package nl.saxion.cage.twitteradapter;
+package nl.saxion.cage.twitteradapter.Actitivies;
 
 //imports
 
@@ -21,6 +21,10 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import nl.saxion.cage.twitteradapter.AsyncTasks.GetFriendsListAsync;
+import nl.saxion.cage.twitteradapter.Adapters.CardUserAdapter;
+import nl.saxion.cage.twitteradapter.Model;
+import nl.saxion.cage.twitteradapter.R;
+import nl.saxion.cage.twitteradapter.Users;
 
 public class FriendsListActivity extends AppCompatActivity {
 

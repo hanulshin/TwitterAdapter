@@ -1,4 +1,4 @@
-package nl.saxion.cage.twitteradapter;
+package nl.saxion.cage.twitteradapter.Tweets;
 
 import java.util.*;
 

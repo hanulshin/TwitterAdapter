@@ -16,11 +16,17 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLEncoder;
 
+import nl.saxion.cage.twitteradapter.Model;
+
 public class RetrieveBearerAsync extends AsyncTask<String, Void, String> {
 
-    //api key and secret
-    private static final String API_KEY = "BABNgm313dL2rRXf3iRM11lL8";
-    private static final String API_SECRET = "WR2VFNTaJBRGmDCUettxUGPss50ZPOQaVlO8wsUYoHPMKlQkrG";
+    static Model model = Model.getInstance();
+
+    //key & secret for getting accessToken
+    private static final String API_KEY = model.getApiKey();
+    private static final String API_SECRET = model.getApiSecret();
+
+    //encoding charset
     private static final String CHARSET_UTF_8 = "UTF-8";
 
     @Override

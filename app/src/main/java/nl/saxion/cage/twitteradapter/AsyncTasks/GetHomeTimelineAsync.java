@@ -11,14 +11,18 @@ import com.github.scribejava.core.model.OAuthRequest;
 import com.github.scribejava.core.model.Response;
 import com.github.scribejava.core.model.Verb;
 
+import nl.saxion.cage.twitteradapter.Model;
+
 /**
  * Created by Cage on 6/19/16.
  */
 public class GetHomeTimelineAsync extends AsyncTask<String, Void, String> {
 
+    static Model model = Model.getInstance();
+
     //key & secret for getting accessToken
-    private static final String API_KEY = "BABNgm313dL2rRXf3iRM11lL8";
-    private static final String API_SECRET = "WR2VFNTaJBRGmDCUettxUGPss50ZPOQaVlO8wsUYoHPMKlQkrG";
+    private static final String API_KEY = model.getApiKey();
+    private static final String API_SECRET = model.getApiSecret();
 
     //auth service for
     private com.github.scribejava.core.oauth.OAuth10aService authService;

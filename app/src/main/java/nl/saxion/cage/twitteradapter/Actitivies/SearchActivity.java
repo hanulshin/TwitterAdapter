@@ -1,4 +1,4 @@
-package nl.saxion.cage.twitteradapter;
+package nl.saxion.cage.twitteradapter.Actitivies;
 
 //imports
 import android.content.Context;
@@ -22,11 +22,15 @@ import java.util.concurrent.ExecutionException;
 
 import nl.saxion.cage.twitteradapter.AsyncTasks.RetrieveBearerAsync;
 import nl.saxion.cage.twitteradapter.AsyncTasks.SearchTwitterAsync;
+import nl.saxion.cage.twitteradapter.Adapters.CardTweetAdapter;
 import nl.saxion.cage.twitteradapter.Entities.Entities;
 import nl.saxion.cage.twitteradapter.Entities.Hashtags;
 import nl.saxion.cage.twitteradapter.Entities.Media;
 import nl.saxion.cage.twitteradapter.Entities.URL;
 import nl.saxion.cage.twitteradapter.Entities.User_Mention;
+import nl.saxion.cage.twitteradapter.R;
+import nl.saxion.cage.twitteradapter.Tweets.Tweets;
+import nl.saxion.cage.twitteradapter.Users;
 
 public class SearchActivity extends AppCompatActivity {
 

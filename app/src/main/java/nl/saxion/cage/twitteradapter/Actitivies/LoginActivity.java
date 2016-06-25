@@ -1,4 +1,4 @@
-package nl.saxion.cage.twitteradapter;
+package nl.saxion.cage.twitteradapter.Actitivies;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -22,15 +21,20 @@ import com.github.scribejava.core.model.OAuthRequest;
 import com.github.scribejava.core.model.Response;
 import com.github.scribejava.core.model.Verb;
 
+import nl.saxion.cage.twitteradapter.Model;
+import nl.saxion.cage.twitteradapter.R;
+
 public class LoginActivity extends AppCompatActivity {
     //define views
     private WebView webView = null;
     private Activity myActivity = null;
     private ProgressDialog mDialog = null;
 
+    static Model model = Model.getInstance();
+
     //key & secret for getting accessToken
-    private static final String API_KEY = "BABNgm313dL2rRXf3iRM11lL8";
-    private static final String API_SECRET = "WR2VFNTaJBRGmDCUettxUGPss50ZPOQaVlO8wsUYoHPMKlQkrG";
+    private static final String API_KEY = model.getApiKey();
+    private static final String API_SECRET = model.getApiSecret();
 
     //for oAuth authorization
     private com.github.scribejava.core.oauth.OAuth10aService authService;
@@ -53,7 +57,6 @@ public class LoginActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setContentView(R.layout.web_view_login);
-
                 //didn't create OAUTH10aService class because there is a default one
                 authService =
                         new ServiceBuilder()
@@ -64,7 +67,6 @@ public class LoginActivity extends AppCompatActivity {
                 requestToken = authService.getRequestToken();
                 String authUrl = authService.getAuthorizationUrl(requestToken);
 
-                //
                 webView = (WebView) findViewById(R.id.webView);
                 webView.setWebViewClient(new MyWebViewClient());
                 webView.loadUrl(authUrl);
@@ -78,47 +80,18 @@ public class LoginActivity extends AppCompatActivity {
         });
 
     }
+
     @Override
     public void onBackPressed() {
     }
-
-//    @Override
-//    protected void onStop() {
-//        cancelProgressDialog();
-//        super.onStop();
-//    }
-
-
-
-//    @Override
-//    protected void onPause() {
-//        cancelProgressDialog();
-//        super.onPause();
-//    }
-//
-//    private void cancelProgressDialog() {
-//        if (mDialog != null) {
-//            mDialog.dismiss();
-//            mDialog.cancel();
-//            mDialog = null;
-//        }
-//    }
-
-//    @Override
-//    protected void onResume() {
-//        this.onRestart();
-//    }
 
     private class MyWebViewClient extends WebViewClient {
 
         @Override
         public void onPageFinished(WebView view, String url) {
-            try {
-                if (mDialog != null && mDialog.isShowing()) {
-                    mDialog.dismiss();
-                    mDialog = null;
-                }
-            } catch (Exception exception) {
+            if (mDialog != null && mDialog.isShowing()) {
+                mDialog.dismiss();
+                mDialog = null;
             }
         }
 
@@ -133,13 +106,6 @@ public class LoginActivity extends AppCompatActivity {
                 mDialog.show();
             }
         }
-
-//        @Override
-//        public void onLoadResource(WebView view, String url) {
-//            if (view.getProgress() >= 70) {
-//                cancelProgressDialog();
-//            }
-//        }
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {

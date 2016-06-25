@@ -12,17 +12,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:windowActionBar="false">
-        <activity android:name=".Feed">
+        <activity android:name=".HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".ZoomActivity" />
-        <activity android:name=".UserProfileActivity" />
-        <activity android:name=".SearchActivity"></activity>
-        <activity android:name=".FriendsListActivity"></activity>
+        <activity android:name=".Actitivies.LoginActivity" />
+        <activity android:name=".Actitivies.ZoomActivity" />
+        <activity android:name=".Actitivies.UserProfileActivity" />
+        <activity android:name=".Actitivies.SearchActivity"></activity>
+        <activity android:name=".Actitivies.FriendsListActivity"></activity>
     </application>
 </manifest>
