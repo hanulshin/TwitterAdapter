@@ -12,9 +12,15 @@ import nl.saxion.cage.twitteradapter.R;
 
 public class ZoomActivity extends AppCompatActivity {
 
-    //imageView to hold image
+    /**
+     * imageView of expanded image
+     */
     ImageView imageView;
 
+    /**
+     * set image, set onclicklistener to close the activity
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -16,13 +16,26 @@ import nl.saxion.cage.twitteradapter.Model;
  */
 public class LikeTweetAsync  extends AsyncTask <String,Void,Void> {
 
-    //key & secret for getting accessToken
-    private static final String API_KEY = "BABNgm313dL2rRXf3iRM11lL8";
-    private static final String API_SECRET = "WR2VFNTaJBRGmDCUettxUGPss50ZPOQaVlO8wsUYoHPMKlQkrG";
+    /**
+     * static model instance for getting keys
+     */
+    static Model model = Model.getInstance();
 
-    //auth service for
+    /**
+     * api key for signing requests
+     */
+    private static final String API_KEY = model.getApiKey();
+
+    /**
+     * api secret for signing requests
+     */
+    private static final String API_SECRET = model.getApiSecret();
+
+    /**
+     * authService for authenticating requests
+     */
     private com.github.scribejava.core.oauth.OAuth10aService authService;
-  //  Feed feed = new Feed();
+
     String id_str;
 
     @Override

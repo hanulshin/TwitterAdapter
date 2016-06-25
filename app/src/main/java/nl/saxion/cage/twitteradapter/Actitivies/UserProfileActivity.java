@@ -45,44 +45,74 @@ import nl.saxion.cage.twitteradapter.Users;
 public class UserProfileActivity extends AppCompatActivity {
     private com.github.scribejava.core.oauth.OAuth10aService authService;
 
+    /**
+     * static model instance for getting keys
+     */
     static Model model = Model.getInstance();
 
-    //key & secret for getting accessToken
+    /**
+     * api key for signing requests
+     */
     private static final String API_KEY = model.getApiKey();
+
+    /**
+     * api secret for signing requests
+     */
     private static final String API_SECRET = model.getApiSecret();
 
-    private TextView nameText;
-    private TextView screenNameText;
-    private ImageView profileImage;
-    private TextView descriptionText;
-    private TextView followers_countText;
-    private TextView friends_countText;
-    private TextView statuses_countText;
-    private Button friends_button;
-
-    //adapter for cardView
+    /**
+     * cardView adapter for tweets
+     */
     private CardTweetAdapter adapter;
 
-    //access and bearer token
+    /**
+     * accessToken for signing requests
+     */
     private OAuth1AccessToken accessToken;
-    private String bearerToken = null;
 
-    //current json file of tweets
-    private String searchJSON;
+    /**
+     * String json file containing list of tweets
+     */
+    private String jsonTweets;
 
-    //list of tweets
+    /**
+     * list of tweets
+     */
     List<Tweets> tweets = new ArrayList<>();
 
+    /**
+     * current user object, containing user information
+     */
     Users user;
 
+    /**
+     *
+     */
+    private EditText tweetField;
 
-
+    /**
+     * set cardView adapter, get intent extras, load user timeline,
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
-        //card view adapter
+        //set views
+        Button postButton = (Button) findViewById(R.id.post);
+        tweetField = (EditText) findViewById(R.id.tweet);
+        TextView nameText = (TextView) findViewById(R.id.name);
+        TextView screenNameText = (TextView) findViewById(R.id.screen_name);
+        ImageView profileImage = (ImageView) findViewById(R.id.profile_image_url);
+        TextView descriptionText = (TextView) findViewById(R.id.description);
+        TextView followers_countText = (TextView) findViewById(R.id.followers_count);
+        TextView friends_countText = (TextView) findViewById(R.id.friends_count);
+        TextView statuses_countText = (TextView) findViewById(R.id.statuses_count);
+        Button friends_button = (Button) findViewById(R.id.button_friends);
+
+        //cardView adapter
         adapter = new CardTweetAdapter(tweets, this);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.profile_list);
         recyclerView.setHasFixedSize(true);
@@ -95,7 +125,7 @@ public class UserProfileActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(llm);
         recyclerView.setAdapter(adapter);
 
-        //create intent
+        //get intent
         Intent intent = getIntent();
 
         //get extras from intent
@@ -104,6 +134,7 @@ public class UserProfileActivity extends AppCompatActivity {
         //get tweets user has made
         getUserTimeline();
 
+        //set authService
         authService =
                 new ServiceBuilder()
                         .apiKey(API_KEY)
@@ -111,13 +142,12 @@ public class UserProfileActivity extends AppCompatActivity {
                         .callback("http://www.cagitter.com"/*OAUTH_CALLBACK_URL*/)// not used in git, but said to use in slides
                         .build(TwitterApi.instance());//changed from API to api, getInstance to instance
 
-        //pending for json file which will contain user information
+        //query twitter for user information
         final OAuthRequest request = new OAuthRequest(Verb.GET, "https://api.twitter.com/1.1/account/verify_credentials.json", authService);
-        authService.signRequest(accessToken, request); // the access token from step 4
+        authService.signRequest(accessToken, request);
         final Response response = request.send();
 
-        //print json file to logcat
-        Log.d("resp", response.getBody());
+        //read response of query to objects
         try {
             readJsonToObjects(response.getBody());
         } catch (IOException e) {
@@ -126,42 +156,37 @@ public class UserProfileActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        Button post = (Button) findViewById(R.id.post);
-
-        assert post != null;
-        post.setOnClickListener(new View.OnClickListener() {
+        assert postButton != null;
+        postButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //new post tweets asyncTask
                 PostTweetsAsync post = new PostTweetsAsync();
-                EditText tweet = (EditText) findViewById(R.id.tweet);
-                post.execute(tweet.getText().toString(), accessToken.getToken(), accessToken.getTokenSecret());
-                tweet.setText("");
+                post.execute(tweetField.getText().toString(), accessToken.getToken(), accessToken.getTokenSecret());
+
+                //clear editText
+                tweetField.setText("");
+
+                //refresh user timeline
                 getUserTimeline();
             }
         });
 
-        nameText = (TextView) findViewById(R.id.name);
-        screenNameText = (TextView) findViewById(R.id.screen_name);
-        profileImage = (ImageView) findViewById(R.id.profile_image_url);
-        descriptionText = (TextView) findViewById(R.id.description);
-        followers_countText = (TextView) findViewById(R.id.followers_count);
-        friends_countText = (TextView) findViewById(R.id.friends_count);
-        statuses_countText = (TextView) findViewById(R.id.statuses_count);
-        friends_button = (Button) findViewById(R.id.button_friends);
-
+        //setViews
         nameText.setText(user.getName());
         screenNameText.setText("@" + user.getScreen_name());
-
-        //load profile image
-        Picasso.with(this).load(user.getProfile_image_url()).into(profileImage);
         descriptionText.setText(user.getDescription());
         followers_countText.setText("followers: " + Integer.toString(user.getFollowers_count()));
         friends_countText.setText("following: " + Integer.toString(user.getFriends_count()));
         statuses_countText.setText("tweets posted: " + Integer.toString(user.getStatuses_count()));
 
+        //load profile image
+        Picasso.with(this).load(user.getProfile_image_url()).into(profileImage);
+
         friends_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //load friendsList activity
                 Intent friendsListIntent = new Intent(getApplicationContext(), FriendsListActivity.class);
                 friendsListIntent.putExtra("accessToken", accessToken);
                 startActivity(friendsListIntent);
@@ -189,46 +214,42 @@ public class UserProfileActivity extends AppCompatActivity {
         user = new Users(screen_name, name, profile_image_url, description, followers_count, friends_count, statuses_count);
     }
 
+    /**
+     * loads user timeline (tweets the user has posted)
+     */
     private void getUserTimeline() {
-        System.out.println("getting user timeline");
         if (accessToken != null) {
             GetUserTimelineAsync getTimeline = new GetUserTimelineAsync();
             getTimeline.execute(accessToken.getToken(), accessToken.getTokenSecret());
+
             try {
-
                 //update tweet list and cardView
-                searchJSON = getTimeline.get();
-
-                System.out.println("searchJson: " + searchJSON);
-
+                jsonTweets = getTimeline.get();
                 updateCardView();
-
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
         }
-        else System.out.println("accesstoken null");
     }
 
+    /**
+     * reads json file to objects, logs time it took
+     * updates list of objects
+     */
     private void updateCardView() {
-        System.out.println("updating cardView");
-        if (searchJSON != null) {
+        if (jsonTweets != null) {
             //get start time
             long startTime = System.currentTimeMillis();
 
             //read objects
             try {
-                //readJsonTest(searchJSON);
-                readJsonStatusesToObjects(searchJSON);
+                readJsonStatusesToObjects(jsonTweets);
             } catch (IOException ioe) {
-                System.out.println(ioe.getMessage());
                 ioe.printStackTrace();
-                System.out.println("wrdffeasvr");
             } catch (JSONException e) {
                 e.printStackTrace();
-                System.out.println("help me");
             }
 
             //get end time
@@ -242,9 +263,6 @@ public class UserProfileActivity extends AppCompatActivity {
 
             //update the card view
             adapter.notifyDataSetChanged();
-            System.out.println("tweets" + tweets);
-
-            System.out.println("data set changed");
         }
     }
 

@@ -25,87 +25,92 @@ import nl.saxion.cage.twitteradapter.Model;
 import nl.saxion.cage.twitteradapter.R;
 
 public class LoginActivity extends AppCompatActivity {
-    //define views
-    private WebView webView = null;
-    private Activity myActivity = null;
-    private ProgressDialog mDialog = null;
 
+    private WebView webView = null;
+
+    /**
+     * instance of model for getting api key and secret
+     */
     static Model model = Model.getInstance();
 
-    //key & secret for getting accessToken
+    /**
+     * api key for signing requests
+     */
     private static final String API_KEY = model.getApiKey();
+
+    /**
+     * api secret for signing requests
+     */
     private static final String API_SECRET = model.getApiSecret();
 
-    //for oAuth authorization
+    /**
+     * authService for authenticating requests
+     */
     private com.github.scribejava.core.oauth.OAuth10aService authService;
+
+    /**
+     * request token for signing requests
+     */
     private OAuth1RequestToken requestToken = null;
 
+    /**
+     * set auth service, get request token,
+     * start webView for logging in
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        myActivity = this;
+        //login button
+        Button button = (Button) findViewById(R.id.twitter_login_btn);
 
+        //strict thread policy
         if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
 
-        Button button = (Button) findViewById(R.id.twitter_login_btn);
         assert button != null;
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setContentView(R.layout.web_view_login);
-                //didn't create OAUTH10aService class because there is a default one
+
+                //set authService
                 authService =
                         new ServiceBuilder()
                                 .apiKey(API_KEY)
                                 .apiSecret(API_SECRET)
                                 .callback("http://www.cagitter.com"/*OAUTH_CALLBACK_URL*/)// not used in git, but said to use in slides
                                 .build(TwitterApi.instance());//changed from API to api, getInstance to instance
+
+                //set the request Token
                 requestToken = authService.getRequestToken();
+
+                //set the authorization url
                 String authUrl = authService.getAuthorizationUrl(requestToken);
 
+                //set the webView and load url
                 webView = (WebView) findViewById(R.id.webView);
                 webView.setWebViewClient(new MyWebViewClient());
                 webView.loadUrl(authUrl);
-
-//                final OAuth1AccessToken accessToken = authService.getAccessToken(requestToken, verifier);// "verifier you got frAom the user/callback"
-//                final OAuthRequest request = new OAuthRequest(Verb.GET, "https://api.twitter.com/1.1/account/verify_credentials.json", authService);
-//                authService.signRequest(accessToken, request); // the access token from step 4
-//                final Response response = request.send();
-//                System.out.println(response.getBody());
             }
         });
 
     }
 
+    /**
+     * override of pressing back button
+     */
     @Override
     public void onBackPressed() {
+        //do not let the user back out
     }
 
+    /**
+     * inner WebView class for handling logging in
+     */
     private class MyWebViewClient extends WebViewClient {
-
-        @Override
-        public void onPageFinished(WebView view, String url) {
-            if (mDialog != null && mDialog.isShowing()) {
-                mDialog.dismiss();
-                mDialog = null;
-            }
-        }
-
-        @Override
-        public void onPageStarted(WebView view, String url, Bitmap favicon) {
-            super.onPageStarted(view, url, favicon);
-            if (mDialog == null)
-                mDialog = new ProgressDialog(LoginActivity.this);
-            mDialog.setMessage("Loading..");
-
-            if (!(myActivity.isFinishing())) {
-                mDialog.show();
-            }
-        }
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {

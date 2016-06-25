@@ -18,15 +18,31 @@ import nl.saxion.cage.twitteradapter.Model;
  */
 public class GetHomeTimelineAsync extends AsyncTask<String, Void, String> {
 
+    /**
+     * static model instance for getting keys
+     */
     static Model model = Model.getInstance();
 
-    //key & secret for getting accessToken
+    /**
+     * api key for signing requests
+     */
     private static final String API_KEY = model.getApiKey();
+
+    /**
+     * api secret for signing requests
+     */
     private static final String API_SECRET = model.getApiSecret();
 
-    //auth service for
+    /**
+     * authService for authenticating requests
+     */
     private com.github.scribejava.core.oauth.OAuth10aService authService;
 
+    /**
+     * get home timeline
+     * @param params
+     * @return
+     */
     @Override
     protected String doInBackground(String... params) {
         OAuth1AccessToken accessToken = new OAuth1AccessToken(params[0], params[1]);

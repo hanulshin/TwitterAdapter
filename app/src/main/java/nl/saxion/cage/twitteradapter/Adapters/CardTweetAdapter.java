@@ -27,24 +27,42 @@ import nl.saxion.cage.twitteradapter.R;
 import nl.saxion.cage.twitteradapter.Tweets.Tweets;
 
 public class CardTweetAdapter extends RecyclerView.Adapter<CardTweetAdapter.CardViewHolder> {
+
+    /**
+     * single tweet for getting tweet information
+     */
     Tweets tweet;
 
-    String url;
+    /**
+     * url for loading media image
+     */
+    String mediaUrl;
 
+    /**
+     * list of tweets
+     */
     private List<Tweets> tweetsList;
 
+    /**
+     * context for loading user media image
+     */
     Context context;
 
+    /**
+     * set variables
+     * @param tweetsList
+     * @param con
+     */
     public CardTweetAdapter(List<Tweets> tweetsList, Context con) {
         this.tweetsList = tweetsList;
         this.context = con;
     }
 
-    @Override
-    public int getItemCount() {
-        return tweetsList.size();
-    }
-
+    /**
+     * highlight entities, set views, set onclick listeners
+     * @param cardViewHolder
+     * @param i
+     */
     @Override
     public void onBindViewHolder(final CardViewHolder cardViewHolder, final int i) {
         //get tweet from position
@@ -87,8 +105,8 @@ public class CardTweetAdapter extends RecyclerView.Adapter<CardTweetAdapter.Card
         //load media image
         if (tweet.getEntities().getMedia(
         ).size() > 0) {
-            url = tweet.getEntities().getMedia().get(0).getMedia_url();
-            Log.d("url", url);
+            mediaUrl = tweet.getEntities().getMedia().get(0).getMedia_url();
+            Log.d("mediaUrl", mediaUrl);
             Picasso.with(context)
                     .load(tweet.getEntities().getMedia().get(0).getMedia_url())
                     .resize(1500, 500)
@@ -101,7 +119,7 @@ public class CardTweetAdapter extends RecyclerView.Adapter<CardTweetAdapter.Card
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, ZoomActivity.class);
-                intent.putExtra("imageUrl", url);
+                intent.putExtra("imageUrl", mediaUrl);
                 context.startActivity(intent);
             }
         });
@@ -138,6 +156,12 @@ public class CardTweetAdapter extends RecyclerView.Adapter<CardTweetAdapter.Card
         return spanText;
     }
 
+    /**
+     * inflates a card
+     * @param viewGroup
+     * @param i the index of the card
+     * @return
+     */
     @Override
     public CardViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.
@@ -146,6 +170,9 @@ public class CardTweetAdapter extends RecyclerView.Adapter<CardTweetAdapter.Card
         return new CardViewHolder(itemView);
     }
 
+    /**
+     * sets and assigns views values
+     */
     public static class CardViewHolder extends RecyclerView.ViewHolder {
         //define views
         private TextView textText;
@@ -175,4 +202,10 @@ public class CardTweetAdapter extends RecyclerView.Adapter<CardTweetAdapter.Card
             like = (ImageButton) convertView.findViewById(R.id.like);
         }
     }
+
+    @Override
+    public int getItemCount() {
+        return tweetsList.size();
+    }
+
 }

@@ -12,30 +12,46 @@ import com.github.scribejava.core.model.Verb;
 
 import nl.saxion.cage.twitteradapter.Model;
 
-/**
- * Created by Cage on 6/19/16.
- */
 public class GetUserTimelineAsync extends AsyncTask<String, Void, String> {
 
+    /**
+     * static model instance for getting keys
+     */
     static Model model = Model.getInstance();
 
-    //key & secret for getting accessToken
+    /**
+     * api key for signing requests
+     */
     private static final String API_KEY = model.getApiKey();
+
+    /**
+     * api secret for signing requests
+     */
     private static final String API_SECRET = model.getApiSecret();
 
-    private com.github.scribejava.core.oauth.OAuth10aService authService;
-    private OAuth1RequestToken requestToken = null;
-    @Override
+    /**
+     * accessToken for signing requests
+     */
+    private OAuth1AccessToken accessToken = model.getAccessToken();
 
+    /**
+     * authService for authenticating requests
+     */
+    private com.github.scribejava.core.oauth.OAuth10aService authService;
+
+    /**
+     * gets user timeline
+     * @param params api ke
+     * @return
+     */
+    @Override
     protected String doInBackground(String... params) {
-        OAuth1AccessToken accessToken = new OAuth1AccessToken(params[0], params[1]);
         authService =
                 new ServiceBuilder()
                         .apiKey(API_KEY)
                         .apiSecret(API_SECRET)
                         .callback("http://www.cagitter.com"/*OAUTH_CALLBACK_URL*/)// not used in git, but said to use in slides
                         .build(TwitterApi.instance());//changed from API to api, getInstance to instance
-
         final OAuthRequest request = new OAuthRequest(Verb.GET, "https://api.twitter.com/1.1/statuses/user_timeline.json", authService);
         authService.signRequest(accessToken, request); // the access token from step 4
         final Response response = request.send();

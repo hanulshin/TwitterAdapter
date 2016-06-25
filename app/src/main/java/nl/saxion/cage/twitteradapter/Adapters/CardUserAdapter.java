@@ -16,17 +16,35 @@ import nl.saxion.cage.twitteradapter.R;
 import nl.saxion.cage.twitteradapter.Users;
 
 public class CardUserAdapter extends RecyclerView.Adapter<CardUserAdapter.CardViewHolder> {
-    Users users;
 
-    private List<Users> usersList;
+    /**
+     * single user for getting user information
+     */
+    Users user;
 
+    /**
+     * list of users
+     */
+    private List<Users> users;
+
+    /**
+     * context for loading user profile image
+     */
     Context context;
 
-    public CardUserAdapter(List<Users> usersList, Context con) {
-        this.usersList = usersList;
-        this.context = con;
+    /**
+     * set variables
+     * @param users list of users
+     * @param context context of main class using the adapter
+     */
+    public CardUserAdapter(List<Users> users, Context context) {
+        this.users = users;
+        this.context = context;
     }
 
+    /**
+     * define and set views
+     */
     public static class CardViewHolder extends RecyclerView.ViewHolder {
         //define views
         protected TextView nameText;
@@ -44,29 +62,40 @@ public class CardUserAdapter extends RecyclerView.Adapter<CardUserAdapter.CardVi
         }
     }
 
-    @Override
-    public int getItemCount() {
-        return usersList.size();
-    }
-
+    /**
+     * set user information
+     * @param cardViewHolder
+     * @param i index of the card
+     */
     @Override
     public void onBindViewHolder(final CardViewHolder cardViewHolder, final int i) {
         //get tweet from position
-        users = usersList.get(i);
+        user = users.get(i);
 
         //set text in textViews
-        cardViewHolder.nameText.setText(users.getName());
-        cardViewHolder.screenNameText.setText("@" + users.getScreen_name());
+        cardViewHolder.nameText.setText(user.getName());
+        cardViewHolder.screenNameText.setText("@" + user.getScreen_name());
 
         //load profile image
-        Picasso.with(context).load(users.getProfile_image_url()).into(cardViewHolder.profileImage);
+        Picasso.with(context).load(user.getProfile_image_url()).into(cardViewHolder.profileImage);
     }
 
+    /**
+     * inflate card
+     * @param viewGroup
+     * @param i
+     * @return
+     */
     @Override
     public CardViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
                 inflate(R.layout.friend_card, viewGroup, false);
         return new CardViewHolder(itemView);
+    }
+
+    @Override
+    public int getItemCount() {
+        return users.size();
     }
 }

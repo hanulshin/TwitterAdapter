@@ -1,6 +1,7 @@
 package nl.saxion.cage.twitteradapter.Actitivies;
 
 //imports
+
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,9 +13,11 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,17 +37,52 @@ import nl.saxion.cage.twitteradapter.Users;
 
 public class SearchActivity extends AppCompatActivity {
 
-    //list of tweets
+    /**
+     * list of tweets
+     */
     List<Tweets> tweets = new ArrayList<>();
+
+    /**
+     * searchField
+     */
     private EditText editSearch;
+
+    /**
+     * bearerToken for signing request
+     */
     private String bearerToken;
-    private String searchJSON;
+
+    /**
+     * String json file containing list of tweets
+     */
+    private String jsonTweets;
+
+    /**
+     * CardView adapter for list of tweets
+     */
     private CardTweetAdapter adapter;
 
+    /**
+     * set up cardView adapter, set up views and onclicklisteners
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+
+        //card view adapter
+        adapter = new CardTweetAdapter(tweets, this);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.list_card);
+        recyclerView.setHasFixedSize(true);
+
+        //linear layout manager used for recyclerView (cardView)
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+
+        //set recyclerView layout manager & adapter
+        recyclerView.setLayoutManager(llm);
+        recyclerView.setAdapter(adapter);
 
         //define editText view for search bar
         editSearch = (EditText) findViewById(R.id.edit_search);
@@ -70,21 +108,13 @@ public class SearchActivity extends AppCompatActivity {
             }
         };
         editSearch.setOnEditorActionListener(actionListener);
-
-        //card view adapter
-        adapter = new CardTweetAdapter(tweets, this);
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.list_card);
-        recyclerView.setHasFixedSize(true);
-
-        //linear layout manager used for recyclerView (cardView)
-        LinearLayoutManager llm = new LinearLayoutManager(this);
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
-
-        //set recyclerView layout manager & adapter
-        recyclerView.setLayoutManager(llm);
-        recyclerView.setAdapter(adapter);
     }
 
+    /**
+     * queries twitter for list of tweets related to a search term
+     *
+     * @param searchTerm the word to be searched
+     */
     private void search(String searchTerm) {
         //check if we have bearerToken
         if (bearerToken == null) {
@@ -113,8 +143,8 @@ public class SearchActivity extends AppCompatActivity {
         try {
 
             //update tweet list and cardView
-            searchJSON = searchTwitter.get();
-            System.out.println(searchJSON);
+            jsonTweets = searchTwitter.get();
+            System.out.println(jsonTweets);
             updateCardView();
 
         } catch (InterruptedException e) {
@@ -124,22 +154,21 @@ public class SearchActivity extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * reads json file to objects and updates list of tweets
+     */
     private void updateCardView() {
-        if (searchJSON != null) {
+        if (jsonTweets != null) {
             //get start time
             long startTime = System.currentTimeMillis();
 
             //read objects
             try {
-                readJsonStatusesToObjects(searchJSON);
-            } catch (IOException ioe) {
-            } catch (JSONException e) {
-                try {
-                    readJsonStatusesToObjects(searchJSON);
-                } catch (JSONException e1) {
-                } catch (IOException e1) {
-                }
+                readJsonStatusesToObjects(jsonTweets);
+            } catch (JSONException e1) {
+                e1.printStackTrace();
+            } catch (IOException e1) {
+                e1.printStackTrace();
             }
 
             //get end time
@@ -167,12 +196,9 @@ public class SearchActivity extends AppCompatActivity {
 
         //create new jObject for reading the file
         JSONObject jObject = new JSONObject(file);
-        System.out.println(jObject);
 
         //get statuses
         JSONArray jTweetArray = jObject.getJSONArray("statuses");
-
-        System.out.println(jTweetArray);
 
         //loop through statuses
         for (int i = 0; i < jTweetArray.length(); i++) {
@@ -263,4 +289,5 @@ public class SearchActivity extends AppCompatActivity {
             tweets.add(new Tweets(user, text, retweets, createdAt, favourites, entities));
         }
     }
+
 }

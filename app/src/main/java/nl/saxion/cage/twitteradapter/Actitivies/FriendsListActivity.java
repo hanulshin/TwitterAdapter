@@ -1,13 +1,10 @@
 package nl.saxion.cage.twitteradapter.Actitivies;
 
-//imports
-
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.EditText;
 
 import com.github.scribejava.core.model.OAuth1AccessToken;
 
@@ -28,16 +25,32 @@ import nl.saxion.cage.twitteradapter.Users;
 
 public class FriendsListActivity extends AppCompatActivity {
 
-    //list of tweets
+    /**
+     * list of users
+     */
     List<Users> users = new ArrayList<>();
-    private EditText editSearch;
-    private String bearerToken;
-    private String searchJSON;
+
+    /**
+     * String json file containing list of friends
+     */
+    private String jsonFriendList;
+
+    /**
+     * Card adapter for users
+     */
     private CardUserAdapter adapter;
 
-    //access and bearer token
+    /**
+     * accessToken for signing requests
+     */
     private OAuth1AccessToken accessToken;
 
+    /**
+     * set user cardView adapter, set accessToken from model,
+     * load friend list
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,56 +69,55 @@ public class FriendsListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(llm);
         recyclerView.setAdapter(adapter);
 
+        //get Model instance
         Model model = Model.getInstance();
+
+        //set accessToken
         accessToken = model.getAccessToken();
 
+        //get list of friends
         getFriendsList();
     }
 
+    /**
+     * Runs a getFriendsList async task and updates the cardView
+     */
     private void getFriendsList() {
-        System.out.println("getting friend list...");
         if (accessToken != null) {
             GetFriendsListAsync getFriendsList = new GetFriendsListAsync();
             getFriendsList.execute(accessToken.getToken(), accessToken.getTokenSecret());
             try {
-
-                //update tweet list and cardView
-                searchJSON = getFriendsList.get();
-
-                System.out.println("searchJson: " + searchJSON);
-
+                jsonFriendList = getFriendsList.get();
                 updateCardView();
-
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
         }
-        else System.out.println("accesstoken null");
     }
 
+    /**
+     * Reads json file, and updates cardView
+     * The time it takes is also logged
+     */
     private void updateCardView() {
-        if (searchJSON != null) {
+        if (jsonFriendList != null) {
             //get start time
             long startTime = System.currentTimeMillis();
 
             //read objects
             try {
-                readJsonToObjects(searchJSON);
+                readJsonToObjects(jsonFriendList);
             } catch (IOException ioe) {
                 ioe.printStackTrace();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
-            //get end time
+            //calculate and print total time
             long endTime = System.currentTimeMillis();
-
-            //calculate total time
             long totalTime = endTime - startTime;
-
-            //print total time
             Log.d("object loading time", Long.toString(totalTime) + "ms");
 
             //update the card view
@@ -114,7 +126,7 @@ public class FriendsListActivity extends AppCompatActivity {
     }
 
     /**
-     * Parses JSON file into objects
+     * Parses JSON file into user objects and adds them to list of users
      *
      * @param file name of the JSON file to be parsed.
      */
@@ -124,26 +136,25 @@ public class FriendsListActivity extends AppCompatActivity {
 
         //create new jObject for reading the file
         JSONObject jObject = new JSONObject(file);
-        System.out.println(jObject);
 
-        //get statuses
+        //get users array
         JSONArray jTweetArray = jObject.getJSONArray("users");
 
-        System.out.println("jtweetarray " + jTweetArray);
-
-        //loop through statuses
+        //loop through users
         for (int i = 0; i < jTweetArray.length(); i++) {
             JSONObject jUserObject = jTweetArray.getJSONObject(i);
 
-            //get user
-           // JSONObject jUserObject = jTweetObj.getJSONObject("user");
+            //get user data
             String name = jUserObject.getString("name");
             String screen_name = jUserObject.getString("screen_name");
             String profile_image_url = jUserObject.getString("profile_image_url");
 
             //create new user object with extracted json data
             Users user = new Users(screen_name, name, profile_image_url);
+
+            //add users to list
             users.add(user);
         }
     }
+
 }

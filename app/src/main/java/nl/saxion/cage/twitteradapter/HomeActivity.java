@@ -1,6 +1,5 @@
 package nl.saxion.cage.twitteradapter;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.support.v7.app.AppCompatActivity;
@@ -37,22 +36,31 @@ import nl.saxion.cage.twitteradapter.Tweets.Tweets;
 
 public class HomeActivity extends AppCompatActivity {
 
-    //define context
-    Context context = this;
-
-    //access and bearer token
+    /**
+     * accessToken for signing requests
+     */
     private OAuth1AccessToken accessToken = null;
-    private String bearerToken = null;
 
-    //list of tweets
+    /**
+     * list of tweets
+     */
     List<Tweets> tweets = new ArrayList<>();
 
-    //current json file of tweets
-    private String searchJSON;
+    /**
+     * String json file containing list of tweets
+     */
+    private String jsonTweets;
 
-    //adapter for cardView
-    private CardTweetAdapter adapter;
+    /**
+     * to adapt list of tweets to cardView
+     */
+    private CardTweetAdapter cardTweetAdapter;
 
+    /**
+     * Sets up toolbar, starts login screen, initializes cardView adapter
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,8 +74,8 @@ public class HomeActivity extends AppCompatActivity {
         Intent loginIntent = new Intent(this, LoginActivity.class);
         startActivityForResult(loginIntent, 1);
 
-        //card view adapter
-        adapter = new CardTweetAdapter(tweets, this);
+        //card view
+        cardTweetAdapter = new CardTweetAdapter(tweets, this);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.cardList);
         recyclerView.setHasFixedSize(true);
 
@@ -75,11 +83,16 @@ public class HomeActivity extends AppCompatActivity {
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
 
-        //set recyclerView layout manager & adapter
+        //set recyclerView layout manager &
         recyclerView.setLayoutManager(llm);
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(cardTweetAdapter);
     }
 
+    /**
+     *
+     * @param menu menu layout resource, defines what is in the toolbar (optionsMenu)
+     * @return boolean from superClass
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -87,20 +100,25 @@ public class HomeActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     *
+     * @param item the item in toolbar (optionsMenu) that has been clicked
+     * @return boolean from superclass
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_home:
-                adapter.notifyDataSetChanged();
+                cardTweetAdapter.notifyDataSetChanged();
                 System.out.println("home button");
                 return true;
             case R.id.action_search:
-                Intent searchIntent = new Intent(context, SearchActivity.class);
+                Intent searchIntent = new Intent(getApplicationContext(), SearchActivity.class);
                 startActivity(searchIntent);
                 return true;
             case R.id.action_profile:
                 if (accessToken != null) {
-                    Intent profileIntent = new Intent(context, UserProfileActivity.class);
+                    Intent profileIntent = new Intent(getApplicationContext(), UserProfileActivity.class);
                     profileIntent.putExtra("accessToken", accessToken);
                     startActivity(profileIntent);
                 }
@@ -110,12 +128,23 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * reload the home timeline after coming back to
+     * this page from another (eg. search screen)
+     */
     @Override
     protected void onResume() {
         super.onResume();
         getHomeTimeline();
     }
 
+    /**
+     * Gives the result of the loginActivity
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data intent containing access token
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data == null) {
@@ -123,34 +152,31 @@ public class HomeActivity extends AppCompatActivity {
             return;
         }
 
-        //get access token from data intent
-        accessToken = (OAuth1AccessToken) data.getExtras().getSerializable("accessToken");
-
+        //get Model instance and set accessToken
         Model model = Model.getInstance();
         model.setAccessToken((OAuth1AccessToken) data.getExtras().getSerializable("accessToken"));
 
-        System.out.println("accessToken from model: " + model.getAccessToken().getToken());
+        //get accessToken from model
+        accessToken = model.getAccessToken();
 
         //load main timeline
         getHomeTimeline();
-        adapter.notifyDataSetChanged();
-        System.out.println("data set changed");
     }
 
+    /**
+     * Gets the home timeline of the logged in user and updates the cardView
+     */
     private void getHomeTimeline() {
         if (accessToken != null) {
 
+            //new getHomeTimeline async task
             GetHomeTimelineAsync getTimeline = new GetHomeTimelineAsync();
             getTimeline.execute(accessToken.getToken(), accessToken.getTokenSecret());
 
             try {
-
                 //update tweet list and cardView
-                searchJSON = getTimeline.get();
-                System.out.println(searchJSON);
-
+                jsonTweets = getTimeline.get();
                 updateCardView();
-
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
@@ -160,32 +186,28 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     /**
-     *
+     * loads json file to objects and updates cardView
      */
     private void updateCardView() {
-        if (searchJSON != null) {
-            //get start time
+        if (jsonTweets != null) {
+
             long startTime = System.currentTimeMillis();
             //read objects
             try {
-            readJsonToObjects(searchJSON);
+            readJsonToObjects(jsonTweets);
             } catch (JSONException jse) {
                 jse.printStackTrace();
             } catch (IOException ioe) {
                 ioe.printStackTrace();
             }
 
-            //get end time
+            //calculate total time and print
             long endTime = System.currentTimeMillis();
-
-            //calculate total time
             long totalTime = endTime - startTime;
-
-            //print total time
             Log.d("object loading time", Long.toString(totalTime) + "ms");
 
-            //update the card view
-            adapter.notifyDataSetChanged();
+            //tell the adapter that the list of tweets has changed
+            cardTweetAdapter.notifyDataSetChanged();
         }
     }
 
@@ -223,9 +245,9 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     /**
-     * Parses JSON file into objects
+     * Parses JSON file into objects and adds them to the list of tweets
      *
-     * @param file name of the JSON file to be parsed.
+     * @param file name of the JSON file to be parsed
      */
     private void readJsonToObjects(String file) throws IOException, JSONException {
 
@@ -324,120 +346,5 @@ public class HomeActivity extends AppCompatActivity {
             //create and add new Tweet to list of tweets with json data, and user & entities object
             tweets.add(new Tweets(user, text, retweets, createdAt, favourites, entities, id_str));
         }
-    }
-
-    /**
-     * Parses JSON file into objects
-     *
-     * @param file name of the JSON file to be parsed.
-     */
-    private void readJsonStatusesToObjects(String file) throws IOException, JSONException {
-        //clear the current list of tweets
-        tweets.clear();
-
-        //create new jsonObject for reading the file
-        JSONObject jsonObject = new JSONObject(file);
-
-        //get statuses
-        JSONArray jTweetArray = jsonObject.optJSONArray("");
-
-        System.out.println(jTweetArray);
-
-        if (jTweetArray == null) {
-            jTweetArray = jsonObject.optJSONArray("");
-        }
-
-        //loop through statuses
-        for (int i = 0; i < jTweetArray.length(); i++) {
-            JSONObject jTweetObj = jTweetArray.getJSONObject(i);
-
-            //get basic status properties
-            String text = jTweetObj.getString("text");
-            String createdAt = jTweetObj.getString("created_at");
-            int retweets = jTweetObj.getInt("retweet_count");
-            int favourites = jTweetObj.getInt("favorite_count");
-
-            //get user
-            JSONObject jUserObject = jTweetObj.getJSONObject("user");
-            String name = jUserObject.getString("name");
-            String screen_name = jUserObject.getString("screen_name");
-            String profile_image_url = jUserObject.getString("profile_image_url");
-
-            //get entities
-            JSONObject jEntitiesObject = jTweetObj.optJSONObject("entities");
-
-            //get hashtags
-            ArrayList<Hashtags> hashtagList = new ArrayList<>();
-            JSONArray jHashtagArray = jEntitiesObject.optJSONArray("hashtags");
-
-            //loop through all hashtags
-            for (int j = 0; j < jHashtagArray.length(); j++) {
-                JSONObject JHashtags = jHashtagArray.optJSONObject(j);
-                String hashText = JHashtags.getString("text");
-                JSONArray jIndices = JHashtags.getJSONArray("indices");
-                int indices[] = new int[2];
-                indices[0] = jIndices.getInt(0);
-                indices[1] = jIndices.getInt(1);
-                Hashtags hashtag = new Hashtags(indices, hashText);
-                hashtagList.add(hashtag);
-            }
-
-            //get urls
-            ArrayList<URL> urlArray = new ArrayList<>();
-            JSONArray jUrlArray = jEntitiesObject.getJSONArray("urls");
-
-            //loop through all urls
-            for (int p = 0; p < jUrlArray.length(); p++) {
-                JSONObject jUrl = jUrlArray.optJSONObject(p);
-                JSONArray jIndices = jUrl.getJSONArray("indices");
-                int indices[] = {jIndices.getInt(0), jIndices.getInt(1)};
-                URL url = new URL(indices, jUrl.getString("url"));
-                urlArray.add(url);
-            }
-
-            //get user mentions
-            ArrayList<User_Mention> userMentionArray = new ArrayList<>();
-            JSONArray jUserMentionArray = jEntitiesObject.getJSONArray("user_mentions");
-
-            //loop through all user mentions
-            for (int p = 0; p < jUserMentionArray.length(); p++) {
-                JSONObject jUserMention = jUserMentionArray.getJSONObject(p);
-                JSONArray JIndices = jUserMention.getJSONArray("indices");
-                int indices[] = {JIndices.getInt(0), JIndices.getInt(1)};
-                User_Mention mention = new User_Mention(indices);
-                userMentionArray.add(mention);
-            }
-
-            //get media
-            ArrayList<Media> mediaArray = new ArrayList<>();
-            JSONArray jMediaArray = jEntitiesObject.optJSONArray("media");
-
-            //loop through all media
-            if (jMediaArray != null) {
-                for (int p = 0; p < jUserMentionArray.length(); p++) {
-                    JSONObject jMediaObject = jMediaArray.optJSONObject(p);
-                    if (jMediaObject != null) {
-                        JSONArray JIndices = jMediaObject.optJSONArray("indices");
-                        int indices[] = {JIndices.getInt(0), JIndices.getInt(1)};
-                        String url = jMediaObject.getString("media_url");
-                        Media media = new Media(indices, url);
-                        mediaArray.add(media);
-                    }
-                }
-            }
-
-            //create new entities object with extracted json data
-            Entities entities = new Entities(hashtagList, mediaArray, urlArray, userMentionArray);
-
-            //create new user object with extracted json data
-            Users user = new Users(screen_name, name, profile_image_url);
-
-            //create and add new Tweet to list of tweets with json data, and user & entities object
-            tweets.add(new Tweets(user, text, retweets, createdAt, favourites, entities));
-        }
-    }
-
-    public OAuth1AccessToken getAccessToken() {
-        return accessToken;
     }
 }
