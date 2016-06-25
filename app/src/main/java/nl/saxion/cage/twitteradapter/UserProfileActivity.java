@@ -125,6 +125,8 @@ public class UserProfileActivity extends AppCompatActivity {
                 EditText tweet = (EditText) findViewById(R.id.tweet);
                 post.execute(tweet.getText().toString(), accessToken.getToken(), accessToken.getTokenSecret());
                 tweet.setText("");
+                getUserTimeline();
+
 //
 //                Toast toast = new Toast(context);
 //                toast.setText("Posted to your timeline");
@@ -190,7 +192,8 @@ public class UserProfileActivity extends AppCompatActivity {
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
-        } else System.out.println("accesstoken null");
+        }
+        else System.out.println("accesstoken null");
     }
 
     private void updateCardView() {
@@ -201,11 +204,14 @@ public class UserProfileActivity extends AppCompatActivity {
 
             //read objects
             try {
+                //readJsonTest(searchJSON);
                 readJsonStatusesToObjects(searchJSON);
             } catch (IOException ioe) {
                 System.out.println(ioe.getMessage());
+                System.out.println("wrdffeasvr");
             } catch (JSONException e) {
-                System.out.println(e.getMessage());
+                e.printStackTrace();
+                System.out.println("help me");
             }
 
             //get end time
@@ -232,21 +238,20 @@ public class UserProfileActivity extends AppCompatActivity {
      */
     private void readJsonStatusesToObjects(String file) throws IOException, JSONException {
         //clear the current list of tweets
-        //tweets.clear();
-
+        tweets.clear();
         //create new jsonObject for reading the file
-        JSONObject jsonObject = new JSONObject(file);
-        System.out.println(jsonObject);
+        JSONArray jTweetArray = new JSONArray(file);
+        //System.out.println(jsonObject);
         System.out.println("WTF");
 
         //get statuses
-        JSONArray jTweetArray = null;// = jsonObject.optJSONArray("");
+        //JSONArray jTweetArray = null;// = jsonObject.optJSONArray("");
 
         System.out.println(jTweetArray);
 
-        if (jTweetArray == null) {
-            jTweetArray = jsonObject.optJSONArray("");
-        }
+//        if (jTweetArray == null) {
+//            jTweetArray = jsonObject.optJSONArray("");
+//        }
 
         //loop through statuses
         for (int i = 0; i < jTweetArray.length(); i++) {
@@ -336,6 +341,16 @@ public class UserProfileActivity extends AppCompatActivity {
             //create and add new Tweet to list of tweets with json data, and user & entities object
             tweets.add(new Tweets(user, text, retweets, createdAt, favourites, entities));
         }
+    }
+
+    private void readJsonTest(String file) throws IOException, JSONException{
+        System.out.println("yay");
+        //JSONObject jsonObject = new JSONObject(file);
+        JSONArray jsonArray = new JSONArray();
+        //JSONArray jsonArray = jsonObject.getJSONArray("");
+        Log.d("what","what");
+        System.out.println(jsonArray);
+        System.out.println("poop");
     }
 }
 
