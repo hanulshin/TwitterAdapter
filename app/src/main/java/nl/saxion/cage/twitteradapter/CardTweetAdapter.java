@@ -25,6 +25,8 @@ public class CardTweetAdapter extends RecyclerView.Adapter<CardTweetAdapter.Card
 
     String url;
 
+    boolean likeState = false;
+
     private List<Tweets> tweetsList;
 
     Context context;
@@ -34,10 +36,7 @@ public class CardTweetAdapter extends RecyclerView.Adapter<CardTweetAdapter.Card
         this.context = con;
     }
 
-    public CardAdapter(List<Tweets> tweetsList, Context con, String lol) {
-        this.tweetsList = tweetsList;
-        this.context = con;
-    }
+
 
     @Override
     public int getItemCount() {
@@ -67,6 +66,8 @@ public class CardTweetAdapter extends RecyclerView.Adapter<CardTweetAdapter.Card
         for (int j = 0; j < tweet.getEntities().getUser_mentions().size(); j++) {
             setSpan(highlightColor, tweet.getEntities().getUser_mentions().size(), tweet.getEntities().getUser_mentions().get(j).getIndices(), spanText);
         }
+
+        //boolean likeState=false;
 
         //set text in textViews
         cardViewHolder.textText.setText(spanText);
@@ -109,12 +110,30 @@ public class CardTweetAdapter extends RecyclerView.Adapter<CardTweetAdapter.Card
         cardViewHolder.like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tweet.getId_str();
-                UnlikeTweetAsync unlikeTweetAsync = new UnlikeTweetAsync();
-               // LikeTweetAsync likeTweetAsync = new LikeTweetAsync();
-                unlikeTweetAsync.execute(tweet.getId_str());
-                Model model = Model.getInstance();
-                System.out.println("work "+model.getAccessToken());
+
+                if(likeState!=true){
+                    tweet.getId_str();
+                    //UnlikeTweetAsync unlikeTweetAsync = new UnlikeTweetAsync();
+                    LikeTweetAsync likeTweetAsync = new LikeTweetAsync();
+                    likeTweetAsync.execute(tweet.getId_str());
+                    Model model = Model.getInstance();
+                    System.out.println("work "+model.getAccessToken());
+                    cardViewHolder.like.setImageResource(R.drawable.ic_favorite_black_24px);
+                    likeState=true;
+                }
+                else{
+                    tweet.getId_str();
+                    UnlikeTweetAsync unlikeTweetAsync = new UnlikeTweetAsync();
+                    // LikeTweetAsync likeTweetAsync = new LikeTweetAsync();
+                    unlikeTweetAsync.execute(tweet.getId_str());
+                    Model model = Model.getInstance();
+                    cardViewHolder.like.setImageResource(R.drawable.ic_favorite_border_black_24px);
+                    System.out.println("work "+model.getAccessToken());
+                    likeState=false;
+                }
+
+
+
             }
         });
     }
