@@ -1,6 +1,6 @@
 package nl.saxion.cage.twitteradapter;
 
-//imports
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
@@ -63,9 +63,6 @@ public class Feed extends AppCompatActivity {
     //adapter for cardView
     private CardAdapter adapter;
 
-    //search bar and profile button
-    private EditText editSearch;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,39 +72,9 @@ public class Feed extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
-        //define editText view for search bar, and profile button
-        editSearch = (EditText) findViewById(R.id.editSearch);
-        //profileButton = (Button) findViewById(R.id.profileButton);
-
         //login screen
         Intent loginIntent = new Intent(this, LoginActivity.class);
         startActivityForResult(loginIntent, 1);
-
-        //listens to key presses on keyboard
-//        OnEditorActionListener actionListener = new OnEditorActionListener() {
-//            @Override
-//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-//
-//                    //search twitter and clear search bar
-//
-//                    //
-//                    //search(editSearch.getText().toString());
-//
-//                    getHomeTimeline();
-//                    editSearch.setText("");
-//
-//                    //hide keyboard
-//                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-//                    imm.hideSoftInputFromWindow(editSearch.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
-//
-//                    //the key has been pressed
-//                    return true;
-//                }
-//                return false;
-//            }
-//        };
-//        editSearch.setOnEditorActionListener(actionListener);
 
         //card view adapter
         adapter = new CardAdapter(tweets, this);
@@ -121,6 +88,34 @@ public class Feed extends AppCompatActivity {
         //set recyclerView layout manager & adapter
         recyclerView.setLayoutManager(llm);
         recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_home:
+                return true;
+            case R.id.action_search:
+                Intent searchIntent = new Intent(context, SearchActivity.class);
+                startActivity(searchIntent);
+                return true;
+            case R.id.action_profile:
+                if (accessToken != null){
+                    Intent profileIntent = new Intent(context, UserProfileActivity.class);
+                    profileIntent.putExtra("accessToken", accessToken);
+                    startActivity(profileIntent);
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -154,112 +149,6 @@ public class Feed extends AppCompatActivity {
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
-        }
-    }
-
-//    private void search(String searchTerm) {
-//        //check if we have bearerToken
-//        if (bearerToken == null) {
-//
-//            //retrieve new bearerToken
-//            RetrieveBearerAsync retrieveToken = new RetrieveBearerAsync();
-//            retrieveToken.execute();
-//
-//            //try to get the token
-//            try {
-//                System.out.println("getting token");
-//                bearerToken = retrieveToken.get();
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            } catch (ExecutionException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//
-//        //new searchTwitter async task
-//        SearchTwitterAsync searchTwitter = new SearchTwitterAsync();
-//
-//        //execute task
-//        searchTwitter.execute(searchTerm, bearerToken);
-//
-//        try {
-//
-//            //update tweet list and cardView
-//            searchJSON = searchTwitter.get();
-//            updateCardView();
-//
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        } catch (ExecutionException e) {
-//            e.printStackTrace();
-//        }
-//    }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_home:
-                //do stuff
-                return true;
-            case R.id.action_search:
-                //search screen
-                Intent searchIntent = new Intent(context, SearchActivity.class);
-                startActivity(searchIntent);
-                return true;
-            case R.id.action_profile:
-                if (accessToken != null) {
-                    //user profile screen
-                    Intent profileIntent = new Intent(context, UserProfileActivity.class);
-                    profileIntent.putExtra("accessToken", accessToken);
-                    startActivity(profileIntent);
-                }
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    private void search(String searchTerm) {
-        //check if we have bearerToken
-        if (bearerToken == null) {
-
-            //retrieve new bearerToken
-            RetrieveBearerAsync retrieveToken = new RetrieveBearerAsync();
-            retrieveToken.execute();
-
-            //try to get the token
-            try {
-                System.out.println("getting token");
-                bearerToken = retrieveToken.get();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
-        }
-
-        //new searchTwitter async task
-        SearchTwitterAsync searchTwitter = new SearchTwitterAsync();
-
-        //execute task
-        searchTwitter.execute(searchTerm, bearerToken);
-
-        try {
-
-            //update tweet list and cardView
-            searchJSON = searchTwitter.get();
-            updateCardView();
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
         }
     }
 
@@ -445,6 +334,12 @@ public class Feed extends AppCompatActivity {
 
         //get statuses
         JSONArray jTweetArray = jsonObject.optJSONArray("");
+
+        System.out.println(jTweetArray);
+
+        if (jTweetArray == null) {
+            jTweetArray = jsonObject.optJSONArray("");
+        }
 
         //loop through statuses
         for (int i = 0; i < jTweetArray.length(); i++) {
