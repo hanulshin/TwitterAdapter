@@ -21,14 +21,25 @@ public class Tweets  {
         this.entities = entities;
     }
 
-    public Tweets(Users user, String text, int retweet_count, String created_at, int favourite_count) {
+
+    public String getId_str() {
+        return id_str;
+    }
+
+    public Tweets(Users user, String text, int retweet_count, String created_at, int favourite_count, Entities entities, String id_str) {
         this.user = user;
         this.text = text;
         this.retweet_count = retweet_count;
         this.created_at = created_at;
         this.favourite_count = favourite_count;
+        this.entities = entities;
+        this.id_str = id_str;
+
     }
 
+    public int getId() {
+        return id;
+    }
     public int getFavourite_count() {
         return favourite_count;
     }

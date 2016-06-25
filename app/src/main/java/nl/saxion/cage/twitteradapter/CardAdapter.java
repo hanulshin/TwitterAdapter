@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,6 +30,11 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
     Context context;
 
     public CardAdapter(List<Tweets> tweetsList, Context con) {
+        this.tweetsList = tweetsList;
+        this.context = con;
+    }
+
+    public CardAdapter(List<Tweets> tweetsList, Context con, String lol) {
         this.tweetsList = tweetsList;
         this.context = con;
     }
@@ -98,6 +104,19 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
                 context.startActivity(intent);
             }
         });
+
+        //set OnClickListener for like ImageButton
+        cardViewHolder.like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tweet.getId_str();
+                UnlikeTweetAsync unlikeTweetAsync = new UnlikeTweetAsync();
+               // LikeTweetAsync likeTweetAsync = new LikeTweetAsync();
+                unlikeTweetAsync.execute(tweet.getId_str());
+                Model model = Model.getInstance();
+                System.out.println("work "+model.getAccessToken());
+            }
+        });
     }
 
     /**
@@ -137,6 +156,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         protected ImageView profileImage;
         protected ImageView media;
         protected View view;
+        protected ImageButton like;
 
         //cardViewHolder for accessing views
         public CardViewHolder(View convertView) {
@@ -151,6 +171,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
             dateText = (TextView) convertView.findViewById(R.id.DateView);
             profileImage = (ImageView) convertView.findViewById(R.id.profileView);
             media = (ImageView) convertView.findViewById(R.id.mediaImage);
+            like = (ImageButton) convertView.findViewById(R.id.like);
         }
     }
 }

@@ -60,6 +60,9 @@ public class Feed extends AppCompatActivity {
         Intent loginIntent = new Intent(this, LoginActivity.class);
         startActivityForResult(loginIntent, 1);
 
+
+        System.out.println("betterwork"+accessToken);
+
         //card view adapter
         adapter = new CardAdapter(tweets, this);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.cardList);
@@ -100,6 +103,12 @@ public class Feed extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getHomeTimeline();
     }
 
     @Override
@@ -224,6 +233,7 @@ public class Feed extends AppCompatActivity {
             JSONObject jTweetObj = jTweetArray.getJSONObject(i);
 
             //get basic status properties
+            String id_str = jTweetObj.getString("id_str");
             String text = jTweetObj.getString("text");
             String createdAt = jTweetObj.getString("created_at");
             int retweets = jTweetObj.getInt("retweet_count");
@@ -305,7 +315,7 @@ public class Feed extends AppCompatActivity {
             Users user = new Users(screen_name, name, profile_image_url);
 
             //create and add new Tweet to list of tweets with json data, and user & entities object
-            tweets.add(new Tweets(user, text, retweets, createdAt, favourites, entities));
+            tweets.add(new Tweets(user, text, retweets, createdAt, favourites, entities,id_str));
         }
     }
 
@@ -419,5 +429,9 @@ public class Feed extends AppCompatActivity {
             //create and add new Tweet to list of tweets with json data, and user & entities object
             tweets.add(new Tweets(user, text, retweets, createdAt, favourites, entities));
         }
+    }
+
+    public OAuth1AccessToken getAccessToken() {
+        return accessToken;
     }
 }
