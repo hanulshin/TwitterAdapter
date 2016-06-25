@@ -155,6 +155,7 @@ public class Feed extends AppCompatActivity {
     private void updateCardView() {
         if (searchJSON != null) {
             //get start time
+
             long startTime = System.currentTimeMillis();
 
             //read objects
