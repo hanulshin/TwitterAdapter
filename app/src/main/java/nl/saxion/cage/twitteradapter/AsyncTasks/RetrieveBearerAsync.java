@@ -1,4 +1,4 @@
-package nl.saxion.cage.twitteradapter;
+package nl.saxion.cage.twitteradapter.AsyncTasks;
 
 import android.os.AsyncTask;
 import android.util.Base64;

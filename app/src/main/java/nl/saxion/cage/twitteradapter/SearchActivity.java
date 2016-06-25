@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
 import org.json.JSONArray;
@@ -20,6 +19,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+
+import nl.saxion.cage.twitteradapter.AsyncTasks.RetrieveBearerAsync;
+import nl.saxion.cage.twitteradapter.AsyncTasks.SearchTwitterAsync;
 import nl.saxion.cage.twitteradapter.Entities.Entities;
 import nl.saxion.cage.twitteradapter.Entities.Hashtags;
 import nl.saxion.cage.twitteradapter.Entities.Media;
@@ -33,7 +35,7 @@ public class SearchActivity extends AppCompatActivity {
     private EditText editSearch;
     private String bearerToken;
     private String searchJSON;
-    private CardAdapter adapter;
+    private CardTweetAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +68,7 @@ public class SearchActivity extends AppCompatActivity {
         editSearch.setOnEditorActionListener(actionListener);
 
         //card view adapter
-        adapter = new CardAdapter(tweets, this);
+        adapter = new CardTweetAdapter(tweets, this);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.list_card);
         recyclerView.setHasFixedSize(true);
 

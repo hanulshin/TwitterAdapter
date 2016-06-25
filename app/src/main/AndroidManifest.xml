@@ -23,5 +23,6 @@
         <activity android:name=".ZoomActivity" />
         <activity android:name=".UserProfileActivity" />
         <activity android:name=".SearchActivity"></activity>
+        <activity android:name=".FriendsListActivity"></activity>
     </application>
 </manifest>

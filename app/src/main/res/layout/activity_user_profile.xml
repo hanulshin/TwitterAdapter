@@ -88,4 +88,13 @@
         android:id="@+id/tweet"
         android:layout_alignTop="@+id/post"
         android:layout_toEndOf="@+id/post" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="friends"
+        android:id="@+id/button_friends"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="5dp" />
 </RelativeLayout>

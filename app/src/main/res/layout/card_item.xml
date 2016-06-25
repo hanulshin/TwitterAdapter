@@ -100,7 +100,7 @@
             android:layout_height="15dp"
             android:id="@+id/imageButton"
             android:background="@drawable/ic_favorite_black_24px"
-            android:layout_alignBottom="@+id/LikeView"
+            android:layout_below="@+id/profileView"
             android:layout_toStartOf="@+id/LikeView" />
 
         <ImageButton

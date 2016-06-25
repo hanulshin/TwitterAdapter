@@ -1,6 +1,5 @@
 package nl.saxion.cage.twitteradapter;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,7 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.scribejava.apis.TwitterApi;
 import com.github.scribejava.core.builder.ServiceBuilder;
@@ -31,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import nl.saxion.cage.twitteradapter.AsyncTasks.GetUserTimelineAsync;
 import nl.saxion.cage.twitteradapter.Entities.Entities;
 import nl.saxion.cage.twitteradapter.Entities.Hashtags;
 import nl.saxion.cage.twitteradapter.Entities.Media;
@@ -43,16 +42,17 @@ public class UserProfileActivity extends AppCompatActivity {
     private static final String API_KEY = "BABNgm313dL2rRXf3iRM11lL8";
     private static final String API_SECRET = "WR2VFNTaJBRGmDCUettxUGPss50ZPOQaVlO8wsUYoHPMKlQkrG";
 
-    protected TextView nameText;
-    protected TextView screenNameText;
-    protected ImageView profileImage;
-    protected TextView descriptionText;
-    protected TextView followers_countText;
-    protected TextView friends_countText;
-    protected TextView statuses_countText;
+    private TextView nameText;
+    private TextView screenNameText;
+    private ImageView profileImage;
+    private TextView descriptionText;
+    private TextView followers_countText;
+    private TextView friends_countText;
+    private TextView statuses_countText;
+    private Button friends_button;
 
     //adapter for cardView
-    private CardAdapter adapter;
+    private CardTweetAdapter adapter;
 
     //access and bearer token
     private OAuth1AccessToken accessToken;
@@ -74,7 +74,7 @@ public class UserProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_profile);
 
         //card view adapter
-        adapter = new CardAdapter(tweets, this);
+        adapter = new CardTweetAdapter(tweets, this);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.profile_list);
         recyclerView.setHasFixedSize(true);
 
@@ -92,6 +92,7 @@ public class UserProfileActivity extends AppCompatActivity {
         //get extras from intent
         accessToken = (OAuth1AccessToken) intent.getExtras().getSerializable("accessToken");
 
+        //get tweets user has made
         getUserTimeline();
 
         authService =
@@ -118,6 +119,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
         Button post = (Button) findViewById(R.id.post);
 
+        assert post != null;
         post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,11 +128,6 @@ public class UserProfileActivity extends AppCompatActivity {
                 post.execute(tweet.getText().toString(), accessToken.getToken(), accessToken.getTokenSecret());
                 tweet.setText("");
                 getUserTimeline();
-
-//
-//                Toast toast = new Toast(context);
-//                toast.setText("Posted to your timeline");
-//                toast.show();
             }
         });
 
@@ -141,15 +138,26 @@ public class UserProfileActivity extends AppCompatActivity {
         followers_countText = (TextView) findViewById(R.id.followers_count);
         friends_countText = (TextView) findViewById(R.id.friends_count);
         statuses_countText = (TextView) findViewById(R.id.statuses_count);
+        friends_button = (Button) findViewById(R.id.button_friends);
 
         nameText.setText(user.getName());
         screenNameText.setText("@" + user.getScreen_name());
+
         //load profile image
         Picasso.with(this).load(user.getProfile_image_url()).into(profileImage);
         descriptionText.setText(user.getDescription());
         followers_countText.setText("followers: " + Integer.toString(user.getFollowers_count()));
         friends_countText.setText("following: " + Integer.toString(user.getFriends_count()));
         statuses_countText.setText("tweets posted: " + Integer.toString(user.getStatuses_count()));
+
+        friends_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent friendsListIntent = new Intent(getApplicationContext(), FriendsListActivity.class);
+                friendsListIntent.putExtra("accessToken", accessToken);
+                startActivity(friendsListIntent);
+            }
+        });
     }
 
     /**

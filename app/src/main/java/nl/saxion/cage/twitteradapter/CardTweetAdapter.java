@@ -19,7 +19,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder> {
+public class CardTweetAdapter extends RecyclerView.Adapter<CardTweetAdapter.CardViewHolder> {
     Tweets tweet;
 
     String url;
@@ -28,7 +28,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
 
     Context context;
 
-    public CardAdapter(List<Tweets> tweetsList, Context con) {
+    public CardTweetAdapter(List<Tweets> tweetsList, Context con) {
         this.tweetsList = tweetsList;
         this.context = con;
     }

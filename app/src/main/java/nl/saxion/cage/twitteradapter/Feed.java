@@ -23,6 +23,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+
+import nl.saxion.cage.twitteradapter.AsyncTasks.GetHomeTimelineAsync;
 import nl.saxion.cage.twitteradapter.Entities.Entities;
 import nl.saxion.cage.twitteradapter.Entities.Hashtags;
 import nl.saxion.cage.twitteradapter.Entities.Media;
@@ -45,7 +47,7 @@ public class Feed extends AppCompatActivity {
     private String searchJSON;
 
     //adapter for cardView
-    private CardAdapter adapter;
+    private CardTweetAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +63,7 @@ public class Feed extends AppCompatActivity {
         startActivityForResult(loginIntent, 1);
 
         //card view adapter
-        adapter = new CardAdapter(tweets, this);
+        adapter = new CardTweetAdapter(tweets, this);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.cardList);
         recyclerView.setHasFixedSize(true);
 
