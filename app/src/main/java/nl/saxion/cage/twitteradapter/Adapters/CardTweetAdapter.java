@@ -1,4 +1,4 @@
-package nl.saxion.cage.twitteradapter;
+package nl.saxion.cage.twitteradapter.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -19,6 +19,13 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+
+import nl.saxion.cage.twitteradapter.Actitivies.ZoomActivity;
+import nl.saxion.cage.twitteradapter.AsyncTasks.LikeTweetAsync;
+import nl.saxion.cage.twitteradapter.AsyncTasks.UnlikeTweetAsync;
+import nl.saxion.cage.twitteradapter.Model;
+import nl.saxion.cage.twitteradapter.R;
+import nl.saxion.cage.twitteradapter.Tweets.Tweets;
 
 public class CardTweetAdapter extends RecyclerView.Adapter<CardTweetAdapter.CardViewHolder> {
     Tweets tweet;

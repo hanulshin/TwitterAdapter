@@ -20,9 +20,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import nl.saxion.cage.twitteradapter.Adapters.CardTweetAdapter;
 import nl.saxion.cage.twitteradapter.AsyncTasks.RetrieveBearerAsync;
 import nl.saxion.cage.twitteradapter.AsyncTasks.SearchTwitterAsync;
-import nl.saxion.cage.twitteradapter.Adapters.CardTweetAdapter;
+
 import nl.saxion.cage.twitteradapter.Entities.Entities;
 import nl.saxion.cage.twitteradapter.Entities.Hashtags;
 import nl.saxion.cage.twitteradapter.Entities.Media;
