@@ -57,6 +57,11 @@ public class HomeActivity extends AppCompatActivity {
     private CardTweetAdapter cardTweetAdapter;
 
     /**
+     * model class
+     */
+    private static Model model = Model.getInstance();
+
+    /**
      * Sets up toolbar, starts login screen, initializes cardView adapter
      *
      * @param savedInstanceState
@@ -70,9 +75,9 @@ public class HomeActivity extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
-        //login screen
-        Intent loginIntent = new Intent(this, LoginActivity.class);
-        startActivityForResult(loginIntent, 1);
+//        //login screen
+//        Intent loginIntent = new Intent(this, LoginActivity.class);
+//        startActivityForResult(loginIntent, 1);
 
         //card view
         cardTweetAdapter = new CardTweetAdapter(tweets, this);
@@ -108,19 +113,23 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_home:
-                cardTweetAdapter.notifyDataSetChanged();
-                System.out.println("home button");
+            case R.id.action_refresh:
+                getHomeTimeline();
                 return true;
             case R.id.action_search:
                 Intent searchIntent = new Intent(getApplicationContext(), SearchActivity.class);
                 startActivity(searchIntent);
                 return true;
             case R.id.action_profile:
-                if (accessToken != null) {
-                    Intent profileIntent = new Intent(getApplicationContext(), UserProfileActivity.class);
-                    profileIntent.putExtra("accessToken", accessToken);
-                    startActivity(profileIntent);
+                if (model.isLoggedIn()) {
+                    if (accessToken != null) {
+                        Intent profileIntent = new Intent(getApplicationContext(), UserProfileActivity.class);
+                        startActivity(profileIntent);
+                    }
+                } else {
+                    //login screen
+                    Intent loginIntent = new Intent(this, LoginActivity.class);
+                    startActivityForResult(loginIntent, 1);
                 }
                 return true;
             default:
@@ -151,16 +160,18 @@ public class HomeActivity extends AppCompatActivity {
             finish();
             return;
         }
-
         //get Model instance and set accessToken
-        Model model = Model.getInstance();
         model.setAccessToken((OAuth1AccessToken) data.getExtras().getSerializable("accessToken"));
+
+        //tell the model that we have successfully logged in
+        model.setLoggedIn(true);
 
         //get accessToken from model
         accessToken = model.getAccessToken();
 
         //load main timeline
-        getHomeTimeline();
+        Intent profileIntent = new Intent(getApplicationContext(), UserProfileActivity.class);
+        startActivity(profileIntent);
     }
 
     /**
@@ -171,7 +182,7 @@ public class HomeActivity extends AppCompatActivity {
 
             //new getHomeTimeline async task
             GetHomeTimelineAsync getTimeline = new GetHomeTimelineAsync();
-            getTimeline.execute(accessToken.getToken(), accessToken.getTokenSecret());
+            getTimeline.execute();
 
             try {
                 //update tweet list and cardView

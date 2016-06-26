@@ -60,10 +60,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-
-        //login button
-        Button button = (Button) findViewById(R.id.twitter_login_btn);
+        setContentView(R.layout.web_view_login);
 
         //strict thread policy
         if (android.os.Build.VERSION.SDK_INT > 9) {
@@ -71,31 +68,24 @@ public class LoginActivity extends AppCompatActivity {
             StrictMode.setThreadPolicy(policy);
         }
 
-        assert button != null;
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                setContentView(R.layout.web_view_login);
+        //set authService
+        authService =
+                new ServiceBuilder()
+                        .apiKey(API_KEY)
+                        .apiSecret(API_SECRET)
+                        .callback("http://www.cagitter.com"/*OAUTH_CALLBACK_URL*/)// not used in git, but said to use in slides
+                        .build(TwitterApi.instance());//changed from API to api, getInstance to instance
 
-                //set authService
-                authService =
-                        new ServiceBuilder()
-                                .apiKey(API_KEY)
-                                .apiSecret(API_SECRET)
-                                .callback("http://www.cagitter.com"/*OAUTH_CALLBACK_URL*/)// not used in git, but said to use in slides
-                                .build(TwitterApi.instance());//changed from API to api, getInstance to instance
+        //set the request Token
+        requestToken = authService.getRequestToken();
 
-                //set the request Token
-                requestToken = authService.getRequestToken();
+        //set the authorization url
+        String authUrl = authService.getAuthorizationUrl(requestToken);
 
-                //set the authorization url
-                String authUrl = authService.getAuthorizationUrl(requestToken);
-
-                //set the webView and load url
-                webView = (WebView) findViewById(R.id.webView);
-                webView.setWebViewClient(new MyWebViewClient());
-                webView.loadUrl(authUrl);
-            }
-        });
+        //set the webView and load url
+        webView = (WebView) findViewById(R.id.webView);
+        webView.setWebViewClient(new MyWebViewClient());
+        webView.loadUrl(authUrl);
 
     }
 

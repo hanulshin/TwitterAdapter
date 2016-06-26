@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 import nl.saxion.cage.twitteradapter.Entities.Entities;
 
 /**
- *
+ * class containing information of user object
  */
 public class Users {
 

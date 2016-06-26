@@ -28,6 +28,11 @@ public class Model {
     private OAuth1AccessToken accessToken = null;
 
     /**
+     * for telling whether the user is logged in
+     */
+    private boolean loggedIn = false;
+
+    /**
      * gets the static instance of the model object
      * @return instance of Model
      */
@@ -43,11 +48,19 @@ public class Model {
         this.accessToken = accessToken;
     }
 
+    public void setLoggedIn(boolean loggedIn) {
+        this.loggedIn = loggedIn;
+    }
+
     public String getApiKey() {
         return apiKey;
     }
 
     public String getApiSecret() {
         return apiSecret;
+    }
+
+    public boolean isLoggedIn() {
+        return loggedIn;
     }
 }

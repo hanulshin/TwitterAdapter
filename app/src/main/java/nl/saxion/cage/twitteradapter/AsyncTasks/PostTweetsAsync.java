@@ -24,28 +24,28 @@ public class PostTweetsAsync extends AsyncTask<String, Void, Boolean> {
      */
     OAuth1AccessToken accessToken = model.getAccessToken();
 
-    String tweet;
-
     /**
      * static model instance for getting keys
      */
     static Model model = Model.getInstance();
 
-    //key & secret for getting accessToken
+    /**
+     * api key for signing requests
+     */
     private static final String API_KEY = model.getApiKey();
+
+    /**
+     * api secret for signing requests
+     */
     private static final String API_SECRET = model.getApiSecret();
 
     @Override
     protected Boolean doInBackground(String... params) {
-        accessToken = new OAuth1AccessToken(params[1], params[2]);
-        tweet = params[0];
-        postTweet();
+        postTweet(params[0]);
         return true;
     }
 
-    private void postTweet() {
-
-        //didn't create OAUTH10aService class because there is a default one
+    private void postTweet(String tweetText) {
         authService =
                 new ServiceBuilder()
                         .apiKey(API_KEY)
@@ -54,7 +54,7 @@ public class PostTweetsAsync extends AsyncTask<String, Void, Boolean> {
                         .build(TwitterApi.instance());//changed from API to api, getInstance to instance
         OAuthRequest request =
                 new OAuthRequest(Verb.POST, "https://api.twitter.com/1.1/statuses/update.json", authService);
-        request.addParameter("status", tweet);
+        request.addParameter("status", tweetText);
         authService.signRequest(accessToken, request);
         Response response = request.send();
         if (response.isSuccessful()) {

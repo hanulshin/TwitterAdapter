@@ -68,7 +68,7 @@ public class UserProfileActivity extends AppCompatActivity {
     /**
      * accessToken for signing requests
      */
-    private OAuth1AccessToken accessToken;
+    private OAuth1AccessToken accessToken = model.getAccessToken();
 
     /**
      * String json file containing list of tweets
@@ -129,7 +129,7 @@ public class UserProfileActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         //get extras from intent
-        accessToken = (OAuth1AccessToken) intent.getExtras().getSerializable("accessToken");
+//        accessToken = (OAuth1AccessToken) intent.getExtras().getSerializable("accessToken");
 
         //get tweets user has made
         getUserTimeline();
@@ -220,7 +220,7 @@ public class UserProfileActivity extends AppCompatActivity {
     private void getUserTimeline() {
         if (accessToken != null) {
             GetUserTimelineAsync getTimeline = new GetUserTimelineAsync();
-            getTimeline.execute(accessToken.getToken(), accessToken.getTokenSecret());
+            getTimeline.execute();
 
             try {
                 //update tweet list and cardView
