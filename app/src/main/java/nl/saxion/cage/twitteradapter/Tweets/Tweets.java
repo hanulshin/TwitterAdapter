@@ -11,63 +11,41 @@ public class Tweets  {
     /**
      *
      */
-    private Object annotations;
-
-    /**
-     *
-     */
     private String created_at;
 
     /**
-     *
-     */
-    private Current_User_Retweet current_user_retweet;
-
-    /**
-     *
+     * entities object stores hashtags etc
      */
     private Entities entities;
 
     /**
-     *
+     * number of favorites
      */
     private int favourite_count;
 
     /**
-     *
-     */
-    private String filter_level;
-
-    /**
-     *
-     */
-    private Object geo;
-
-    /**
-     *
-     */
-    private int id;
-
-    /**
-     *
+     * id of the tweet for liking/unliking
      */
     private String id_str;
 
     /**
-     *
+     * number of retweets
      */
     private int retweet_count;
 
     /**
-     *
+     * tweet text
      */
     private String text;
 
     /**
-     *
+     * User that posted the tweet
      */
     private Users user;
 
+    /**
+     * whether the tweet is liked by the current user or not
+     */
     private boolean favourited = false;
 
     public Tweets(Users user, String text, int retweet_count, String created_at, int favourite_count, Entities entities, String id_str) {
@@ -93,9 +71,6 @@ public class Tweets  {
         return id_str;
     }
 
-    public int getId() {
-        return id;
-    }
     public int getFavourite_count() {
         return favourite_count;
     }
