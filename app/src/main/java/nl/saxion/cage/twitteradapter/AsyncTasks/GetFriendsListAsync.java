@@ -39,7 +39,7 @@ public class GetFriendsListAsync extends AsyncTask<String, Void, String> {
     /**
      * get friends list
      * @param params
-     * @return
+     * @return json file which contains list of user friends
      */
     @Override
     protected String doInBackground(String... params) {
@@ -48,7 +48,7 @@ public class GetFriendsListAsync extends AsyncTask<String, Void, String> {
                 new ServiceBuilder()
                         .apiKey(API_KEY)
                         .apiSecret(API_SECRET)
-                        .callback("http://www.cagitter.com"/*OAUTH_CALLBACK_URL*/)// not used in git, but said to use in slides
+                        .callback("http://www.cagitter.com"/*OAUTH_CALLBACK_URL*/)
                         .build(TwitterApi.instance());//changed from API to api, getInstance to instance
 
         final OAuthRequest request = new OAuthRequest(Verb.GET, "https://api.twitter.com/1.1/friends/list.json", authService);

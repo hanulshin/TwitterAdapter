@@ -36,8 +36,11 @@ public class LikeTweetAsync  extends AsyncTask <String,Void,Void> {
      */
     private com.github.scribejava.core.oauth.OAuth10aService authService;
 
-    String id_str;
-
+    /**
+     * gets user timeline
+     * @param params
+     * @return null
+     */
     @Override
     protected Void doInBackground(String... params) {
         Model model = Model.getInstance();
@@ -47,14 +50,14 @@ public class LikeTweetAsync  extends AsyncTask <String,Void,Void> {
                 new ServiceBuilder()
                         .apiKey(API_KEY)
                         .apiSecret(API_SECRET)
-                        .callback("http://www.cagitter.com"/*OAUTH_CALLBACK_URL*/)// not used in git, but said to use in slides
+                        .callback("http://www.cagitter.com"/*OAUTH_CALLBACK_URL*/)
                         .build(TwitterApi.instance());//changed from API to api, getInstance to instance
 
         final OAuthRequest request = new OAuthRequest(Verb.POST, "https://api.twitter.com/1.1/favorites/create.json"+"?id="+id_str, authService);
         authService.signRequest(model.getAccessToken(), request); // the access token from step 4
 
         final Response response = request.send();
-
+        System.out.println("Like mark has been created, contents of the tweet - "+response.getBody());
 
         return null;
     }

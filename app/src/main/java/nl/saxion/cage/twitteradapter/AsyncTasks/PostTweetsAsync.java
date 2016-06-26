@@ -19,10 +19,16 @@ import nl.saxion.cage.twitteradapter.Model;
 public class PostTweetsAsync extends AsyncTask<String, Void, Boolean> {
     private com.github.scribejava.core.oauth.OAuth10aService authService;
 
-    OAuth1AccessToken accessToken;
+    /**
+     * accessToken for signing requests
+     */
+    OAuth1AccessToken accessToken = model.getAccessToken();
 
     String tweet;
 
+    /**
+     * static model instance for getting keys
+     */
     static Model model = Model.getInstance();
 
     //key & secret for getting accessToken

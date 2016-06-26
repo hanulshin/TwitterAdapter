@@ -20,6 +20,9 @@ import nl.saxion.cage.twitteradapter.Model;
 
 public class RetrieveBearerAsync extends AsyncTask<String, Void, String> {
 
+    /**
+     * static model instance for getting keys
+     */
     static Model model = Model.getInstance();
 
     //key & secret for getting accessToken
@@ -32,11 +35,6 @@ public class RetrieveBearerAsync extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... params) {
         return retrieveToken();
-    }
-
-    @Override
-    protected void onPostExecute(String s) {
-        super.onPostExecute(s);
     }
 
     /**

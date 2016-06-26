@@ -31,6 +31,11 @@ public class GetHomeTimelineAsync extends AsyncTask<String, Void, String> {
     private static final String API_SECRET = model.getApiSecret();
 
     /**
+     * accessToken for signing requests
+     */
+    OAuth1AccessToken accessToken = model.getAccessToken();
+
+    /**
      * authService for authenticating requests
      */
     private com.github.scribejava.core.oauth.OAuth10aService authService;
@@ -38,16 +43,16 @@ public class GetHomeTimelineAsync extends AsyncTask<String, Void, String> {
     /**
      * get home timeline
      * @param params
-     * @return
+     * @return json file which contains home timeline of user
      */
     @Override
     protected String doInBackground(String... params) {
-        OAuth1AccessToken accessToken = new OAuth1AccessToken(params[0], params[1]);
+
         authService =
                 new ServiceBuilder()
                         .apiKey(API_KEY)
                         .apiSecret(API_SECRET)
-                        .callback("http://www.cagitter.com"/*OAUTH_CALLBACK_URL*/)// not used in git, but said to use in slides
+                        .callback("http://www.cagitter.com"/*OAUTH_CALLBACK_URL*/)
                         .build(TwitterApi.instance());//changed from API to api, getInstance to instance
 
         final OAuthRequest request = new OAuthRequest(Verb.GET, "https://api.twitter.com/1.1/statuses/home_timeline.json", authService);

@@ -19,28 +19,35 @@ public class UnlikeTweetAsync  extends AsyncTask<String,Void,Void> {
     private static final String API_KEY = "BABNgm313dL2rRXf3iRM11lL8";
     private static final String API_SECRET = "WR2VFNTaJBRGmDCUettxUGPss50ZPOQaVlO8wsUYoHPMKlQkrG";
 
-    //auth service for
+    /**
+     * authService for authenticating requests
+     */
     private com.github.scribejava.core.oauth.OAuth10aService authService;
-    //  Feed feed = new Feed();
-    String id_str;
 
+
+    /**
+     * unlike tweet that has been chosen
+     * @param params
+     * @return null
+     */
     @Override
     protected Void doInBackground(String... params) {
         Model model = Model.getInstance();
+
+        //id of the tweet user choose to unlike
         String id_str = params[0];
-        // OAuth1AccessToken accessToken = new OAuth1AccessToken(params[1], params[2]);
         authService =
                 new ServiceBuilder()
                         .apiKey(API_KEY)
                         .apiSecret(API_SECRET)
-                        .callback("http://www.cagitter.com"/*OAUTH_CALLBACK_URL*/)// not used in git, but said to use in slides
+                        .callback("http://www.cagitter.com"/*OAUTH_CALLBACK_URL*/)
                         .build(TwitterApi.instance());//changed from API to api, getInstance to instance
 
         final OAuthRequest request = new OAuthRequest(Verb.POST, "https://api.twitter.com/1.1/favorites/destroy.json"+"?id="+id_str, authService);
         authService.signRequest(model.getAccessToken(), request); // the access token from step 4
 
         final Response response = request.send();//record the response from server
-        System.out.println("nein"+response.getBody());
+        System.out.println("Like mark has been deleted, contents of the tweet - "+response.getBody());
 
 
         return null;
