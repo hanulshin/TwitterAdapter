@@ -152,29 +152,7 @@ public class CardTweetAdapter extends RecyclerView.Adapter<CardTweetAdapter.Card
 //            }
 //        });
 
-        //set OnClickListener for like ImageButton
-        cardViewHolder.like.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (likeState != true) {
-                    tweet.getId_str();
-                    LikeTweetAsync likeTweetAsync = new LikeTweetAsync();
-                    likeTweetAsync.execute(tweet.getId_str());
-                    Model model = Model.getInstance();
-                    System.out.println("work " + model.getAccessToken());
-                    cardViewHolder.like.setImageResource(R.drawable.ic_favorite_black_24px);
-                    likeState = true;
-                } else {
-                    tweet.getId_str();
-                    UnlikeTweetAsync unlikeTweetAsync = new UnlikeTweetAsync();
-                    unlikeTweetAsync.execute(tweet.getId_str());
-                    Model model = Model.getInstance();
-                    cardViewHolder.like.setImageResource(R.drawable.ic_favorite_border_black_24px);
-                    System.out.println("work " + model.getAccessToken());
-                    likeState = false;
-                }
-            }
-        });
+
     }
 
     /**
@@ -203,12 +181,20 @@ public class CardTweetAdapter extends RecyclerView.Adapter<CardTweetAdapter.Card
      * @return
      */
     @Override
-    public CardViewHolder onCreateViewHolder(final ViewGroup viewGroup, int position) {
+    public CardViewHolder onCreateViewHolder(final ViewGroup viewGroup, final int position) {
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
                 inflate(R.layout.card_item, viewGroup, false);
+        //get the viewHolder for getting views
         final CardViewHolder holder = new CardViewHolder(itemView);
+
+        //set imageView for setting onclick
         final ImageView mediaImage = (ImageView) itemView.findViewById(R.id.mediaImage);
+
+        //set imageButton for setting onclick
+        final ImageButton likeButton = (ImageButton) itemView.findViewById(R.id.like);
+
+        //set onclick listener for image
         mediaImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -220,8 +206,28 @@ public class CardTweetAdapter extends RecyclerView.Adapter<CardTweetAdapter.Card
                 }
             }
 
-            // todo put like onclick here
+        });
 
+        //set OnClickListener for like ImageButton
+        likeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if ( tweetsList.get(position).isFavourited() != true) {
+                    LikeTweetAsync likeTweetAsync = new LikeTweetAsync();
+                    likeTweetAsync.execute(tweetsList.get(position).getId_str());
+                    Model model = Model.getInstance();
+                    System.out.println("work " + model.getAccessToken());
+                    likeButton.setImageResource(R.drawable.ic_favorite_black_24px);
+                    tweetsList.get(position).setFavourited(true);
+                } else {
+                    UnlikeTweetAsync unlikeTweetAsync = new UnlikeTweetAsync();
+                    unlikeTweetAsync.execute(tweetsList.get(position).getId_str());
+                    Model model = Model.getInstance();
+                    likeButton.setImageResource(R.drawable.ic_favorite_border_black_24px);
+                    System.out.println("work " + model.getAccessToken());
+                    tweetsList.get(position).setFavourited(false);
+                }
+            }
         });
         return holder;
     }
