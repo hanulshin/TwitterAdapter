@@ -206,6 +206,7 @@ public class SearchActivity extends AppCompatActivity {
             JSONObject jTweetObj = jTweetArray.getJSONObject(i);
 
             //get basic status properties
+            String id_str = jTweetObj.getString("id_str");
             String text = jTweetObj.getString("text");
             String createdAt = jTweetObj.getString("created_at");
             int retweets = jTweetObj.getInt("retweet_count");
@@ -287,7 +288,7 @@ public class SearchActivity extends AppCompatActivity {
             Users user = new Users(screen_name, name, profile_image_url);
 
             //create and add new Tweet to list of tweets with json data, and user & entities object
-            tweets.add(new Tweets(user, text, retweets, createdAt, favourites, entities));
+            tweets.add(new Tweets(user, text, retweets, createdAt, favourites, entities,id_str));
         }
     }
 
