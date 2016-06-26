@@ -18,7 +18,9 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import nl.saxion.cage.twitteradapter.Actitivies.ZoomActivity;
 import nl.saxion.cage.twitteradapter.AsyncTasks.LikeTweetAsync;
@@ -32,17 +34,17 @@ public class CardTweetAdapter extends RecyclerView.Adapter<CardTweetAdapter.Card
     /**
      * single tweet for getting tweet information
      */
-    Tweets tweet;
+    private Tweets tweet;
 
     /**
      * url for loading media image
      */
-    String mediaUrl;
+    private String mediaUrl;
 
     /**
      * state of like button (liked or unliked)
      */
-    boolean likeState = false;
+    private boolean likeState = false;
 
     /**
      * list of tweets
@@ -52,10 +54,11 @@ public class CardTweetAdapter extends RecyclerView.Adapter<CardTweetAdapter.Card
     /**
      * context for loading user media image
      */
-    Context context;
+    private Context context;
 
     /**
      * set variables
+     *
      * @param tweetsList
      * @param con
      */
@@ -65,14 +68,32 @@ public class CardTweetAdapter extends RecyclerView.Adapter<CardTweetAdapter.Card
     }
 
     /**
+     * holds position of each card
+     */
+    private Map<Integer, Integer> positionToValueMap = new HashMap<>();
+
+    /**
      * highlight entities, set views, set onclick listeners
+     *
      * @param cardViewHolder
-     * @param i
+     * @param position
      */
     @Override
-    public void onBindViewHolder(final CardViewHolder cardViewHolder, final int i) {
+    public void onBindViewHolder(final CardViewHolder cardViewHolder, final int position) {
+        //update the position for correct clicking
+        //cardViewHolder.onRecyclerItemClickListener.updatePosition(position);
+
+        int valueToDisplay = 1;
+
+        if (positionToValueMap.containsKey(position)) {
+            valueToDisplay = positionToValueMap.get(position);
+        } else {
+            positionToValueMap.put(position, valueToDisplay);
+        }
+        System.out.println(valueToDisplay);
+
         //get tweet from position
-        tweet = tweetsList.get(i);
+        tweet = tweetsList.get(position);
 
         //create spannable for highlighting
         Spannable spanText = Spannable.Factory.getInstance().newSpannable(tweet.getText());
@@ -120,44 +141,38 @@ public class CardTweetAdapter extends RecyclerView.Adapter<CardTweetAdapter.Card
                     .into(cardViewHolder.media);
         }
 
-        //set OnClickListener for images
-        cardViewHolder.media.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, ZoomActivity.class);
-                intent.putExtra("imageUrl", mediaUrl);
-                context.startActivity(intent);
-            }
-        });
+//        cardViewHolder.onRecyclerItemClickListener.updatePosition(position);
+//        //set OnClickListener for images
+//        cardViewHolder.media.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(context, ZoomActivity.class);
+//                intent.putExtra("imageUrl", mediaUrl);
+//                context.startActivity(intent);
+//            }
+//        });
 
         //set OnClickListener for like ImageButton
         cardViewHolder.like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if(likeState!=true){
+                if (likeState != true) {
                     tweet.getId_str();
-                    //UnlikeTweetAsync unlikeTweetAsync = new UnlikeTweetAsync();
                     LikeTweetAsync likeTweetAsync = new LikeTweetAsync();
                     likeTweetAsync.execute(tweet.getId_str());
                     Model model = Model.getInstance();
-                    System.out.println("work "+model.getAccessToken());
+                    System.out.println("work " + model.getAccessToken());
                     cardViewHolder.like.setImageResource(R.drawable.ic_favorite_black_24px);
-                    likeState=true;
-                }
-                else{
+                    likeState = true;
+                } else {
                     tweet.getId_str();
                     UnlikeTweetAsync unlikeTweetAsync = new UnlikeTweetAsync();
-                    // LikeTweetAsync likeTweetAsync = new LikeTweetAsync();
                     unlikeTweetAsync.execute(tweet.getId_str());
                     Model model = Model.getInstance();
                     cardViewHolder.like.setImageResource(R.drawable.ic_favorite_border_black_24px);
-                    System.out.println("work "+model.getAccessToken());
-                    likeState=false;
+                    System.out.println("work " + model.getAccessToken());
+                    likeState = false;
                 }
-
-
-
             }
         });
     }
@@ -182,16 +197,34 @@ public class CardTweetAdapter extends RecyclerView.Adapter<CardTweetAdapter.Card
 
     /**
      * inflates a card
+     *
      * @param viewGroup
-     * @param i the index of the card
+     * @param position the index of the card
      * @return
      */
     @Override
-    public CardViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public CardViewHolder onCreateViewHolder(final ViewGroup viewGroup, int position) {
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
                 inflate(R.layout.card_item, viewGroup, false);
-        return new CardViewHolder(itemView);
+        final CardViewHolder holder = new CardViewHolder(itemView);
+        final ImageView mediaImage = (ImageView) itemView.findViewById(R.id.mediaImage);
+        mediaImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final int position = holder.getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION){
+
+                    Intent zoomIntent = new Intent(context, ZoomActivity.class);
+                    zoomIntent.putExtra("imageUrl", mediaUrl);
+                    context.startActivity(zoomIntent);
+
+                    System.out.println(mediaUrl);
+                    System.out.println("clicked " + position);
+                }
+            }
+        });
+        return holder;
     }
 
     /**
@@ -211,19 +244,19 @@ public class CardTweetAdapter extends RecyclerView.Adapter<CardTweetAdapter.Card
         private ImageButton like;
 
         //cardViewHolder for accessing views
-        public CardViewHolder(View convertView) {
-            super(convertView);
+        public CardViewHolder(View itemView) {
+            super(itemView);
 
             //set views
-            textText = (TextView) convertView.findViewById(R.id.TextView);
-            nameText = (TextView) convertView.findViewById(R.id.NameView);
-            screenNameText = (TextView) convertView.findViewById(R.id.ScreenNameView);
-            retweetsCountText = (TextView) convertView.findViewById(R.id.RetweetView);
-            likesText = (TextView) convertView.findViewById(R.id.LikeView);
-            dateText = (TextView) convertView.findViewById(R.id.DateView);
-            profileImage = (ImageView) convertView.findViewById(R.id.profileView);
-            media = (ImageView) convertView.findViewById(R.id.mediaImage);
-            like = (ImageButton) convertView.findViewById(R.id.like);
+            textText = (TextView) itemView.findViewById(R.id.TextView);
+            nameText = (TextView) itemView.findViewById(R.id.NameView);
+            screenNameText = (TextView) itemView.findViewById(R.id.ScreenNameView);
+            retweetsCountText = (TextView) itemView.findViewById(R.id.RetweetView);
+            likesText = (TextView) itemView.findViewById(R.id.LikeView);
+            dateText = (TextView) itemView.findViewById(R.id.DateView);
+            profileImage = (ImageView) itemView.findViewById(R.id.profileView);
+            media = (ImageView) itemView.findViewById(R.id.mediaImage);
+            like = (ImageButton) itemView.findViewById(R.id.like);
         }
     }
 
@@ -231,5 +264,4 @@ public class CardTweetAdapter extends RecyclerView.Adapter<CardTweetAdapter.Card
     public int getItemCount() {
         return tweetsList.size();
     }
-
 }
