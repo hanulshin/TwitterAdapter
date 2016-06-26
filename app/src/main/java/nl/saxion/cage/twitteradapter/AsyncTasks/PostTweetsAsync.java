@@ -45,6 +45,10 @@ public class PostTweetsAsync extends AsyncTask<String, Void, Boolean> {
         return true;
     }
 
+    /**
+     * posts a tweet to twitter
+     * @param tweetText
+     */
     private void postTweet(String tweetText) {
         authService =
                 new ServiceBuilder()
@@ -52,15 +56,9 @@ public class PostTweetsAsync extends AsyncTask<String, Void, Boolean> {
                         .apiSecret(API_SECRET)
                         .callback("http://www.cagitter.com"/*OAUTH_CALLBACK_URL*/)
                         .build(TwitterApi.instance());//changed from API to api, getInstance to instance
-        OAuthRequest request =
-                new OAuthRequest(Verb.POST, "https://api.twitter.com/1.1/statuses/update.json", authService);
+        OAuthRequest request = new OAuthRequest(Verb.POST, "https://api.twitter.com/1.1/statuses/update.json", authService);
         request.addParameter("status", tweetText);
         authService.signRequest(accessToken, request);
-        Response response = request.send();
-        if (response.isSuccessful()) {
-            System.out.println("I can");
-            String res = response.getBody();
-            // Do something with res...
-        }
+        request.send();
     }
 }

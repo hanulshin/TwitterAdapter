@@ -134,12 +134,6 @@ public class UserProfileActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(llm);
         recyclerView.setAdapter(adapter);
 
-        //get intent
-        Intent intent = getIntent();
-
-        //get extras from intent
-//        accessToken = (OAuth1AccessToken) intent.getExtras().getSerializable("accessToken");
-
         //get tweets user has made
         getUserTimeline();
 
