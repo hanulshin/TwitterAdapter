@@ -79,7 +79,6 @@ public class Tweets  {
         this.favourite_count = favourite_count;
         this.entities = entities;
         this.id_str = id_str;
-
     }
 
     public boolean isFavourited() {

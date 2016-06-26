@@ -32,21 +32,6 @@ import nl.saxion.cage.twitteradapter.Tweets.Tweets;
 public class CardTweetAdapter extends RecyclerView.Adapter<CardTweetAdapter.CardViewHolder> {
 
     /**
-     * single tweet for getting tweet information
-     */
-    private Tweets tweet;
-
-    /**
-     * url for loading media image
-     */
-    private String mediaUrl;
-
-    /**
-     * state of like button (liked or unliked)
-     */
-    private boolean likeState = false;
-
-    /**
      * list of tweets
      */
     private List<Tweets> tweetsList;
@@ -68,11 +53,6 @@ public class CardTweetAdapter extends RecyclerView.Adapter<CardTweetAdapter.Card
     }
 
     /**
-     * holds position of each card
-     */
-    private Map<Integer, Integer> positionToValueMap = new HashMap<>();
-
-    /**
      * highlight entities, set views, set onclick listeners
      *
      * @param cardViewHolder
@@ -80,20 +60,8 @@ public class CardTweetAdapter extends RecyclerView.Adapter<CardTweetAdapter.Card
      */
     @Override
     public void onBindViewHolder(final CardViewHolder cardViewHolder, final int position) {
-        //update the position for correct clicking
-        //cardViewHolder.onRecyclerItemClickListener.updatePosition(position);
-
-        int valueToDisplay = 1;
-
-        if (positionToValueMap.containsKey(position)) {
-            valueToDisplay = positionToValueMap.get(position);
-        } else {
-            positionToValueMap.put(position, valueToDisplay);
-        }
-        System.out.println(valueToDisplay);
-
-        //get tweet from position
-        tweet = tweetsList.get(position);
+        //single tweet for getting tweet information
+        Tweets tweet = tweetsList.get(position);
 
         //create spannable for highlighting
         Spannable spanText = Spannable.Factory.getInstance().newSpannable(tweet.getText());
@@ -132,7 +100,8 @@ public class CardTweetAdapter extends RecyclerView.Adapter<CardTweetAdapter.Card
         //load media image
         if (tweet.getEntities().getMedia(
         ).size() > 0) {
-            mediaUrl = tweet.getEntities().getMedia().get(0).getMedia_url();
+            //url for loading media image
+            String mediaUrl = tweet.getEntities().getMedia().get(0).getMedia_url();
             Log.d("mediaUrl", mediaUrl);
             Picasso.with(context)
                     .load(tweet.getEntities().getMedia().get(0).getMedia_url())
@@ -140,19 +109,6 @@ public class CardTweetAdapter extends RecyclerView.Adapter<CardTweetAdapter.Card
                     .centerCrop()
                     .into(cardViewHolder.media);
         }
-
-//        cardViewHolder.onRecyclerItemClickListener.updatePosition(position);
-//        //set OnClickListener for images
-//        cardViewHolder.media.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(context, ZoomActivity.class);
-//                intent.putExtra("imageUrl", mediaUrl);
-//                context.startActivity(intent);
-//            }
-//        });
-
-
     }
 
     /**
@@ -177,7 +133,7 @@ public class CardTweetAdapter extends RecyclerView.Adapter<CardTweetAdapter.Card
      * inflates a card
      *
      * @param viewGroup
-     * @param position the index of the card
+     * @param position  the index of the card
      * @return
      */
     @Override
@@ -199,7 +155,7 @@ public class CardTweetAdapter extends RecyclerView.Adapter<CardTweetAdapter.Card
             @Override
             public void onClick(View v) {
                 final int position = holder.getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION){
+                if (position != RecyclerView.NO_POSITION) {
                     Intent zoomIntent = new Intent(context, ZoomActivity.class);
                     zoomIntent.putExtra("imageUrl", tweetsList.get(position).getEntities().getMedia().get(0).getMedia_url());
                     context.startActivity(zoomIntent);
@@ -212,7 +168,7 @@ public class CardTweetAdapter extends RecyclerView.Adapter<CardTweetAdapter.Card
         likeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if ( tweetsList.get(position).isFavourited() != true) {
+                if (tweetsList.get(position).isFavourited() != true) {
                     LikeTweetAsync likeTweetAsync = new LikeTweetAsync();
                     likeTweetAsync.execute(tweetsList.get(position).getId_str());
                     Model model = Model.getInstance();

@@ -144,7 +144,12 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        //getHomeTimeline();
+        if (tweets.size() == 0 && model.isLoggedIn()){
+            getHomeTimeline();
+        } else if (!model.isLoggedIn()){
+            tweets.clear();
+            cardTweetAdapter.notifyDataSetChanged();
+        }
     }
 
     /**
