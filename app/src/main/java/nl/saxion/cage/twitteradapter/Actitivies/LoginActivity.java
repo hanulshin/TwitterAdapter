@@ -88,13 +88,13 @@ public class LoginActivity extends AppCompatActivity {
         webView.loadUrl(authUrl);
     }
 
-//    /**
-//     * override of pressing back button
-//     */
-//    @Override
-//    public void onBackPressed() {
-//        //do not let the user back out
-//    }
+    /**
+     * override of pressing back button
+     */
+    @Override
+    public void onBackPressed() {
+        //do not let the user back out
+    }
 
     /**
      * inner WebView class for handling logging in
