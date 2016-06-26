@@ -214,15 +214,14 @@ public class CardTweetAdapter extends RecyclerView.Adapter<CardTweetAdapter.Card
             public void onClick(View v) {
                 final int position = holder.getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION){
-
                     Intent zoomIntent = new Intent(context, ZoomActivity.class);
-                    zoomIntent.putExtra("imageUrl", mediaUrl);
+                    zoomIntent.putExtra("imageUrl", tweetsList.get(position).getEntities().getMedia().get(0).getMedia_url());
                     context.startActivity(zoomIntent);
-
-                    System.out.println(mediaUrl);
-                    System.out.println("clicked " + position);
                 }
             }
+
+            // todo put like onclick here
+
         });
         return holder;
     }
