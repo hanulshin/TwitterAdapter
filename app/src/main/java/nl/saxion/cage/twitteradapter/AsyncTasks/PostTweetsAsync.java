@@ -50,7 +50,7 @@ public class PostTweetsAsync extends AsyncTask<String, Void, Boolean> {
                 new ServiceBuilder()
                         .apiKey(API_KEY)
                         .apiSecret(API_SECRET)
-                        .callback("http://www.cagitter.com"/*OAUTH_CALLBACK_URL*/)// not used in git, but said to use in slides
+                        .callback("http://www.cagitter.com"/*OAUTH_CALLBACK_URL*/)
                         .build(TwitterApi.instance());//changed from API to api, getInstance to instance
         OAuthRequest request =
                 new OAuthRequest(Verb.POST, "https://api.twitter.com/1.1/statuses/update.json", authService);

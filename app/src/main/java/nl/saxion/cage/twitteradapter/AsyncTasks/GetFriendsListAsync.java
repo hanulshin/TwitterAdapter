@@ -52,7 +52,7 @@ public class GetFriendsListAsync extends AsyncTask<String, Void, String> {
                         .build(TwitterApi.instance());//changed from API to api, getInstance to instance
 
         final OAuthRequest request = new OAuthRequest(Verb.GET, "https://api.twitter.com/1.1/friends/list.json", authService);
-        authService.signRequest(accessToken, request); // the access token from step 4
+        authService.signRequest(accessToken, request);
         final Response response = request.send();
         return response.getBody();
     }

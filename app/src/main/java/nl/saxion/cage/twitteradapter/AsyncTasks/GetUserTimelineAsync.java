@@ -53,7 +53,7 @@ public class GetUserTimelineAsync extends AsyncTask<String, Void, String> {
                         .callback("http://www.cagitter.com"/*OAUTH_CALLBACK_URL*/)
                         .build(TwitterApi.instance());//changed from API to api, getInstance to instance
         final OAuthRequest request = new OAuthRequest(Verb.GET, "https://api.twitter.com/1.1/statuses/user_timeline.json", authService);
-        authService.signRequest(accessToken, request); // the access token from step 4
+        authService.signRequest(accessToken, request);
         final Response response = request.send();
         return response.getBody();
     }

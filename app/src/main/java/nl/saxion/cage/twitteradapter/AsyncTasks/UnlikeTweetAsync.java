@@ -44,7 +44,7 @@ public class UnlikeTweetAsync  extends AsyncTask<String,Void,Void> {
                         .build(TwitterApi.instance());//changed from API to api, getInstance to instance
 
         final OAuthRequest request = new OAuthRequest(Verb.POST, "https://api.twitter.com/1.1/favorites/destroy.json"+"?id="+id_str, authService);
-        authService.signRequest(model.getAccessToken(), request); // the access token from step 4
+        authService.signRequest(model.getAccessToken(), request);
 
         final Response response = request.send();//record the response from server
         System.out.println("Like mark has been deleted, contents of the tweet - "+response.getBody());
