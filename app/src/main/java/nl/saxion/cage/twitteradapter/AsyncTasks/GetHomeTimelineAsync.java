@@ -47,17 +47,19 @@ public class GetHomeTimelineAsync extends AsyncTask<String, Void, String> {
      */
     @Override
     protected String doInBackground(String... params) {
-
         authService =
                 new ServiceBuilder()
                         .apiKey(API_KEY)
                         .apiSecret(API_SECRET)
                         .callback("http://www.cagitter.com"/*OAUTH_CALLBACK_URL*/)
                         .build(TwitterApi.instance());//changed from API to api, getInstance to instance
-
-        final OAuthRequest request = new OAuthRequest(Verb.GET, "https://api.twitter.com/1.1/statuses/home_timeline.json", authService);
-        authService.signRequest(accessToken, request); // the access token from step 4
-        final Response response = request.send();
-        return response.getBody();
+        if (model.isLoggedIn()) {
+            final OAuthRequest request = new OAuthRequest(Verb.GET, "https://api.twitter.com/1.1/statuses/home_timeline.json", authService);
+            authService.signRequest(accessToken, request); // the access token from step 4
+            final Response response = request.send();
+            return response.getBody();
+        } else {
+            return null;
+        }
     }
 }

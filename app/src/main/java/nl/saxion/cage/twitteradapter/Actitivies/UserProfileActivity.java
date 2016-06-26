@@ -1,12 +1,15 @@
 package nl.saxion.cage.twitteradapter.Actitivies;
 
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.webkit.CookieManager;
+import android.webkit.ValueCallback;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -91,6 +94,11 @@ public class UserProfileActivity extends AppCompatActivity {
     private EditText tweetField;
 
     /**
+     * button for logging out
+     */
+    private Button logoutButton;
+
+    /**
      * set cardView adapter, get intent extras, load user timeline,
      *
      * @param savedInstanceState
@@ -102,15 +110,16 @@ public class UserProfileActivity extends AppCompatActivity {
 
         //set views
         Button postButton = (Button) findViewById(R.id.post);
-        tweetField = (EditText) findViewById(R.id.tweet);
+        Button friends_button = (Button) findViewById(R.id.button_friends);
         TextView nameText = (TextView) findViewById(R.id.name);
         TextView screenNameText = (TextView) findViewById(R.id.screen_name);
-        ImageView profileImage = (ImageView) findViewById(R.id.profile_image_url);
         TextView descriptionText = (TextView) findViewById(R.id.description);
         TextView followers_countText = (TextView) findViewById(R.id.followers_count);
         TextView friends_countText = (TextView) findViewById(R.id.friends_count);
         TextView statuses_countText = (TextView) findViewById(R.id.statuses_count);
-        Button friends_button = (Button) findViewById(R.id.button_friends);
+        ImageView profileImage = (ImageView) findViewById(R.id.profile_image_url);
+        tweetField = (EditText) findViewById(R.id.tweet_edittext);
+        logoutButton = (Button) findViewById(R.id.b_logout);
 
         //cardView adapter
         adapter = new CardTweetAdapter(tweets, this);
@@ -118,7 +127,7 @@ public class UserProfileActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
 
         //linear layout manager used for recyclerView (cardView)
-        LinearLayoutManager llm = new LinearLayoutManager(this);
+        final LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
 
         //set recyclerView layout manager & adapter
@@ -169,6 +178,22 @@ public class UserProfileActivity extends AppCompatActivity {
 
                 //refresh user timeline
                 getUserTimeline();
+            }
+        });
+
+        assert logoutButton != null;
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //log out
+                CookieManager cookieManager = CookieManager.getInstance();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    cookieManager.removeAllCookies(null);
+                    model.setAccessToken(null);
+                    model.setLoggedIn(false);
+                    System.out.println("logged out");
+                    finish();
+                }
             }
         });
 

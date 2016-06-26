@@ -86,16 +86,15 @@ public class LoginActivity extends AppCompatActivity {
         webView = (WebView) findViewById(R.id.webView);
         webView.setWebViewClient(new MyWebViewClient());
         webView.loadUrl(authUrl);
-
     }
 
-    /**
-     * override of pressing back button
-     */
-    @Override
-    public void onBackPressed() {
-        //do not let the user back out
-    }
+//    /**
+//     * override of pressing back button
+//     */
+//    @Override
+//    public void onBackPressed() {
+//        //do not let the user back out
+//    }
 
     /**
      * inner WebView class for handling logging in
@@ -115,10 +114,10 @@ public class LoginActivity extends AppCompatActivity {
             //retrieving access token, which will allow us to permanently access user account
             final OAuth1AccessToken accessToken = authService.getAccessToken(requestToken, verifier);
 
-            //pending for json file which will contain user information
-            final OAuthRequest request = new OAuthRequest(Verb.GET, "https://api.twitter.com/1.1/account/verify_credentials.json", authService);
-            authService.signRequest(accessToken, request); // the access token from step 4
-            final Response response = request.send();
+//            //pending for json file which will contain user information
+//            final OAuthRequest request = new OAuthRequest(Verb.GET, "https://api.twitter.com/1.1/account/verify_credentials.json", authService);
+//            authService.signRequest(accessToken, request); // the access token from step 4
+//            final Response response = request.send();
 
             //new intent for sending info back to feed class
             Intent intent = new Intent();

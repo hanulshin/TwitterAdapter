@@ -178,21 +178,25 @@ public class HomeActivity extends AppCompatActivity {
      * Gets the home timeline of the logged in user and updates the cardView
      */
     private void getHomeTimeline() {
-        if (accessToken != null) {
+        if (model.isLoggedIn()) {
+            if (accessToken != null) {
+                //new getHomeTimeline async task
+                GetHomeTimelineAsync getTimeline = new GetHomeTimelineAsync();
+                getTimeline.execute();
 
-            //new getHomeTimeline async task
-            GetHomeTimelineAsync getTimeline = new GetHomeTimelineAsync();
-            getTimeline.execute();
-
-            try {
-                //update tweet list and cardView
-                jsonTweets = getTimeline.get();
-                updateCardView();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
+                try {
+                    //update tweet list and cardView
+                    jsonTweets = getTimeline.get();
+                    updateCardView();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
             }
+        } else {
+            tweets.clear();
+            cardTweetAdapter.notifyDataSetChanged();
         }
     }
 
